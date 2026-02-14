@@ -150,61 +150,47 @@ function loadNomesData(callback) {
 }
 
 async function loadNPCList() {
-    const mainContent = document.getElementById("content");
-    mainContent.innerHTML = "<h2>🛡️ Buscando NPCs na taverna...</h2>";
+  const mainContent = document.getElementById("content");
+  
+  // 1. Feedback visual de carregamento
+  mainContent.innerHTML = `
+    <div class="loading-container">
+      <h2>🛡️ Buscando NPCs na taverna...</h2>
+    </div>
+  `;
 
-    console.log("Tentando buscar dados com a variável db...");
+  console.log("Consultando banco de dados...");
 
-    // 1. Busca os dados usando 'db'
-    let { data: npcs, error } = await db
-        .from('npcs')
-        .select('*')
-        .order('nome', { ascending: true });
+  // 2. Busca dados no Supabase
+  let { data: npcs, error } = await db
+      .from('npcs')
+      .select('*')
+      .order('nome', { ascending: true });
 
-    // 2. Verifica se houve erro de conexão/tabela
-    if (error) {
-        console.error("Erro do Supabase:", error.message);
-        mainContent.innerHTML = "<p style='color:red'>Erro ao carregar: " + error.message + "</p>";
-        return;
-    }
+  // 3. Tratamento de Erro
+  if (error) {
+      console.error("Erro Supabase:", error.message);
+      mainContent.innerHTML = `<p style="color:red; padding:20px;">Erro ao carregar NPCs: ${error.message}</p>`;
+      return;
+  }
 
-    // 3. Verifica se o banco retornou uma lista vazia
-    if (!npcs || npcs.length === 0) {
-        console.warn("O banco retornou 0 NPCs. Verifique se há dados na tabela e as políticas de RLS.");
-        mainContent.innerHTML = "<h2>Nenhum NPC encontrado no banco de dados.</h2>";
-        return;
-    }
+  // 4. Prepara o esqueleto da página no "content"
+  // Criamos o div com ID "npcGrid" para que a função renderNPCs saiba onde desenhar
+  mainContent.innerHTML = `
+      <div class="header-section">
+          <h2>📜 Registros de NPCs</h2>
+          <p>Total de personagens: ${npcs ? npcs.length : 0}</p>
+      </div>
+      <div id="npcGrid" class="npc-grid"></div>
+  `;
 
-    console.log("NPCs encontrados:", npcs);
-
-    // 4. Renderização (Adaptada para ler o 'metadata')
-    npcCache = npcs; 
-    
-    let html = `
-        <div class="header-section">
-            <h2>📜 Registros de NPCs</h2>
-            <p>Total de personagens: ${npcs.length}</p>
-        </div>
-        <div class="npc-grid">
-    `;
-
-    npcs.forEach(npc => {
-        // Se você usou a coluna 'metadata' para salvar a complexidade, 
-        // pegamos os dados de lá, senão usamos o que está na raiz.
-        const raca = npc.raca || npc.metadata?.raca || "Desconhecida";
-        const status = npc.status || npc.metadata?.status || "Ativo";
-
-        html += `
-            <div class="npc-card" onclick="openNPCDetails('${npc.id}')">
-                <h3>${npc.nome}</h3>
-                <p><strong>Raça:</strong> ${raca}</p>
-                <span class="status-tag">${status}</span>
-            </div>
-        `;
-    });
-
-    html += `</div>`;
-    mainContent.innerHTML = html;
+  // 5. Atualiza o cache global e chama a sua função de renderização
+  if (npcs && npcs.length > 0) {
+      npcCache = npcs;
+      renderNPCs(npcs); // Aqui chamamos a sua função original!
+  } else {
+      document.getElementById("npcGrid").innerHTML = "<p class='placeholder'>A taverna está vazia (Nenhum NPC encontrado).</p>";
+  }
 }
 
 function getNPCs() {
@@ -368,54 +354,6 @@ function abrirFichaNPC(nome) {
     .getNPCPorNome(nome);
 }
 
-function openNPCModal(npc) {
-  var modal = document.getElementById("npcModal");
-  var body = document.getElementById("npcModalBody");
-  var modalContent = modal.querySelector(".modal-content");
-
-  // Background do modal usando concatenação simples
-  if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
-    modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
-  }
-
-  // Campos principais fixos
-  var html = "<h2>" + (npc.nome || "NPC sem nome") + "</h2>" +
-             "<p><strong>Raça:</strong> " + (npc.raca || npc.raça || "—") + "</p>" +
-             "<p><strong>Status:</strong> " + (npc.status || "Vivo") + "</p>";
-
-  if (npc.faccao) {
-    html += "<p><strong>Facção:</strong> " + npc.faccao + "</p>";
-  }
-
-  // Observações
-  if (npc.observacoes) {
-    html += "<hr><p><strong>Observações:</strong></p><p>" + npc.observacoes + "</p>";
-  }
-
-  // Campos extras dinâmicos
-  var ignoredKeys = ["id", "nome", "raca", "raça", "status", "faccao", "observacoes"];
-
-  for (var key in npc) {
-    if (npc.hasOwnProperty(key)) {
-      var value = npc[key];
-      
-      if (ignoredKeys.indexOf(key) !== -1) continue;
-      if (!value) continue;
-
-      // Substitui snake_case e Capitaliza sem usar Arrow Function
-      var label = key.replace(/_/g, " ").replace(/\b\w/g, function(l) {
-        return l.toUpperCase();
-      });
-
-      html += "<hr><p><strong>" + label + ":</strong></p>" +
-              "<p>" + (Array.isArray(value) ? value.join(", ") : value) + "</p>";
-    }
-  }
-
-  body.innerHTML = html;
-  modal.classList.remove("hidden");
-}
-
 function closeNPCModal() {
   document.getElementById("npcModal").classList.add("hidden");
 }
@@ -567,6 +505,13 @@ function openGenericModal(objeto, tituloPadrao) {
   const body = document.getElementById("npcModalBody");
   var modalContent = modal.querySelector(".modal-content");
 
+  // 1. FUSÃO DE DADOS: Juntamos o que está na raiz com o que está no metadata
+  // Isso garante que objeto.raca ou objeto.metadata.raca funcionem igual
+  const dataCompleta = { 
+    ...objeto, 
+    ...(objeto.metadata || {}) 
+  };
+
   // Background do modal usando concatenação simples
   if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
     modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
@@ -576,7 +521,6 @@ function openGenericModal(objeto, tituloPadrao) {
   let colunasHtml = "";
   let tituloPrincipal = tituloPadrao;
 
-  // Dicionário para traduzir as chaves do seu código para nomes bonitos no Modal
   const nomesFormatados = {
     raca: "Raça",
     faccao: "Facção",
@@ -584,35 +528,48 @@ function openGenericModal(objeto, tituloPadrao) {
     missao: "Missão Relacionada",
     personalidade: "Personalidade",
     encontravel: "Onde Encontrar",
-    ameacas: "Ameaças"
+    ameacas: "Ameaças",
+    status: "Status",
+    observacoes: "Observações",
+    segredo: "🤫 Segredo (Mestre)",
+    desejo: "Desejo",
+    comportamento: "Comportamento"
   };
 
-  Object.entries(objeto).forEach(([chave, valor]) => {
+  // 2. Itera sobre a dataCompleta (que já tem tudo misturado)
+  Object.entries(dataCompleta).forEach(([chave, valor]) => {
     const chaveLower = chave.toLowerCase();
 
-    // 1. Define o Título
-    if (chaveLower === "nome" || chaveLower === "faccao_nome") {
+    // Ignoramos chaves técnicas do banco ou a própria coluna metadata
+    if (chaveLower === "metadata" || chaveLower === "created_at") return;
+
+    // Define o Título
+    if (chaveLower === "nome" || chaveLower === "faccao_nome" || chaveLower === "nome_faccao") {
       tituloPrincipal = valor;
       return;
     }
 
-    // 2. Trata o ID para mostrar se é Gerado ou Canônico no Modal também
+    // Trata o ID para detectar origem (Manual ou Supabase)
     if (chaveLower === "id") {
-      const origem = valor.startsWith("GEN") ? "🧪 Gerado via Alquimia" : "📜 Registro Canônico";
+      // Se o ID começar com GEN ou se tiver uma flag no metadata
+      const isGerado = String(valor).startsWith("GEN") || dataCompleta.origem === "Gerado";
+      const origem = isGerado ? "🧪 Gerado via Alquimia" : "📜 Registro Canônico";
       colunasHtml += `<section class="local-col"><h3>Origem</h3><p>${origem}</p></section>`;
       return;
     }
 
-    // 3. Formatação do Rótulo (Usa o dicionário ou limpa o texto)
+    // Pula se o valor for vazio ou nulo
+    if (!valor || valor === "—") return;
+
     const label = nomesFormatados[chaveLower] || 
                   chave.replace(/_/g, " ").charAt(0).toUpperCase() + chave.slice(1);
 
     colunasHtml += `
-    <section class="local-col">
-      <h3>${label}</h3>
-      <p>${formatarValor(valor)}</p>
-    </section>
-  `;
+      <section class="local-col ${chaveLower === 'segredo' ? 'secret-info' : ''}">
+        <h3>${label}</h3>
+        <p>${typeof formatarValor === 'function' ? formatarValor(valor) : valor}</p>
+      </section>
+    `;
   });
 
   body.innerHTML = `
@@ -630,19 +587,19 @@ function openGenericModal(objeto, tituloPadrao) {
   `;
 
   const footer = document.getElementById("modalFooter");
-  // Limpamos o footer para evitar que botões de itens anteriores "vazem" para o próximo modal
   footer.innerHTML = ""; 
 
-  // Verificação refinada: Só entra se tiver Dano (Arma) ou CA (Armadura)
-  if (objeto.dano || objeto.classeArmadura) {
+  // Mantém a lógica da Forja de Itens
+  if (dataCompleta.dano || dataCompleta.classeArmadura) {
     footer.innerHTML = `
-      <button class="btn-forja" onclick='ativarEdicaoItem(${JSON.stringify(objeto)})'>
+      <button class="btn-forja" onclick='ativarEdicaoItem(${JSON.stringify(dataCompleta)})'>
         ⚒️ Abrir na Forja
       </button>
     `;
   }
 
   modal.classList.remove("hidden");
+  modal.style.display = "flex"; // Garante a visibilidade no layout flex
 }
 
 function formatarValor(valor) {
