@@ -326,28 +326,37 @@ function gerarDescricaoNPC(raca, sexo) {
 
 function renderNPCs(npcs) {
   const grid = document.getElementById("npcGrid");
-  if (!grid || !npcs.length) {
-    if (grid) grid.innerHTML = "<p class='placeholder'>Nenhum NPC encontrado.</p>";
+  if (!grid) return;
+
+  if (!npcs || !npcs.length) {
+    grid.innerHTML = "<p class='placeholder'>Nenhum NPC encontrado.</p>";
     return;
   }
 
   grid.innerHTML = "";
 
   npcs.forEach(npc => {
+    // 1. Extraímos os dados que podem estar na raiz ou dentro de metadata
+    const raca = npc.raca || npc.metadata?.raca || "Desconhecida";
+    const sexo = npc.sexo || npc.metadata?.sexo || "—";
+    const faccao = npc.faccao || npc.metadata?.faccao || "<em>Independente</em>";
+    
+    // 2. Lógica de origem (ajustada para UUIDs do Supabase se necessário)
+    let origemTag = "📜 Canônico";
+    if (npc.id && String(npc.id).startsWith("GEN")) origemTag = "🧪 Gerado";
+    if (npc.metadata?.origem === "Gerado") origemTag = "🧪 Gerado";
+
     const card = document.createElement("div");
     card.className = "card npc-card";
 
-    // Mantemos a lógica visual rápida do card
-    const origemTag = npc.id && npc.id.startsWith("GEN") ? "🧪 Gerado" : "📜 Canônico";
-
     card.innerHTML = `
       <h3 class="npc-name">${npc.nome}</h3>
-      <p class="npc-meta"><strong>${npc.raca}</strong> • ${npc.sexo || "—"}</p>
-      <p class="npc-faction"><span class="label">Facção:</span> ${npc.faccao || "<em>Independente</em>"}</p>
+      <p class="npc-meta"><strong>${raca}</strong> • ${sexo}</p>
+      <p class="npc-faction"><span class="label">Facção:</span> ${faccao}</p>
       <span class="npc-origin">${origemTag}</span>
     `;
 
-    // Agora usa a função genérica!
+    // 3. Ao clicar, enviamos o objeto completo para o modal
     card.onclick = () => openGenericModal(npc, "Ficha de NPC");
     grid.appendChild(card);
   });
