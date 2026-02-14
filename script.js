@@ -599,7 +599,6 @@ function openGenericModal(objeto, tituloPadrao) {
   }
 
   modal.classList.remove("hidden");
-  modal.style.display = "flex"; // Garante a visibilidade no layout flex
 }
 
 function formatarValor(valor) {
