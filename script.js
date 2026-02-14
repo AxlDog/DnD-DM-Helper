@@ -151,21 +151,60 @@ function loadNomesData(callback) {
 
 async function loadNPCList() {
     const mainContent = document.getElementById("content");
-    mainContent.innerHTML = "<h2>Carregando NPCs...</h2>";
+    mainContent.innerHTML = "<h2>🛡️ Buscando NPCs na taverna...</h2>";
 
-    // Busca dados no Supabase em vez de usar DATA_NPCS
-    let { data: npcs, error } = await supabase
+    console.log("Tentando buscar dados com a variável db...");
+
+    // 1. Busca os dados usando 'db'
+    let { data: npcs, error } = await db
         .from('npcs')
         .select('*')
         .order('nome', { ascending: true });
 
+    // 2. Verifica se houve erro de conexão/tabela
     if (error) {
-        console.error("Erro ao buscar NPCs:", error);
+        console.error("Erro do Supabase:", error.message);
+        mainContent.innerHTML = "<p style='color:red'>Erro ao carregar: " + error.message + "</p>";
         return;
     }
 
-    npcCache = npcs; // Atualiza o cache local com os dados do banco
-    renderNPCs(npcs); // Chame a função que monta o HTML
+    // 3. Verifica se o banco retornou uma lista vazia
+    if (!npcs || npcs.length === 0) {
+        console.warn("O banco retornou 0 NPCs. Verifique se há dados na tabela e as políticas de RLS.");
+        mainContent.innerHTML = "<h2>Nenhum NPC encontrado no banco de dados.</h2>";
+        return;
+    }
+
+    console.log("NPCs encontrados:", npcs);
+
+    // 4. Renderização (Adaptada para ler o 'metadata')
+    npcCache = npcs; 
+    
+    let html = `
+        <div class="header-section">
+            <h2>📜 Registros de NPCs</h2>
+            <p>Total de personagens: ${npcs.length}</p>
+        </div>
+        <div class="npc-grid">
+    `;
+
+    npcs.forEach(npc => {
+        // Se você usou a coluna 'metadata' para salvar a complexidade, 
+        // pegamos os dados de lá, senão usamos o que está na raiz.
+        const raca = npc.raca || npc.metadata?.raca || "Desconhecida";
+        const status = npc.status || npc.metadata?.status || "Ativo";
+
+        html += `
+            <div class="npc-card" onclick="openNPCDetails('${npc.id}')">
+                <h3>${npc.nome}</h3>
+                <p><strong>Raça:</strong> ${raca}</p>
+                <span class="status-tag">${status}</span>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    mainContent.innerHTML = html;
 }
 
 function getNPCs() {
