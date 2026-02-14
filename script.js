@@ -149,16 +149,23 @@ function loadNomesData(callback) {
     .getNomesData();
 }
 
-function loadNPCList() {
-  setActiveMenu("3");
-  setView("npcs");
+async function loadNPCList() {
+    const mainContent = document.getElementById("content");
+    mainContent.innerHTML = "<h2>Carregando NPCs...</h2>";
 
-  document.getElementById("content").innerHTML = `
-    <h2>📜 NPCs</h2>
-    <div class="card-grid" id="npcGrid"></div>
-  `;
+    // Busca dados no Supabase em vez de usar DATA_NPCS
+    let { data: npcs, error } = await supabase
+        .from('npcs')
+        .select('*')
+        .order('nome', { ascending: true });
 
-  renderNPCs(DATA_NPCS);
+    if (error) {
+        console.error("Erro ao buscar NPCs:", error);
+        return;
+    }
+
+    npcCache = npcs; // Atualiza o cache local com os dados do banco
+    renderNPCs(npcs); // Chame a função que monta o HTML
 }
 
 function getNPCs() {
