@@ -4,7 +4,7 @@ let npcCache = [];
 
 const SUPABASE_URL = 'https://umiytlqphtxknhjldzgs.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nq_f9SCvJwxp9dNM5KGskw_ltD4oL45';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -154,7 +154,7 @@ async function loadNPCList() {
     mainContent.innerHTML = "<h2>Carregando NPCs...</h2>";
 
     // Busca dados no Supabase em vez de usar DATA_NPCS
-    let { data: npcs, error } = await _supabase
+    let { data: npcs, error } = await supabase
         .from('npcs')
         .select('*')
         .order('nome', { ascending: true });
