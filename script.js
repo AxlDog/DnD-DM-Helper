@@ -154,7 +154,7 @@ async function loadNPCList() {
     mainContent.innerHTML = "<h2>Carregando NPCs...</h2>";
 
     // Busca dados no Supabase em vez de usar DATA_NPCS
-    let { data: npcs, error } = await supabase
+    let { data: npcs, error } = await _supabase
         .from('npcs')
         .select('*')
         .order('nome', { ascending: true });
