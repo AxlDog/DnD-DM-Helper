@@ -2,6 +2,10 @@ const params = new URLSearchParams(window.location.search);
 let npcGerado = null;
 let npcCache = [];
 
+const SUPABASE_URL = 'https://umiytlqphtxknhjldzgs.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_nq_f9SCvJwxp9dNM5KGskw_ltD4oL45';
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("npcModal");
