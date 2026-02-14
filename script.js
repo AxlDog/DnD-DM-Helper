@@ -4,7 +4,7 @@ let npcCache = [];
 
 const SUPABASE_URL = 'https://umiytlqphtxknhjldzgs.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nq_f9SCvJwxp9dNM5KGskw_ltD4oL45';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase_ = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 document.addEventListener("DOMContentLoaded", () => {
