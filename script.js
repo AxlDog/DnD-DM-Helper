@@ -150,6 +150,8 @@ function loadNomesData(callback) {
 }
 
 async function loadNPCList() {
+	setActiveMenu(3);
+	setView("npcs");
   const mainContent = document.getElementById("content");
   
   // 1. Feedback visual de carregamento
@@ -180,7 +182,6 @@ async function loadNPCList() {
       <h2>📜 NPCs</h2>
 		<div class="card-grid" id="npcGrid"></div>
 	  `;
-
   // 5. Atualiza o cache global e chama a sua função de renderização
   if (npcs && npcs.length > 0) {
       npcCache = npcs;
@@ -188,10 +189,6 @@ async function loadNPCList() {
   } else {
       document.getElementById("npcGrid").innerHTML = "<p class='placeholder'>A taverna está vazia (Nenhum NPC encontrado).</p>";
   }
-}
-
-function getNPCs() {
-  return DATA_NPCS;
 }
 
 function loadNPCCreator() {
