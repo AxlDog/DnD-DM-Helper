@@ -177,12 +177,9 @@ async function loadNPCList() {
   // 4. Prepara o esqueleto da página no "content"
   // Criamos o div com ID "npcGrid" para que a função renderNPCs saiba onde desenhar
   mainContent.innerHTML = `
-      <div class="header-section">
-          <h2>📜 Registros de NPCs</h2>
-          <p>Total de personagens: ${npcs ? npcs.length : 0}</p>
-      </div>
-      <div id="npcGrid" class="npc-grid"></div>
-  `;
+      <h2>📜 NPCs</h2>
+		<div class="card-grid" id="npcGrid"></div>
+	  `;
 
   // 5. Atualiza o cache global e chama a sua função de renderização
   if (npcs && npcs.length > 0) {
