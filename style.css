@@ -914,3 +914,45 @@ main h2 {
 .show-mestre {
   display: flex !important; /* ou block, dependendo do seu layout */
 }
+
+.npc-edit-box {
+  margin-top: 30px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed #daa520;
+  border-radius: 8px;
+}
+
+.npc-edit-box h4 {
+  color: #daa520;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.edit-inputs input, .edit-inputs textarea {
+  width: 100%;
+  background: #111;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.btn-update-npc {
+  width: 100%;
+  padding: 10px;
+  background: #daa520;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-update-npc:hover {
+  background: #fff;
+}
