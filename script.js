@@ -217,30 +217,34 @@ function loadNPCCreator() {
 }
 
 async function gerarNPC(racaSelecionada = "") {
-  // 1. Nova lógica de Sexo: Resto da divisão por 2
-  // Geramos um número inteiro e verificamos se é par (resto 0)
+  // 1. Lógica de Sexo: Resto da divisão por 2
   const sorteio = Math.floor(Math.random() * 100);
   const sexo = (sorteio % 2 === 0) ? "Masculino" : "Feminino";
   
   const raca = racaSelecionada || "Humano";
 
-  // Feedback visual no container de preview
+  // Feedback visual
   const container = document.getElementById("npcPreviewContainer");
   if (container) container.innerHTML = "<p class='loading-ia'>🪄 Conjurando NPC com o Gemini...</p>";
 
-  console.log(`Iniciando geração: ${raca} | ${sexo} (Sorteio: ${sorteio})`);
+  console.log(`[LOG] Iniciando geração: ${raca} | ${sexo} (Sorteio: ${sorteio})`);
 
   try {
     const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
-      body: { raca, sexo }   // CORRETO
+      body: { raca, sexo }
     });
 
     if (error) throw error;
 
+    // --- VERIFICAÇÃO DO RETORNO ---
+    // Este log mostrará exatamente o JSON que o Gemini cuspiu
+    console.log("%c[DEBUG GEMINI] Retorno da IA:", "color: #00ff00; font-weight: bold;", data);
+    // ------------------------------
+
     // 3. Montar o objeto NPC com os dados da IA
     const npc = {
       id: "GEN-" + crypto.randomUUID().slice(0, 8),
-      nome: data.nome,
+      nome: data.nome || "Nome não gerado", // Fallback caso a chave mude
       raca: raca,
       sexo: sexo,
       status: "Vivo",
@@ -258,8 +262,8 @@ async function gerarNPC(racaSelecionada = "") {
     renderNPCPreview(npc);
 
   } catch (err) {
-    console.error("Erro detalhado:", err);
-    alert("Erro na conexão com a Grande Biblioteca (IA). Verifique se o nome da função e as chaves estão corretas.");
+    console.error("Erro detalhado na geração:", err);
+    alert("Erro na conexão com a Grande Biblioteca (IA). Verifique os logs no console.");
   }
 }
 
