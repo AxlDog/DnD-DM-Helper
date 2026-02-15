@@ -201,88 +201,64 @@ function loadNPCCreator() {
       <div class="npc-generator"> 
         <label for="racaSelect"></label> 
         <select id="racaSelect"> 
-          <option value="">Aleatório</option> 
-          <option value="Humano">Humano</option> 
-          <option value="Elfo">Elfo</option> 
-          <option value="Anão">Anão</option> 
-          <option value="Halfling">Halfling</option> 
-          <option value="Orc">Orc</option> 
-          <option value="Tiefling">Tiefling</option> 
+			<option value="">Aleatório</option> 
+			<option value="Humano">Humano</option> 
+			<option value="Elfo">Elfo</option> 
+			<option value="Anão">Anão</option> 
+			<option value="Halfling">Halfling</option> 
+			<option value="Gnomo">Orc</option> 
+			<option value="Tiefling">Tiefling</option>
+			<option value="Goliath">Goliath</option>
+			<option value="Orc">Orc</option>
         </select> 
         <button class="btn-loja" onclick="gerarNPC(document.getElementById('racaSelect').value)">➕ Gerar NPC</button> 
       </div> 
     <div id="npcPreview"></div>`;
 }
 
-function gerarNPC(racaSelecionada = "") {
-  const bancoCompleto = DATA_NOMES_CACHE;
-  console.log("Raça recebida:", racaSelecionada);
+async function gerarNPC(racaSelecionada = "") {
+  // 1. Decidir Raça e Sexo (ainda sorteamos a base se não for fornecida)
+  const raca = racaSelecionada || "Humano";
+  const sexo = Math.random() > 0.5 ? "Masculino" : "Feminino";
 
-  if (
-    !bancoCompleto ||
-    typeof bancoCompleto !== "object" ||
-    Array.isArray(bancoCompleto)
-  ) {
-    throw new Error("DATA_NOMES_CACHE inválido ou não carregado");
+  // Feedback visual
+  const container = document.getElementById("npcPreviewContainer");
+  if (container) container.innerHTML = "<p class='loading-ia'>🪄 Conjurando NPC com o Gemini...</p>";
+
+  try {
+    // 2. Chamar a Edge Function no Supabase
+    // O prefixo 'db' é a sua variável de conexão que configuramos antes
+    const { data, error } = await db.functions.invoke('gerar-npc-gemini', {
+      body: { raca, sexo }
+    });
+
+    if (error) throw error;
+
+    // 3. Montar o objeto NPC com o que a IA devolveu
+    const npc = {
+      id: "GEN-" + crypto.randomUUID().slice(0, 8),
+      nome: data.nome,
+      raca: raca,
+      sexo: sexo,
+      status: "Vivo",
+      faccao: "Independente",
+      metadata: {
+        aparencia: data.aparencia,
+        personalidade: data.personalidade,
+        segredo: data.segredo,
+        desejo: data.desejo,
+        origem: "IA Gemini"
+      }
+    };
+
+    // 4. Salvar no cache e renderizar
+    npcGerado = npc; 
+    renderNPCPreview(npc);
+
+  } catch (err) {
+    console.error("Erro na geração:", err);
+    alert("Ocorreu uma falha na conexão com o Gemini. Tente novamente.");
   }
-
-  const racasDisponiveis = Object.keys(bancoCompleto);
-  if (!racasDisponiveis.length) {
-    throw new Error("Nenhuma raça disponível no banco");
-  }
-
-  const raca =
-    racaSelecionada && bancoCompleto[racaSelecionada]
-      ? racaSelecionada
-      : racasDisponiveis[
-          Math.floor(Math.random() * racasDisponiveis.length)
-        ];
-
-  const bancoRaca = bancoCompleto[raca];
-  if (!bancoRaca) {
-    throw new Error(`Banco da raça não encontrado: ${raca}`);
-  }
-
-  const sexo = Math.floor(Math.random() * 2) % 2 === 0
-  ? "masculinos"
-  : "femininos";
-
-  const nomesBase =
-    sexo === "femininos"
-      ? bancoRaca.femininos
-      : bancoRaca.masculinos;
-
-  if (!Array.isArray(nomesBase) || !nomesBase.length) {
-    throw new Error(`Sem nomes para ${raca} (${sexo})`);
-  }
-
-  const nome =
-    nomesBase[Math.floor(Math.random() * nomesBase.length)];
-
-  const sobrenome =
-  Array.isArray(bancoRaca.sobrenomes) &&
-  bancoRaca.sobrenomes.length &&
-  Math.floor(Math.random() * 10) % 3 === 0
-    ? " " +
-      bancoRaca.sobrenomes[
-        Math.floor(Math.random() * bancoRaca.sobrenomes.length)
-      ]
-    : "";
-  const npc = {
-    id: "GEN-" + crypto.randomUUID().slice(0, 8),
-    nome: nome + sobrenome,
-    raca,
-    sexo,
-    status: "Vivo",
-    faccao: "",
-    descricao: gerarDescricaoNPC(raca, sexo),
-    observacoes: "",
-    segredo: "",
-    origem: "Gerado"
-  };
-
-  renderNPCPreview(npc);
-  npcGerado = npc; 
 }
 
 function getGenNPCs() {
