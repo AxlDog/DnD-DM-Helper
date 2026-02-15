@@ -285,7 +285,7 @@ function renderNPCs(npcs) {
     card.className = "card npc-card";
 
     // Mantemos a lógica visual rápida do card
-    const origemTag = npc.id && npc.id.startsWith("GEN") ? "🧪 Gerado" : "📜 Canônico";
+    const origemTag = npc.metadata.id_js && npc.metadata.id_js.startsWith("GEN") ? "🧪 Gerado" : "📜 Canônico";
 
     card.innerHTML = `
       <h3 class="npc-name">${npc.nome}</h3>
@@ -390,7 +390,6 @@ async function confirmarNPC(npc) {
     preview.innerHTML = `
       <div class="placeholder success">
         <p>✅ <strong>${npc.nome}</strong> foi imortalizado!</p>
-        <button onclick="trocarView('npc-list')" class="btn-primary">Ver Lista</button>
       </div>
     `;
 
