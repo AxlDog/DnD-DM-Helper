@@ -211,9 +211,57 @@ function loadNPCCreator() {
 			<option value="Goliath">Goliath</option>
 			<option value="Orc">Orc</option>
         </select> 
-        <button class="btn-loja" onclick="gerarNPC(document.getElementById('racaSelect').value)">➕ Gerar NPC</button> 
+        <button class="btn-loja" onclick="gerarNPC(document.getElementById('racaSelect').value)">➕ Gerar NPC</button>
+		<button class="btn-loja" onclick="criarNPC()">➕ Criar NPC</button>
       </div> 
     <div id="npcPreview"></div>`;
+}
+
+function criarNPC() {
+  const preview = document.getElementById("npcPreview");
+  
+  preview.innerHTML = `
+    <div class="npc-card manual-form">
+      <h3>➕ Novo NPC Canônico</h3>
+      <input type="text" id="m-nome" placeholder="Nome do Personagem">
+      <input type="text" id="m-raca" placeholder="Raça">
+      
+      <select id="m-sexo">
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+        <option value="Outro">Outro</option>
+      </select>
+
+      <input type="text" id="m-faccao" placeholder="Facção (ex: Punhos Flamejantes)">
+      <textarea id="m-desc" placeholder="Descrição e história..."></textarea>
+      
+      <div class="actions">
+        <button class="btn-primary" onclick="enviarManual()">Salvar NPC</button>
+        <button class="btn-secondary" onclick="preview.innerHTML=''">Cancelar</button>
+      </div>
+    </div>
+  `;
+}
+
+// Função auxiliar para coletar os dados do formulário acima
+function enviarManual() {
+  const nome = document.getElementById("m-nome").value;
+  if (!nome) return alert("O nome é obrigatório!");
+
+  const npcManual = {
+    id: "MAN-" + Date.now(),
+    nome: nome,
+    raca: document.getElementById("m-raca").value || "Humano",
+    sexo: document.getElementById("m-sexo").value,
+    status: "Ativo",
+    faccao: document.getElementById("m-faccao").value,
+    metadata: {
+      descricao: document.getElementById("m-desc").value, // Note: usamos 'descricao' aqui
+      origem: "Manual" // Definimos que é Manual
+    }
+  };
+
+  confirmarNPC(npcManual);
 }
 
 async function gerarNPC(racaSelecionada = "") {
@@ -359,15 +407,18 @@ function descartarNPC() {
 }
 
 async function confirmarNPC(npc) {
-  if (!npc) {
-    console.error("Nenhum dado de NPC fornecido para salvar.");
-    return;
-  }
+  if (!npc) return;
 
   const preview = document.getElementById("npcPreview");
   preview.innerHTML = "<p class='placeholder'>💾 Gravando na Grande Biblioteca...</p>";
 
   try {
+    // 1. Resolvemos a descrição (pode vir como 'aparencia' na IA ou 'descricao' no manual)
+    const descricaoFinal = npc.metadata.aparencia || npc.metadata.descricao || "Sem descrição.";
+    
+    // 2. Resolvemos a origem (se não houver uma definida, assume IA Gemini)
+    const origemFinal = npc.metadata.origem || "IA Gemini";
+
     const { data, error } = await db
       .from('npcs')
       .insert([
@@ -378,9 +429,9 @@ async function confirmarNPC(npc) {
           metadata: {
             sexo: npc.sexo,
             faccao: npc.faccao || 'Independente',
-            descricao: npc.metadata.aparencia,
-            origem: "IA Gemini",
-            id_js: npc.id // Guardamos seu ID antigo aqui apenas como referência
+            descricao: descricaoFinal,
+            origem: origemFinal,
+            id_js: npc.id 
           }
         }
       ]);
