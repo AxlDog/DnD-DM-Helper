@@ -233,7 +233,7 @@ async function gerarNPC(racaSelecionada = "") {
   try {
     // 2. Chamada corrigida: 'gerar_npc_gemini' (com underline)
     const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
-      body: JSON.stringify({  { raca, sexo } })
+      body: { raca, sexo }
     });
 
     if (error) throw error;
