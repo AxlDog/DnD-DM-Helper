@@ -238,10 +238,9 @@ async function gerarNPC(racaSelecionada = "") {
       sexo: sexo,      // Vem da sua variável
       status: "Vivo",
       faccao: "Independente",
-      metadata: {
-        aparencia: data.aparencia, // Vem da IA
-        origem: "IA Gemini"
-      }
+      aparencia: data.aparencia, // Vem da IA
+      origem: "IA Gemini"
+
     };
 
     npcGerado = npc; 
