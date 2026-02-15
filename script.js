@@ -206,7 +206,7 @@ function loadNPCCreator() {
 			<option value="Elfo">Elfo</option> 
 			<option value="Anão">Anão</option> 
 			<option value="Halfling">Halfling</option> 
-			<option value="Gnomo">Orc</option> 
+			<option value="Gnomo">Gnomo</option> 
 			<option value="Tiefling">Tiefling</option>
 			<option value="Goliath">Goliath</option>
 			<option value="Orc">Orc</option>
@@ -222,23 +222,27 @@ async function gerarNPC(racaSelecionada = "") {
   const raca = racaSelecionada || "Humano";
 
   try {
-    const { data, error } = await db
-      .from('npcs')
-      .insert([
-        {
-          // Removi o 'id' para o banco gerar o UUID oficial
-          nome: npc.nome,
-          raca: npc.raca,
-          status: npc.status || 'Ativo',
-          metadata: {
-            sexo: npc.sexo,
-            faccao: npc.faccao || 'Independente',
-            descricao: npc.metadata.aparencia,
-            origem: "IA Gemini",
-            id_js: npc.id // Guardamos seu ID antigo aqui apenas como referência
-          }
-        }
-      ]);
+    const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
+      body: { raca, sexo }
+    });
+
+    if (error) throw error;
+
+    // LOG DE VERIFICAÇÃO (O que você pediu)
+    console.log("%c[RETORNO IA]", "background: #222; color: #bada55", data);
+
+    const npc = {
+      id: "GEN-" + crypto.randomUUID().slice(0, 8),
+      nome: data.nome, // Vem da IA
+      raca: raca,      // Vem da sua variável
+      sexo: sexo,      // Vem da sua variável
+      status: "Vivo",
+      faccao: "Independente",
+      metadata: {
+        aparencia: data.aparencia, // Vem da IA
+        origem: "IA Gemini"
+      }
+    };
 
     npcGerado = npc; 
     renderNPCPreview(npc);
@@ -364,23 +368,19 @@ async function confirmarNPC(npc) {
   preview.innerHTML = "<p class='placeholder'>💾 Gravando na Grande Biblioteca...</p>";
 
   try {
-    // Montamos o objeto para o Supabase seguindo o seu schema SQL
     const { data, error } = await db
       .from('npcs')
       .insert([
         {
-          // O ID uuid é gerado automaticamente pelo banco (gen_random_uuid())
-          // mas se você quiser manter o seu 'GEN-xxx', a coluna teria que ser TEXT.
-          // Como o schema é UUID, o banco cuidará disso para nós.
           nome: npc.nome,
           raca: npc.raca,
           status: npc.status || 'Ativo',
           metadata: {
             sexo: npc.sexo,
             faccao: npc.faccao || 'Independente',
-            descricao: npc.metadata.aparencia, // Pegando a descrição da IA
+            descricao: npc.metadata.aparencia,
             origem: "IA Gemini",
-            id_local: npc.id // Guardamos seu ID gerado no JS aqui por segurança
+            id_js: npc.id // Guardamos seu ID antigo aqui apenas como referência
           }
         }
       ]);
