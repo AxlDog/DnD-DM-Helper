@@ -217,17 +217,9 @@ function loadNPCCreator() {
 }
 
 async function gerarNPC(racaSelecionada = "") {
-  // 1. Lógica de Sexo: Resto da divisão por 2
   const sorteio = Math.floor(Math.random() * 100);
   const sexo = (sorteio % 2 === 0) ? "Masculino" : "Feminino";
-  
   const raca = racaSelecionada || "Humano";
-
-  // Feedback visual
-  const container = document.getElementById("npcPreviewContainer");
-  if (container) container.innerHTML = "<p class='loading-ia'>🪄 Conjurando NPC com o Gemini...</p>";
-
-  console.log(`[LOG] Iniciando geração: ${raca} | ${sexo} (Sorteio: ${sorteio})`);
 
   try {
     const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
@@ -236,24 +228,18 @@ async function gerarNPC(racaSelecionada = "") {
 
     if (error) throw error;
 
-    // --- VERIFICAÇÃO DO RETORNO ---
-    // Este log mostrará exatamente o JSON que o Gemini cuspiu
-    console.log("%c[DEBUG GEMINI] Retorno da IA:", "color: #00ff00; font-weight: bold;", data);
-    // ------------------------------
+    // LOG DE VERIFICAÇÃO (O que você pediu)
+    console.log("%c[RETORNO IA]", "background: #222; color: #bada55", data);
 
-    // 3. Montar o objeto NPC com os dados da IA
     const npc = {
       id: "GEN-" + crypto.randomUUID().slice(0, 8),
-      nome: data.nome || "Nome não gerado", // Fallback caso a chave mude
-      raca: raca,
-      sexo: sexo,
+      nome: data.nome, // Vem da IA
+      raca: raca,      // Vem da sua variável
+      sexo: sexo,      // Vem da sua variável
       status: "Vivo",
       faccao: "Independente",
       metadata: {
-        aparencia: data.aparencia,
-        personalidade: data.personalidade,
-        segredo: data.segredo,
-        desejo: data.desejo,
+        aparencia: data.aparencia, // Vem da IA
         origem: "IA Gemini"
       }
     };
@@ -262,8 +248,7 @@ async function gerarNPC(racaSelecionada = "") {
     renderNPCPreview(npc);
 
   } catch (err) {
-    console.error("Erro detalhado na geração:", err);
-    alert("Erro na conexão com a Grande Biblioteca (IA). Verifique os logs no console.");
+    console.error("Erro:", err);
   }
 }
 
