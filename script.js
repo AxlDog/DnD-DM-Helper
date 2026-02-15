@@ -345,7 +345,7 @@ function renderNPCPreview(npc) {
         <p><strong>Descrição:</strong> ${npc.aparencia}</p>
         <div class="npc-preview-actions">
           <button onclick="gerarNPC(document.getElementById('racaSelect').value)">Gerar Outro</button>
-          <button onclick="confirmarNPC()">Salvar NPC</button>
+          <button onclick='confirmarNPC(${JSON.stringify(npc)})'>Confirmar</button>
         </div>
       </div>
     </div>
@@ -358,31 +358,55 @@ function descartarNPC() {
   npcGerado = null;
 }
 
-function confirmarNPC() {
-  if (!npcGerado) return;
+async function confirmarNPC(npc) {
+  if (!npc) {
+    console.error("Nenhum dado de NPC fornecido para salvar.");
+    return;
+  }
 
   const preview = document.getElementById("npcPreview");
-  preview.innerHTML = "<p class='placeholder'>Salvando NPC...</p>";
+  preview.innerHTML = "<p class='placeholder'>💾 Gravando na Grande Biblioteca...</p>";
 
-  google.script.run
-    .withSuccessHandler(() => {
-      npcGeradoAtual = null;
+  try {
+    // Montamos o objeto para o Supabase seguindo o seu schema SQL
+    const { data, error } = await db
+      .from('npcs')
+      .insert([
+        {
+          // O ID uuid é gerado automaticamente pelo banco (gen_random_uuid())
+          // mas se você quiser manter o seu 'GEN-xxx', a coluna teria que ser TEXT.
+          // Como o schema é UUID, o banco cuidará disso para nós.
+          nome: npc.nome,
+          raca: npc.raca,
+          status: npc.status || 'Ativo',
+          metadata: {
+            sexo: npc.sexo,
+            faccao: npc.faccao || 'Independente',
+            descricao: npc.metadata.aparencia, // Pegando a descrição da IA
+            origem: "IA Gemini",
+            id_local: npc.id // Guardamos seu ID gerado no JS aqui por segurança
+          }
+        }
+      ]);
 
-      preview.innerHTML = `
-        <p class="placeholder success">
-          ✅ NPC salvo com sucesso
-        </p>
-      `;
+    if (error) throw error;
 
-      // se houver navegação de tela:
-      // trocarView("npc-list");
-    })
-    .withFailureHandler(err => {
-      console.error(err);
-      preview.innerHTML =
-        "<p class='placeholder error'>Erro ao salvar NPC</p>";
-    })
-    .salvarNPC({ ...npcGerado });
+    preview.innerHTML = `
+      <div class="placeholder success">
+        <p>✅ <strong>${npc.nome}</strong> foi imortalizado!</p>
+        <button onclick="trocarView('npc-list')" class="btn-primary">Ver Lista</button>
+      </div>
+    `;
+
+  } catch (err) {
+    console.error("Erro ao salvar no Supabase:", err);
+    preview.innerHTML = `
+      <div class="placeholder error">
+        <p>Erro ao salvar: ${err.message}</p>
+        <button onclick='confirmarNPC(${JSON.stringify(npc)})' class="btn-secondary">Tentar Novamente</button>
+      </div>
+    `;
+  }
 }
 
 function montarUrlImagem(fileId) {
