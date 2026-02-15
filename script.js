@@ -493,6 +493,7 @@ function openGenericModal(objeto, tituloPadrao) {
   let tituloPrincipal = tituloPadrao;
 
   const nomesFormatados = {
+	id: "",
     raca: "Raça",
     faccao: "Facção",
     aparencia: "Aparência",
@@ -525,7 +526,6 @@ function openGenericModal(objeto, tituloPadrao) {
       // Se o ID começar com GEN ou se tiver uma flag no metadata
       const isGerado = String(valor).startsWith("GEN") || dataCompleta.origem === "Gerado";
       const origem = isGerado ? "🧪 Gerado via Alquimia" : "📜 Registro Canônico";
-      colunasHtml += `<section class="local-col"><h3>Origem</h3><p>${origem}</p></section>`;
       return;
     }
 
