@@ -521,7 +521,7 @@ function openGenericModal(objeto, tituloPadrao) {
     }
 
     // Trata o ID para detectar origem (Manual ou Supabase)
-    if (chaveLower === "id") {
+    if (chaveLower === "id_js") {
       // Se o ID começar com GEN ou se tiver uma flag no metadata
       const isGerado = String(valor).startsWith("GEN") || dataCompleta.origem === "Gerado";
       const origem = isGerado ? "🧪 Gerado via Alquimia" : "📜 Registro Canônico";
