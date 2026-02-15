@@ -217,24 +217,28 @@ function loadNPCCreator() {
 }
 
 async function gerarNPC(racaSelecionada = "") {
-  // 1. Decidir Raça e Sexo (ainda sorteamos a base se não for fornecida)
+  // 1. Nova lógica de Sexo: Resto da divisão por 2
+  // Geramos um número inteiro e verificamos se é par (resto 0)
+  const sorteio = Math.floor(Math.random() * 100);
+  const sexo = (sorteio % 2 === 0) ? "Masculino" : "Feminino";
+  
   const raca = racaSelecionada || "Humano";
-  const sexo = Math.random() > 0.5 ? "Masculino" : "Feminino";
 
-  // Feedback visual
+  // Feedback visual no container de preview
   const container = document.getElementById("npcPreviewContainer");
   if (container) container.innerHTML = "<p class='loading-ia'>🪄 Conjurando NPC com o Gemini...</p>";
 
+  console.log(`Iniciando geração: ${raca} | ${sexo} (Sorteio: ${sorteio})`);
+
   try {
-    // 2. Chamar a Edge Function no Supabase
-    // O prefixo 'db' é a sua variável de conexão que configuramos antes
-    const { data, error } = await db.functions.invoke('gerar-npc-gemini', {
+    // 2. Chamada corrigida: 'gerar_npc_gemini' (com underline)
+    const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
       body: { raca, sexo }
     });
 
     if (error) throw error;
 
-    // 3. Montar o objeto NPC com o que a IA devolveu
+    // 3. Montar o objeto NPC com os dados da IA
     const npc = {
       id: "GEN-" + crypto.randomUUID().slice(0, 8),
       nome: data.nome,
@@ -251,13 +255,12 @@ async function gerarNPC(racaSelecionada = "") {
       }
     };
 
-    // 4. Salvar no cache e renderizar
     npcGerado = npc; 
     renderNPCPreview(npc);
 
   } catch (err) {
-    console.error("Erro na geração:", err);
-    alert("Ocorreu uma falha na conexão com o Gemini. Tente novamente.");
+    console.error("Erro detalhado:", err);
+    alert("Erro na conexão com a Grande Biblioteca (IA). Verifique se o nome da função e as chaves estão corretas.");
   }
 }
 
