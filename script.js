@@ -341,7 +341,7 @@ function renderNPCPreview(npc) {
         <h3>${npc.nome}</h3>
         <p><strong>${npc.raca}</strong> • ${npc.sexo}</p>
         <p><strong>Status:</strong> ${npc.status}</p>
-        <p><strong>Descrição:</strong> ${npc.descricao}</p>
+        <p><strong>Descrição:</strong> ${npc.aparencia}</p>
         <div class="npc-preview-actions">
           <button onclick="gerarNPC(document.getElementById('racaSelect').value)">Gerar Outro</button>
           <button onclick="confirmarNPC()">Salvar NPC</button>
