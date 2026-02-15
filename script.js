@@ -269,12 +269,11 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
   const conteudo = document.getElementById("editValue").value.trim();
 
   if (!titulo || !conteudo) {
-    alert("Por favor, preencha o título e o conteúdo da nota.");
+    alert("Preencha o título e o conteúdo!");
     return;
   }
 
-  // Criamos o novo objeto metadata mantendo o que já existia
-  // e adicionando o novo título como uma nova chave
+  // Criamos o novo objeto metadata
   const novoMetadata = {
     ...metadataAntigo,
     [titulo]: conteudo
@@ -284,18 +283,19 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
     const { error } = await db
       .from('npcs')
       .update({ metadata: novoMetadata })
-      .eq('id', id); // Filtra apenas o NPC que está aberto
+      .eq('id', id);
 
     if (error) throw error;
 
-    alert(`Nota "${titulo}" adicionada com sucesso!`);
+    alert(`Nota "${titulo}" adicionada!`);
     
-    // Opcional: Recarregar a lista ou o modal para mostrar a nova info
+    // Fecha o modal e recarrega a lista
+    document.getElementById("npcModal").classList.add("hidden");
     if (typeof loadNPCs === "function") loadNPCs(); 
     
   } catch (err) {
-    console.error("Erro ao atualizar NPC:", err);
-    alert("Erro ao salvar edição: " + err.message);
+    console.error("Erro ao salvar:", err);
+    alert("Erro ao salvar edição.");
   }
 }
 
@@ -657,6 +657,19 @@ function openGenericModal(objeto, tituloPadrao) {
   }
 
   modal.classList.remove("hidden");
+}
+
+function prepararEdicaoNPC(id, metadataEncoded) {
+  try {
+    // Decodifica o que o HTML "escondeu"
+    const metadataDecoded = JSON.parse(decodeURIComponent(metadataEncoded));
+    
+    // Chama a função de salvamento (a que você já tem ou a debaixo)
+    salvarEdicaoNPC(id, metadataDecoded);
+  } catch (e) {
+    console.error("Erro ao processar metadados do NPC:", e);
+    alert("Erro interno ao editar. Verifique o console.");
+  }
 }
 
 function formatarValor(valor) {
