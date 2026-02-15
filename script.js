@@ -222,27 +222,23 @@ async function gerarNPC(racaSelecionada = "") {
   const raca = racaSelecionada || "Humano";
 
   try {
-    const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
-      body: { raca, sexo }
-    });
-
-    if (error) throw error;
-
-    // LOG DE VERIFICAÇÃO (O que você pediu)
-    console.log("%c[RETORNO IA]", "background: #222; color: #bada55", data);
-
-    const npc = {
-      id: "GEN-" + crypto.randomUUID().slice(0, 8),
-      nome: data.nome, // Vem da IA
-      raca: raca,      // Vem da sua variável
-      sexo: sexo,      // Vem da sua variável
-      status: "Vivo",
-      faccao: "Independente",
-      metadata: {
-        aparencia: data.aparencia, // Vem da IA
-        origem: "IA Gemini"
-      }
-    };
+    const { data, error } = await db
+      .from('npcs')
+      .insert([
+        {
+          // Removi o 'id' para o banco gerar o UUID oficial
+          nome: npc.nome,
+          raca: npc.raca,
+          status: npc.status || 'Ativo',
+          metadata: {
+            sexo: npc.sexo,
+            faccao: npc.faccao || 'Independente',
+            descricao: npc.metadata.aparencia,
+            origem: "IA Gemini",
+            id_js: npc.id // Guardamos seu ID antigo aqui apenas como referência
+          }
+        }
+      ]);
 
     npcGerado = npc; 
     renderNPCPreview(npc);
@@ -342,7 +338,7 @@ function renderNPCPreview(npc) {
         <h3>${npc.nome}</h3>
         <p><strong>${npc.raca}</strong> • ${npc.sexo}</p>
         <p><strong>Status:</strong> ${npc.status}</p>
-        <p><strong>Descrição:</strong> ${npc.aparencia}</p>
+        <p><strong>Descrição:</strong> ${npc.metadata.aparencia}</p>
         <div class="npc-preview-actions">
           <button onclick="gerarNPC(document.getElementById('racaSelect').value)">Gerar Outro</button>
           <button onclick='confirmarNPC(${JSON.stringify(npc)})'>Confirmar</button>
