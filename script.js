@@ -612,13 +612,17 @@ function openGenericModal(objeto, tituloPadrao) {
   // Identificamos se é NPC pela presença de 'raca' e ausência de atributos de itens
   let editSectionHtml = "";
   if (dataCompleta.raca && !dataCompleta.dano) {
+    // Codificamos o metadata para não quebrar o HTML com aspas
+    const metadataString = encodeURIComponent(JSON.stringify(objeto.metadata || {}));
+
     editSectionHtml = `
       <div class="npc-edit-box">
         <h4>📝 Adicionar Anotação Técnica</h4>
         <div class="edit-inputs">
           <input type="text" id="editKey" placeholder="Título da Nota (ex: Itens, Fraqueza...)">
           <textarea id="editValue" placeholder="Conteúdo da anotação..."></textarea>
-          <button class="btn-update-npc" onclick="salvarEdicaoNPC('${objeto.id}', ${JSON.stringify(objeto.metadata || {})})">
+          <button class="btn-update-npc" 
+                  onclick="prepararEdicaoNPC('${objeto.id}', '${metadataString}')">
             💾 Salvar Alteração
           </button>
         </div>
