@@ -249,7 +249,7 @@ function enviarManual() {
   if (!nome) return alert("O nome é obrigatório!");
 
   const npcManual = {
-    id: "MAN-" + Date.now(),
+    id: "CAN-" + Date.now(),
     nome: nome,
     raca: document.getElementById("m-raca").value || "Humano",
     sexo: document.getElementById("m-sexo").value,
@@ -257,11 +257,46 @@ function enviarManual() {
     faccao: document.getElementById("m-faccao").value,
     metadata: {
       descricao: document.getElementById("m-desc").value, // Note: usamos 'descricao' aqui
-      origem: "Manual" // Definimos que é Manual
+      origem: "Canonico" // Definimos que é Manual
     }
   };
 
   confirmarNPC(npcManual);
+}
+
+async function salvarEdicaoNPC(id, metadataAntigo) {
+  const titulo = document.getElementById("editKey").value.trim();
+  const conteudo = document.getElementById("editValue").value.trim();
+
+  if (!titulo || !conteudo) {
+    alert("Por favor, preencha o título e o conteúdo da nota.");
+    return;
+  }
+
+  // Criamos o novo objeto metadata mantendo o que já existia
+  // e adicionando o novo título como uma nova chave
+  const novoMetadata = {
+    ...metadataAntigo,
+    [titulo]: conteudo
+  };
+
+  try {
+    const { error } = await db
+      .from('npcs')
+      .update({ metadata: novoMetadata })
+      .eq('id', id); // Filtra apenas o NPC que está aberto
+
+    if (error) throw error;
+
+    alert(`Nota "${titulo}" adicionada com sucesso!`);
+    
+    // Opcional: Recarregar a lista ou o modal para mostrar a nova info
+    if (typeof loadNPCs === "function") loadNPCs(); 
+    
+  } catch (err) {
+    console.error("Erro ao atualizar NPC:", err);
+    alert("Erro ao salvar edição: " + err.message);
+  }
 }
 
 async function gerarNPC(racaSelecionada = "") {
@@ -346,12 +381,6 @@ function renderNPCs(npcs) {
     card.onclick = () => openGenericModal(npc, "Ficha de NPC");
     grid.appendChild(card);
   });
-}
-
-function abrirFichaNPC(nome) {
-  google.script.run
-    .withSuccessHandler(renderFichaNPC)
-    .getNPCPorNome(nome);
 }
 
 function closeNPCModal() {
@@ -527,14 +556,11 @@ function openGenericModal(objeto, tituloPadrao) {
   const body = document.getElementById("npcModalBody");
   var modalContent = modal.querySelector(".modal-content");
 
-  // 1. FUSÃO DE DADOS: Juntamos o que está na raiz com o que está no metadata
-  // Isso garante que objeto.raca ou objeto.metadata.raca funcionem igual
   const dataCompleta = { 
     ...objeto, 
     ...(objeto.metadata || {}) 
   };
 
-  // Background do modal usando concatenação simples
   if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
     modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
   }
@@ -544,7 +570,7 @@ function openGenericModal(objeto, tituloPadrao) {
   let tituloPrincipal = tituloPadrao;
 
   const nomesFormatados = {
-	id: "",
+    id: "",
     raca: "Raça",
     faccao: "Facção",
     aparencia: "Aparência",
@@ -559,28 +585,16 @@ function openGenericModal(objeto, tituloPadrao) {
     comportamento: "Comportamento"
   };
 
-  // 2. Itera sobre a dataCompleta (que já tem tudo misturado)
   Object.entries(dataCompleta).forEach(([chave, valor]) => {
     const chaveLower = chave.toLowerCase();
+    if (chaveLower === "metadata" || chaveLower === "created_at" || chaveLower === "id") return;
 
-    // Ignoramos chaves técnicas do banco ou a própria coluna metadata
-    if (chaveLower === "metadata" || chaveLower === "created_at") return;
-
-    // Define o Título
     if (chaveLower === "nome" || chaveLower === "faccao_nome" || chaveLower === "nome_faccao") {
       tituloPrincipal = valor;
       return;
     }
 
-    // Trata o ID para detectar origem (Manual ou Supabase)
-    if (chaveLower === "id_js") {
-      // Se o ID começar com GEN ou se tiver uma flag no metadata
-      const isGerado = String(valor).startsWith("GEN") || dataCompleta.origem === "Gerado";
-      const origem = isGerado ? "🧪 Gerado via Alquimia" : "📜 Registro Canônico";
-      return;
-    }
-
-    // Pula se o valor for vazio ou nulo
+    if (chaveLower === "id_js") return;
     if (!valor || valor === "—") return;
 
     const label = nomesFormatados[chaveLower] || 
@@ -594,6 +608,24 @@ function openGenericModal(objeto, tituloPadrao) {
     `;
   });
 
+  // --- SEÇÃO DE EDIÇÃO (Apenas para NPCs) ---
+  // Identificamos se é NPC pela presença de 'raca' e ausência de atributos de itens
+  let editSectionHtml = "";
+  if (dataCompleta.raca && !dataCompleta.dano) {
+    editSectionHtml = `
+      <div class="npc-edit-box">
+        <h4>📝 Adicionar Anotação Técnica</h4>
+        <div class="edit-inputs">
+          <input type="text" id="editKey" placeholder="Título da Nota (ex: Itens, Fraqueza...)">
+          <textarea id="editValue" placeholder="Conteúdo da anotação..."></textarea>
+          <button class="btn-update-npc" onclick="salvarEdicaoNPC('${objeto.id}', ${JSON.stringify(objeto.metadata || {})})">
+            💾 Salvar Alteração
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
   body.innerHTML = `
     <div class="local-modal-container">
       <header class="local-modal-header">
@@ -603,6 +635,7 @@ function openGenericModal(objeto, tituloPadrao) {
         <div class="local-modal-grid" id="modalFields">
           ${colunasHtml}
         </div>
+        ${editSectionHtml} 
       </div>
       <div id="modalFooter" class="modal-footer"></div>
     </div>
@@ -611,7 +644,6 @@ function openGenericModal(objeto, tituloPadrao) {
   const footer = document.getElementById("modalFooter");
   footer.innerHTML = ""; 
 
-  // Mantém a lógica da Forja de Itens
   if (dataCompleta.dano || dataCompleta.classeArmadura) {
     footer.innerHTML = `
       <button class="btn-forja" onclick='ativarEdicaoItem(${JSON.stringify(dataCompleta)})'>
