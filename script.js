@@ -269,33 +269,41 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
   const conteudo = document.getElementById("editValue").value.trim();
 
   if (!titulo || !conteudo) {
-    alert("Preencha o título e o conteúdo!");
+    alert("Preencha o título e o conteúdo da nota.");
     return;
   }
 
-  // Criamos o novo objeto metadata
+  // 1. Cria o novo metadata mesclando o antigo com a nova chave
   const novoMetadata = {
     ...metadataAntigo,
     [titulo]: conteudo
   };
-  
-  console.log(novoMetadata);
 
   try {
-    const { error } = await db
+    // 2. Faz o update e pede para o Supabase retornar a linha atualizada (.select().single())
+    const { data: npcAtualizado, error } = await db
       .from('npcs')
       .update({ metadata: novoMetadata })
-      .eq('id', id);
+      .eq('id', id)
+      .select()
+      .single();
 
     if (error) throw error;
-    
-    // Fecha o modal e recarrega a lista
-    document.getElementById("npcModal").classList.add("hidden");
-    if (typeof loadNPCs === "function") loadNPCs(); 
-    
+
+    // 3. Feedback rápido de sucesso
+    console.log("NPC Atualizado com sucesso:", npcAtualizado);
+
+    // 4. A MÁGICA: Chama o modal novamente com os dados fresquinhos
+    // Isso vai reconstruir o HTML do modal, limpando os campos de input
+    // e mostrando a nova informação na lista de campos.
+    openGenericModal(npcAtualizado, npcAtualizado.nome);
+
+    // 5. Atualiza a lista de NPCs ao fundo para quando o usuário fechar o modal
+    if (typeof loadNPCs === "function") loadNPCs();
+
   } catch (err) {
-    console.error("Erro ao salvar:", err);
-    alert("Erro ao salvar edição.");
+    console.error("Erro ao atualizar e recarregar:", err);
+    alert("Erro ao salvar: " + err.message);
   }
 }
 
