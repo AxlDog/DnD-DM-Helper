@@ -278,6 +278,8 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
     ...metadataAntigo,
     [titulo]: conteudo
   };
+  
+  console.log(novoMetadata);
 
   try {
     const { error } = await db
@@ -286,8 +288,6 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
       .eq('id', id);
 
     if (error) throw error;
-
-    alert(`Nota "${titulo}" adicionada!`);
     
     // Fecha o modal e recarrega a lista
     document.getElementById("npcModal").classList.add("hidden");
