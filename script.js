@@ -1399,4 +1399,265 @@ function liberarAbasMestre(revelar) {
   });
 }
 
+function loadEncontros() {
+  // Define o item do menu ativo (ajuste o índice conforme necessário, usei 6 como exemplo)
+  if (typeof setActiveMenu === 'function') setActiveMenu(7);
+  
+  // Define a visualização ativa para controle de navegação/CSS
+  if (typeof setView === 'function') setView("encontros");
+
+  const contentArea = document.getElementById("content");
+  if (!contentArea) return;
+
+  // Injeta a estrutura básica da página de encontros
+  contentArea.innerHTML = `
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">⚔️ Encontros e Combates</h2>
+    </div>
+    <div class="card-grid" id="encontrosGrid"></div>
+  `;
+
+  // Chama a função de renderização passando a constante global DATA_ENCONTROS
+  // Certifique-se de que DATA_ENCONTROS esteja acessível neste escopo
+  if (typeof DATA_ENCONTROS !== 'undefined') {
+    renderEncontros(DATA_ENCONTROS);
+  } else {
+    console.warn("A constante DATA_ENCONTROS não foi encontrada.");
+    document.getElementById("encontrosGrid").innerHTML = '<p class="text-gray-500">Nenhum dado de encontro disponível.</p>';
+  }
+}
+
+function renderEncontros(dados) {
+  const grid = document.getElementById("encontrosGrid");
+  if (!grid) return;
+
+  grid.innerHTML = ""; // Limpa o grid
+
+  if (!dados || dados.length === 0) {
+    grid.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhum encontro cadastrado.</p>';
+    return;
+  }
+
+  dados.forEach((encontro) => {
+    const card = document.createElement("div");
+    card.className = "card encounter-card"; // Seguindo o padrão de classes do projeto
+
+    // Mostramos apenas o essencial no card seguindo o padrão visual de renderLocais
+    card.innerHTML = `
+      <div class="card-header">
+        <h3>${encontro.nome || "Sem Nome"}</h3>
+      </div>
+      <p class="line-clamp-1">${encontro.descricao || "Sem descrição definida."}</p>
+    `;
+
+    // Ao clicar, abre o modal enviando o objeto completo seguindo o padrão openGenericModal
+    card.onclick = () => openEncounterModal(encontro);
+    
+    grid.appendChild(card);
+  });
+}
+
+/**
+ * Abre o modal focado nos monstros do encontro, com controles de HP e Iniciativa.
+ */
+function openEncounterModal(encontro) {
+  const modal = document.getElementById("npcModal");
+  const body = document.getElementById("npcModalBody");
+  const modalContent = modal.querySelector(".modal-content");
+
+  if (!modal || !body) return;
+
+  if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
+    modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
+  }
+
+  let inimigosHtml = "";
+  
+  if (encontro.inimigos && Array.isArray(encontro.inimigos)) {
+    inimigosHtml = encontro.inimigos.map(ref => {
+      const monstro = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === ref.id) : null;
+      const nomeBase = monstro ? monstro.nome : ref.id;
+      const monstroId = monstro ? monstro.id : null;
+      const cr = monstro ? `ND ${monstro.cr}` : "ND ?";
+      const pv = monstro ? parseInt(monstro.pv) || 0 : 0;
+      const ca = monstro ? monstro.ca : "?";
+
+      // Cria cards individuais
+      return Array.from({ length: ref.quantidade }, (_, i) => {
+        const sufixo = ref.quantidade > 1 ? ` #${i + 1}` : "";
+        const uniqueId = `${ref.id}_${i}`; // ID único para controle de HP no DOM
+        
+        return `
+          <div class="monster-card-unit" id="monster-card-${uniqueId}">
+            <div class="monster-card-header">
+              <span class="monster-tag">${cr}</span>
+              <span class="monster-name clickable-name" onclick="openMonsterDetails(event, '${monstroId}')" title="Ver Ficha Rápida">
+                ${nomeBase}${sufixo} ℹ️
+              </span>
+            </div>
+
+            <div class="monster-combat-controls">
+              <div class="init-control" title="Iniciativa">
+                <span>⏱️</span>
+                <input type="number" class="combat-input init-input" placeholder="0" />
+              </div>
+
+              <div class="monster-stats-row">
+                <span>🛡️ CA: ${ca}</span>
+                <span>❤️ <span id="hp-val-${uniqueId}">${pv}</span> / ${pv}</span>
+              </div>
+            </div>
+
+            <div class="hp-control-panel">
+              <input type="number" id="hp-input-${uniqueId}" class="combat-input dmg-input" placeholder="Qtd" min="0">
+              <button class="btn-combat btn-heal" onclick="applyDamage(event, '${uniqueId}', false)" title="Curar Vida">💚</button>
+              <button class="btn-combat btn-dmg" onclick="applyDamage(event, '${uniqueId}', true)" title="Causar Dano">💥</button>
+            </div>
+
+            <div class="monster-card-footer">
+              📍 ${ref.posicao_inicial}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }).join('');
+  }
+
+  body.innerHTML = `
+    <div class="local-modal-container">
+      <header class="local-modal-header">
+        <h2>${encontro.nome || "Registro de Combate"}</h2>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;">
+          ${getDificuldadeLabel(encontro.dificuldade)} | Nível ${encontro.nivel_recomendado || '?'}
+        </p>
+      </header>
+      
+      <div class="local-modal-scroll">
+        <div class="monster-section">
+          <h3 class="section-title">Iniciativa e Inimigos</h3>
+          <div class="monster-unit-grid">
+            ${inimigosHtml || '<p>Nenhum monstro registrado.</p>'}
+          </div>
+        </div>
+      </div>
+
+      <div id="modalFooter" class="modal-footer">
+        <button class="btn-forja" onclick="document.getElementById('npcModal').classList.add('hidden')">
+          Fechar Registro
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.remove("hidden");
+}
+
+/**
+ * Aplica dano ou cura na interface do card do monstro específico.
+ */
+function applyDamage(event, uniqueId, isDamage) {
+  if (event) event.stopPropagation();
+
+  const valDisplay = document.getElementById(`hp-val-${uniqueId}`);
+  const inputEl = document.getElementById(`hp-input-${uniqueId}`);
+  const cardEl = document.getElementById(`monster-card-${uniqueId}`);
+
+  if (!valDisplay || !inputEl) return;
+
+  const amount = parseInt(inputEl.value) || 0;
+  if (amount === 0) return;
+
+  let currentHp = parseInt(valDisplay.innerText) || 0;
+
+  if (isDamage) {
+    currentHp -= amount;
+  } else {
+    currentHp += amount;
+  }
+
+  valDisplay.innerText = currentHp;
+  inputEl.value = ''; // Limpa o input após aplicar
+
+  // Feedback visual para monstro abatido
+  if (currentHp*5 == 0) {
+    cardEl.classList.add('monster-dead');
+  } else {
+    cardEl.classList.remove('monster-dead');
+  }
+}
+
+/**
+ * Abre um modal sobreposto com a Ficha Rápida do Monstro.
+ */
+function openMonsterDetails(event, monstroId) {
+  if (event) event.stopPropagation();
+  if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
+
+  const monstro = DATA_MONSTROS.find(m => m.id === monstroId);
+  if (!monstro) return;
+
+  // Monta Atributos - O uso de 'for' como string literal previne erros no parser
+  const attrs = monstro.atributos || {'for':10, 'des':10, 'con':10, 'int':10, 'sab':10, 'car':10};
+  const attrHtml = `
+    <div class="quick-attr-grid">
+      <div><strong>FOR</strong><br>${attrs['for']}</div>
+      <div><strong>DES</strong><br>${attrs.des}</div>
+      <div><strong>CON</strong><br>${attrs.con}</div>
+      <div><strong>INT</strong><br>${attrs.int}</div>
+      <div><strong>SAB</strong><br>${attrs.sab}</div>
+      <div><strong>CAR</strong><br>${attrs.car}</div>
+    </div>
+  `;
+
+  // Monta Ações e Habilidades convertendo array puramente em string para evitar erro de Token
+  let acoesHtml = '';
+  if (monstro.acoes && monstro.acoes.length > 0) {
+    const listaAcoes = monstro.acoes.map(a => `<li><strong>${a.nome}:</strong> ${a.descricao}</li>`).join('');
+    acoesHtml = `<h4 class="quick-title">Ações</h4><ul class="quick-list">${listaAcoes}</ul>`;
+  }
+  
+  let habilidadesHtml = '';
+  if (monstro.habilidades && monstro.habilidades.length > 0) {
+    const listaHab = monstro.habilidades.map(h => `<li><strong>${h.nome}:</strong> ${h.descricao}</li>`).join('');
+    habilidadesHtml = `<h4 class="quick-title">Habilidades</h4><ul class="quick-list">${listaHab}</ul>`;
+  }
+
+  // Criação do Overlay no DOM
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'quickMonsterModal';
+  overlay.onclick = (e) => {
+    if (e.target === overlay) document.body.removeChild(overlay); // Fecha ao clicar fora
+  };
+
+  overlay.innerHTML = `
+    <div class="quick-monster-content">
+      <header class="quick-monster-header">
+        <div>
+          <h3>${monstro.nome}</h3>
+          <span class="quick-subtitle">${monstro.tipo} | ${monstro.alinhamento}</span>
+        </div>
+        <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
+      </header>
+      
+      <div class="quick-monster-body">
+        <p><strong>🛡️ CA:</strong> ${monstro.ca} <small>(${monstro.tipo_ca || '-'})</small></p>
+        <p><strong>❤️ PV:</strong> ${monstro.pv} <small>(${monstro.dados_vida || '-'})</small></p>
+        <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
+        ${attrHtml}
+        <div class="quick-divider"></div>
+        ${habilidadesHtml}
+        ${acoesHtml}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+function getDificuldadeLabel(slug) {
+  const mapa = { 'facil': 'Fácil', 'medio': 'Médio', 'dificil': 'Difícil', 'dificil_alto': 'Difícil (Alto)', 'mortal': 'Mortal' };
+  return mapa[slug] || slug;
+}
+
 window.onload = loadInitialView;
