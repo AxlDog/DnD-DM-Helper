@@ -194,27 +194,72 @@ async function loadNPCList() {
 function loadNPCCreator() {
   setActiveMenu(4);
   setView("npc-create");
-  document.getElementById("content").innerHTML =
-   `<div class="loja-nav">
-      <h2>➕ Criar NPC</h2> 
+  
+  const content = document.getElementById("content");
+  if (!content) return;
+
+  content.innerHTML = `
+    <div class="header-section">
+      <h2>➕ Criar Novo Habitante</h2>
+      <p>Gere NPCs únicos usando inteligência artificial ou preencha manualmente.</p>
     </div>
-      <div class="npc-generator"> 
-        <label for="racaSelect"></label> 
-        <select id="racaSelect"> 
-			<option value="">Aleatório</option> 
-			<option value="Humano">Humano</option> 
-			<option value="Elfo">Elfo</option> 
-			<option value="Anão">Anão</option> 
-			<option value="Halfling">Halfling</option> 
-			<option value="Gnomo">Gnomo</option> 
-			<option value="Tiefling">Tiefling</option>
-			<option value="Goliath">Goliath</option>
-			<option value="Orc">Orc</option>
-        </select> 
-        <button class="btn-loja" onclick="gerarNPC(document.getElementById('racaSelect').value)">➕ Gerar NPC</button>
-		<button class="btn-loja" onclick="criarNPC()">➕ Criar NPC</button>
-      </div> 
-    <div id="npcPreview"></div>`;
+
+    <div class="npc-generator-card">
+      <div class="grid-2-col">
+        <div class="form-group">
+          <label>🧬 Raça</label>
+          <select id="racaSelect" class="input-rpg">
+            <option value="">🎲 Aleatório</option>
+            <option value="Humano">Humano</option>
+            <option value="Elfo">Elfo</option>
+            <option value="Anão">Anão</option>
+            <option value="Halfling">Halfling</option>
+            <option value="Gnomo">Gnomo</option>
+            <option value="Tiefling">Tiefling</option>
+            <option value="Goliath">Goliath</option>
+            <option value="Orc">Orc</option>
+            <option value="Dragonborn">Draconato</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>🛠️ Profissão ou Classe</label>
+          <select id="classeSelect" class="input-rpg">
+            <option value="">🎲 Aleatório</option>
+            <optgroup label="Aventureiros">
+              <option value="Guerreiro">Guerreiro</option>
+              <option value="Mago">Mago</option>
+              <option value="Ladino">Ladino</option>
+              <option value="Clérigo">Clérigo</option>
+              <option value="Patrulheiro">Patrulheiro</option>
+              <option value="Bárbaro">Bárbaro</option>
+            </optgroup>
+            <optgroup label="Civis">
+              <option value="Ferreiro">Ferreiro</option>
+              <option value="Taberneiro">Taberneiro</option>
+              <option value="Guarda da Cidade">Guarda</option>
+              <option value="Nobre">Nobre</option>
+              <option value="Mercador">Mercador</option>
+              <option value="Camponês">Camponês</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions-row mt-4">
+        <button class="btn-loja primary" onclick="handleGerarNPC()">
+          ✨ Gerar com IA
+        </button>
+        <button class="btn-loja secondary" onclick="abrirFormularioManual()">
+          ✍️ Criar Manualmente
+        </button>
+      </div>
+    </div>
+
+    <div id="npcPreview" class="mt-4">
+      <!-- O preview do NPC gerado aparecerá aqui -->
+    </div>
+  `;
 }
 
 function criarNPC() {
@@ -241,6 +286,20 @@ function criarNPC() {
       </div>
     </div>
   `;
+}
+
+/**
+ * Captura os valores da UI e chama a geração
+ */
+async function handleGerarNPC() {
+  const raca = document.getElementById('racaSelect').value;
+  const classe = document.getElementById('classeSelect').value;
+  
+  // Feedback visual de carregamento
+  const preview = document.getElementById("npcPreview");
+  preview.innerHTML = `<div class="loading-container">🪄 Tecendo a alma do NPC...</div>`;
+  
+  await gerarNPC(raca, classe);
 }
 
 // Função auxiliar para coletar os dados do formulário acima
@@ -307,14 +366,15 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
   }
 }
 
-async function gerarNPC(racaSelecionada = "") {
+async function gerarNPC(racaSelecionada = "", classeSelecionada = "") {
   const sorteio = Math.floor(Math.random() * 100);
   const sexo = (sorteio % 2 === 0) ? "Masculino" : "Feminino";
   const raca = racaSelecionada || "Humano";
+  const classe = classeSelecionada || "Camponês";
 
   try {
     const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
-      body: { raca, sexo }
+      body: { raca, sexo, classe }
     });
 
     if (error) throw error;
@@ -1352,8 +1412,8 @@ function configurarVisibilidadeJogadores() {
   console.log("Acesso concedido: Sessão Atual, Linha do Tempo e Mercado liberados.");
 }
 
-const SENHA_MESTRE = "MESTRELULU"; // Senha para liberar TUDO
-const SENHA_JOGADOR = "PARTY"; // Senha para liberar apenas o básico
+const SENHA_MESTRE = "sensei"; // Senha para liberar TUDO
+const SENHA_JOGADOR = "lindos"; // Senha para liberar apenas o básico
 
 function verificarAcesso() {
   const senha = document.getElementById("inputSenha").value;
