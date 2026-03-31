@@ -1586,8 +1586,11 @@ function applyDamage(event, uniqueId, isDamage) {
   }
 }
 
-/**
- * Abre um modal sobreposto com a Ficha Rápida do Monstro.
+/*
+ * =========================================================
+ * FICHA RÁPIDA DE MONSTRO
+ * Estrutura segura com processamento dinâmico de ações
+ * =========================================================
  */
 function openMonsterDetails(event, monstroId) {
   if (event) event.stopPropagation();
@@ -1596,30 +1599,57 @@ function openMonsterDetails(event, monstroId) {
   const monstro = DATA_MONSTROS.find(m => m.id === monstroId);
   if (!monstro) return;
 
-  // Monta Atributos - O uso de 'for' como string literal previne erros no parser
+  // Monta Atributos - Previne erros no parser e garante valor 10 de fallback se nulo
   const attrs = monstro.atributos || {'for':10, 'des':10, 'con':10, 'int':10, 'sab':10, 'car':10};
   const attrHtml = `
     <div class="quick-attr-grid">
-      <div><strong>FOR</strong><br>${attrs['for']}</div>
-      <div><strong>DES</strong><br>${attrs.des}</div>
-      <div><strong>CON</strong><br>${attrs.con}</div>
-      <div><strong>INT</strong><br>${attrs.int}</div>
-      <div><strong>SAB</strong><br>${attrs.sab}</div>
-      <div><strong>CAR</strong><br>${attrs.car}</div>
+      <div><strong>FOR</strong><br>${attrs['for'] || 10}</div>
+      <div><strong>DES</strong><br>${attrs.des || 10}</div>
+      <div><strong>CON</strong><br>${attrs.con || 10}</div>
+      <div><strong>INT</strong><br>${attrs.int || 10}</div>
+      <div><strong>SAB</strong><br>${attrs.sab || 10}</div>
+      <div><strong>CAR</strong><br>${attrs.car || 10}</div>
     </div>
   `;
 
-  // Monta Ações e Habilidades convertendo array puramente em string para evitar erro de Token
-  let acoesHtml = '';
-  if (monstro.acoes && monstro.acoes.length > 0) {
-    const listaAcoes = monstro.acoes.map(a => `<li><strong>${a.nome}:</strong> ${a.descricao}</li>`).join('');
-    acoesHtml = `<h4 class="quick-title">Ações</h4><ul class="quick-list">${listaAcoes}</ul>`;
-  }
-  
-  let habilidadesHtml = '';
-  if (monstro.habilidades && monstro.habilidades.length > 0) {
-    const listaHab = monstro.habilidades.map(h => `<li><strong>${h.nome}:</strong> ${h.descricao}</li>`).join('');
-    habilidadesHtml = `<h4 class="quick-title">Habilidades</h4><ul class="quick-list">${listaHab}</ul>`;
+  // DICIONÁRIO DINÂMICO DE AÇÕES (Mais direto e anti-erros)
+  const categoriasPossiveis = {
+    habilidades: "Habilidades",
+    habilidades_especiais: "Características Especiais",
+    acoes: "Ações",
+    acoes_bonus: "Ações Bônus",
+    reacoes: "Reações",
+    acoes_lendarias: "Ações Lendárias",
+    magias: "Magias"
+  };
+
+  let sessoesDinamicasHtml = '';
+
+  for (const [chave, titulo] of Object.entries(categoriasPossiveis)) {
+    const lista = monstro[chave];
+    
+    // Verifica se a categoria existe e se o array não está vazio
+    if (lista && Array.isArray(lista) && lista.length > 0) {
+      sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
+      
+      const itensMapeados = lista.map(item => {
+        if (typeof item === 'string') return `<li>${item}</li>`; // Trata strings puras (ex: magias)
+        
+        const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
+        let desc = item.descricao || '';
+        
+        // Fallback rápido se não houver 'descricao' mas houver status de ataque
+        if (!desc && item.ataque) {
+          desc = `<em>Ataque:</em> ${item.ataque} | <em>Dano:</em> ${item.dano || '-'}`;
+        } else if (!desc && item.dano) {
+          desc = `<em>Dano:</em> ${item.dano}`;
+        }
+
+        return `<li>${nome}${desc}</li>`;
+      }).join(''); // 'join' no array evita aparecimento de vírgulas (,) espúrias no HTML final
+
+      sessoesDinamicasHtml += `${itensMapeados}</ul>`;
+    }
   }
 
   // Criação do Overlay no DOM
@@ -1635,7 +1665,7 @@ function openMonsterDetails(event, monstroId) {
       <header class="quick-monster-header">
         <div>
           <h3>${monstro.nome}</h3>
-          <span class="quick-subtitle">${monstro.tipo} | ${monstro.alinhamento}</span>
+          <span class="quick-subtitle">${monstro.tipo || 'Desconhecido'} | ${monstro.alinhamento || 'Neutro'}</span>
         </div>
         <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
       </header>
@@ -1646,8 +1676,7 @@ function openMonsterDetails(event, monstroId) {
         <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
         ${attrHtml}
         <div class="quick-divider"></div>
-        ${habilidadesHtml}
-        ${acoesHtml}
+        ${sessoesDinamicasHtml}
       </div>
     </div>
   `;
