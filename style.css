@@ -955,3 +955,195 @@ main h2 {
 .btn-update-npc:hover {
   background: #fff;
 }
+
+/* Grid para os cards individuais */
+.monster-unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+/* Card Individual de cada Inimigo */
+.monster-card-unit {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.monster-card-unit:hover {
+  border-color: #3b82f6;
+  background: rgba(30, 41, 59, 0.9);
+  transform: translateY(-2px);
+}
+
+.monster-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.monster-tag {
+  font-size: 0.7rem;
+  font-weight: bold;
+  background: #3b82f6;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.monster-name {
+  font-weight: 600;
+  color: #f3f4f6;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.monster-stats-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.monster-card-footer {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin-top: auto;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.monster-section { padding: 10px; }
+.section-title {
+  font-size: 0.9rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 20px; border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+  padding-bottom: 8px; text-align: center;
+}
+
+.monster-unit-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
+}
+
+.monster-card-unit {
+  background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+
+/* Feedback visual de morte */
+.monster-card-unit.monster-dead {
+  opacity: 0.5; filter: grayscale(80%); border-color: #ef4444;
+}
+
+.monster-card-unit:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.9); }
+
+.monster-card-header { display: flex; flex-direction: column; gap: 4px; }
+.monster-tag {
+  font-size: 0.7rem; font-weight: bold; background: #3b82f6; color: white;
+  padding: 2px 6px; border-radius: 4px; width: fit-content;
+}
+
+/* Nome clicável */
+.clickable-name {
+  font-weight: 600; color: #93c5fd; font-size: 0.95rem; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.2s;
+}
+.clickable-name:hover { color: #3b82f6; text-decoration: underline; }
+
+.monster-combat-controls {
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0, 0, 0, 0.2); padding: 6px 8px; border-radius: 4px; gap: 8px;
+}
+
+.init-control { display: flex; align-items: center; gap: 4px; }
+.monster-stats-row { display: flex; gap: 10px; font-size: 0.8rem; color: #cbd5e1; }
+
+.hp-control-panel {
+  display: flex; gap: 6px; justify-content: stretch; align-items: center;
+  background: rgba(0, 0, 0, 0.1); padding: 4px; border-radius: 4px;
+}
+
+/* Inputs de combate */
+.combat-input {
+  background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.2);
+  color: white; border-radius: 4px; padding: 4px; text-align: center;
+}
+.init-input { width: 40px; font-weight: bold; }
+.dmg-input { width: 60px; flex-grow: 1; }
+.combat-input:focus { outline: none; border-color: #3b82f6; }
+
+/* Botões de Vida */
+.btn-combat {
+  border: none; border-radius: 4px; padding: 4px 10px; cursor: pointer;
+  font-size: 0.9rem; transition: transform 0.1s, opacity 0.2s;
+}
+.btn-combat:active { transform: scale(0.9); }
+.btn-combat:hover { opacity: 0.8; }
+.btn-heal { background: #10b981; color: white; }
+.btn-dmg { background: #ef4444; color: white; }
+
+.monster-card-footer {
+  font-size: 0.75rem; color: #9ca3af; font-style: italic; margin-top: auto;
+  padding-top: 4px; border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ====================
+   MODAL DE FICHA RÁPIDA (OVERLAY)
+   ==================== */
+.quick-monster-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(3px);
+  z-index: 10000; display: flex; justify-content: center; align-items: center;
+  padding: 20px;
+}
+
+.quick-monster-content {
+  background: #1e293b; border: 1px solid #3b82f6; border-radius: 8px;
+  width: 100%; max-width: 450px; max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; flex-direction: column;
+}
+
+.quick-monster-header {
+  background: rgba(0,0,0,0.2); padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+
+.quick-monster-header h3 { margin: 0; color: #f3f4f6; font-size: 1.2rem; }
+.quick-subtitle { font-size: 0.8rem; color: #9ca3af; font-style: italic; }
+
+.btn-close-quick {
+  background: none; border: none; color: #9ca3af; font-size: 1.2rem;
+  cursor: pointer; transition: color 0.2s;
+}
+.btn-close-quick:hover { color: #ef4444; }
+
+.quick-monster-body { padding: 15px; font-size: 0.9rem; color: #e2e8f0; }
+.quick-monster-body p { margin-bottom: 6px; }
+
+.quick-attr-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; text-align: center;
+  background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin: 15px 0;
+}
+.quick-attr-grid div { font-size: 0.85rem; }
+.quick-attr-grid strong { color: #60a5fa; display: block; margin-bottom: 2px; }
+
+.quick-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+
+.quick-title { color: #60a5fa; border-bottom: 1px solid rgba(96,165,250,0.3); padding-bottom: 4px; margin-bottom: 8px; font-size: 1rem; }
+.quick-list { list-style: none; padding: 0; margin: 0 0 15px 0; }
+.quick-list li { margin-bottom: 8px; background: rgba(0,0,0,0.15); padding: 8px; border-radius: 4px; }
+.quick-list strong { color: #f3f4f6; }
