@@ -73,7 +73,7 @@ function loadInitialView() {
 function loadDashboard() {
   setActiveMenu(0);
   setView("dashboard");
-  document.getElementById("content").innerHTML = `<h2>📌 Sessão Atual</h2> <p>Jogadores enfrentaram Hezrol e conseguiram a vitória, mas não sem antes Eskell e Tamir ficarem inconcientes algumas vezes. Romero conseguiu concluir o ritual de purificação da água, mas o último condão de seu rosário virou luz no processo. Agora os jogadores se veem falando com um tiefling da resistência.</p>`;
+  document.getElementById("content").innerHTML = `<h2>📌 Arco Ash</h2> <p>Jogadores encontraram Frieren, uma poderosa maga, e ajudaram a derrotar demonios que haviam colocado uma recompensa em sua cabeça.</p>`;
 }
 
 function loadTimeline() {
