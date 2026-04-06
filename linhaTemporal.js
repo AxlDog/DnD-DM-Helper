@@ -1,5 +1,5 @@
 
-const DATA_TIMELINE = {
+const DATA_TIMELINE = [
 	"ato_2": {
 		"Sessao Frieren": {
 		  "Localizacao inicial": "Forte dos bandidos",
@@ -16,4 +16,4 @@ const DATA_TIMELINE = {
 		  "recompensas": "Frieren entrega a Kane e seu irmão um pergaminho do scrying para que possam localizar seu alvo ou possivelmente seu pai. Para Ashkarion ela da informações sobre sua espada e sobre Feanor."
 		}
 	};
-}
+]
