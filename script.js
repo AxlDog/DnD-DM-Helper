@@ -998,7 +998,7 @@ function salvarNPCGerado(npc) {
 //----------------- LOJA -------------------
 
 function loadLoja() {
-  setActiveMenu(8);
+  setActiveMenu(7);
   setView("loja");
 
   document.getElementById("content").innerHTML = `
