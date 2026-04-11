@@ -128,7 +128,9 @@ const DATA_LOJA = {
         { nome: "Cantíl", peso: "5 lb", custo: "2 SP", raridade: "Comum" },
         { nome: "Pé de Cabra", peso: "5 lb", custo: "2 GP", raridade: "Comum" },
         { nome: "Kit de Escalada", peso: "12 lb", custo: "25 GP", raridade: "Comum" },
-        { nome: "Lanterna Furta-Fogo", peso: "2 lb", custo: "10 GP", raridade: "Comum" }
+        { nome: "Lanterna Furta-Fogo", peso: "2 lb", custo: "10 GP", raridade: "Comum" },
+		{ nome: "Ração simples", peso: "2 lb", custo: "5 PP", raridade: "Comum" },
+		{ nome: "Lembas", peso: "2 lb", custo: "2 GP", raridade: "Raro" }
       ]
     }
   ]}
