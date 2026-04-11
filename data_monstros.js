@@ -393,5 +393,758 @@ const DATA_MONSTROS = [
       "descricao": "Se houver 3+ inimigos amedrontados, a erinyes ganha vantagem em ataques."
     }
   ]
-  }
+  },
+  {
+	  "id": "npc_edward_newgate",
+	  "nome": "Edward Newgate, Barba Branca",
+	  "tipo": "Humano",
+	  "alinhamento": "Caótico bom",
+	  "ca": 17,
+	  "tipo_ca": "Resistência monstruosa + casaco de capitão",
+	  "pv": 310,
+	  "dados_vida": "20d12 + 160",
+	  "deslocamento": "9m",
+
+	  "atributos": {
+		"for": 24,
+		"des": 12,
+		"con": 26,
+		"int": 12,
+		"sab": 16,
+		"car": 20
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Presença de Imperador",
+		  "descricao": "Criaturas hostis a até 9m devem passar em CD 18 SAB ou ficam Amedrontadas por 1 turno."
+		},
+		{
+		  "nome": "Corpo Inquebrável",
+		  "descricao": "Reduz todo dano recebido em 5. Quando abaixo de 50% de vida, ganha resistência a dano."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 18",
+	  "idiomas": "Comum",
+	  "cr": 17,
+	  "xp": 18000,
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza dois ataques com sua naginata ou um ataque devastador sísmico."
+		},
+		{
+		  "nome": "Murakumogiri",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+12",
+		  "alcance": "3m",
+		  "alvo": "1 criatura",
+		  "dano": "2d10 + 7 cortante + 2d8 impacto"
+		},
+		{
+		  "nome": "Golpe Sísmico",
+		  "tipo": "área",
+		  "alcance": "6m raio",
+		  "alvo": "todas as criaturas",
+		  "dano": "4d10 contundente (CD 18 DES metade)"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Quebra do Mundo",
+		  "descricao": "1 vez por combate, causa 8d10 dano em área ampla e derruba todas as criaturas (prone)."
+		},
+		{
+		  "nome": "Vontade Inabalável",
+		  "descricao": "Não pode ser derrubado ou empurrado contra sua vontade."
+		}
+	  ]
+	},
+	{
+	  "id": "npc_marco_fenix",
+	  "nome": "Marco, a Fênix",
+	  "tipo": "Humano",
+	  "alinhamento": "Caótico bom",
+	  "ca": 18,
+	  "tipo_ca": "Forma híbrida mística",
+	  "pv": 210,
+	  "dados_vida": "18d10 + 108",
+	  "deslocamento": "12m, voo 18m",
+
+	  "atributos": {
+		"for": 16,
+		"des": 20,
+		"con": 22,
+		"int": 14,
+		"sab": 16,
+		"car": 18
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Forma da Fênix",
+		  "descricao": "Pode voar e ignora terreno difícil."
+		},
+		{
+		  "nome": "Regeneração Azul",
+		  "descricao": "Recupera 15 PV no início do turno. Não funciona se estiver inconsciente."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 17",
+	  "idiomas": "Comum",
+	  "cr": 13,
+	  "xp": 10000,
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza dois ataques flamejantes."
+		},
+		{
+		  "nome": "Garras da Fênix",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+10",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "2d6 + 5 cortante + 2d8 fogo"
+		},
+		{
+		  "nome": "Investida Flamejante",
+		  "tipo": "linha",
+		  "alcance": "9m",
+		  "alvo": "criaturas na linha",
+		  "dano": "3d8 fogo (CD 16 DES metade)"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Chamas Restauradoras",
+		  "descricao": "Como ação, cura um aliado em 4d8 PV."
+		},
+		{
+		  "nome": "Ressurgir",
+		  "descricao": "1 vez por dia, ao cair a 0 PV, retorna com 80 PV."
+		}
+	  ]
+	},
+	  {
+		"id": "npc_bb_garrik_ancora",
+		"nome": "Garrik 'Âncora'",
+		"tipo": "Humano",
+		"alinhamento": "Caótico bom",
+		"ca": 15,
+		"tipo_ca": "Armadura de couro reforçado",
+		"pv": 48,
+		"dados_vida": "6d8 + 18",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 18, "des": 10, "con": 16, "int": 10, "sab": 12, "car": 11 },
+
+		"habilidades": [
+		  { "nome": "Linha de Frente", "descricao": "Ganha +2 CA enquanto adjacente a aliados." }
+		],
+
+		"sentidos": "Percepção passiva 11",
+		"idiomas": "Comum",
+		"cr": 2,
+		"xp": 450,
+
+		"acoes": [
+		  {
+			"nome": "Martelo Naval",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d10 + 4 contundente"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Segurar Linha", "descricao": "Pode impor desvantagem em ataque contra aliado próximo 1x por turno." }
+		],
+
+		"funcao_navio": "Tanque / defensor da tripulação"
+	  },
+
+	  {
+		"id": "npc_bb_lira_mar",
+		"nome": "Lira 'Maré Rápida'",
+		"tipo": "Humana",
+		"alinhamento": "Caótico bom",
+		"ca": 14,
+		"tipo_ca": "Couro leve",
+		"pv": 34,
+		"dados_vida": "5d8 + 10",
+		"deslocamento": "12m",
+
+		"atributos": { "for": 10, "des": 18, "con": 14, "int": 12, "sab": 13, "car": 12 },
+
+		"habilidades": [
+		  { "nome": "Agilidade Costeira", "descricao": "Ignora terreno difícil em combate naval." }
+		],
+
+		"sentidos": "Percepção passiva 13",
+		"idiomas": "Comum",
+		"cr": 1,
+		"xp": 200,
+
+		"acoes": [
+		  {
+			"nome": "Adaga Dupla",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 4 perfurante"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Ataque Furtivo", "descricao": "Causa +2d6 se tiver vantagem ou aliado próximo." }
+		],
+
+		"funcao_navio": "Batedora / mensageira"
+	  },
+
+	  {
+		"id": "npc_bb_doran_canhao",
+		"nome": "Doran 'Canhão'",
+		"tipo": "Anão",
+		"alinhamento": "Neutro",
+		"ca": 16,
+		"tipo_ca": "Armadura média",
+		"pv": 45,
+		"dados_vida": "6d8 + 18",
+		"deslocamento": "7,5m",
+
+		"atributos": { "for": 16, "des": 12, "con": 18, "int": 11, "sab": 10, "car": 10 },
+
+		"habilidades": [
+		  { "nome": "Resistente", "descricao": "Vantagem contra venenos." }
+		],
+
+		"sentidos": "Percepção passiva 10",
+		"idiomas": "Comum, Anão",
+		"cr": 2,
+		"xp": 450,
+
+		"acoes": [
+		  {
+			"nome": "Disparo de Canhão Portátil",
+			"tipo": "à distância",
+			"ataque": "+5",
+			"alcance": "18m",
+			"alvo": "1 criatura",
+			"dano": "2d8 + 3 contundente"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Recuo Brutal", "descricao": "Empurra alvo 3m em acerto crítico." }
+		],
+
+		"funcao_navio": "Artilheiro"
+	  },
+
+	  {
+		"id": "npc_bb_sera_corda",
+		"nome": "Sera 'Corda Negra'",
+		"tipo": "Humana",
+		"alinhamento": "Neutro",
+		"ca": 13,
+		"tipo_ca": "Sem armadura",
+		"pv": 32,
+		"dados_vida": "5d8 + 5",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 12, "des": 16, "con": 12, "int": 14, "sab": 13, "car": 11 },
+
+		"habilidades": [
+		  { "nome": "Manipuladora de Cordas", "descricao": "Vantagem para agarrar ou restringir." }
+		],
+
+		"sentidos": "Percepção passiva 12",
+		"idiomas": "Comum",
+		"cr": 1,
+		"xp": 200,
+
+		"acoes": [
+		  {
+			"nome": "Laço",
+			"tipo": "controle",
+			"ataque": "+5",
+			"alcance": "9m",
+			"alvo": "1 criatura",
+			"dano": "restrito (CD 13)"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Puxão", "descricao": "Pode puxar inimigo 3m após prender." }
+		],
+
+		"funcao_navio": "Controle / captura"
+	  },
+
+	  {
+		"id": "npc_bb_kael_fauno",
+		"nome": "Kael 'Riso Salgado'",
+		"tipo": "Humano",
+		"alinhamento": "Caótico neutro",
+		"ca": 13,
+		"tipo_ca": "Couro leve",
+		"pv": 30,
+		"dados_vida": "5d8",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 10, "des": 14, "con": 12, "int": 12, "sab": 10, "car": 16 },
+
+		"habilidades": [
+		  { "nome": "Charme Canalha", "descricao": "Pode tentar distrair inimigos (CD 13 SAB)." }
+		],
+
+		"sentidos": "Percepção passiva 10",
+		"idiomas": "Comum",
+		"cr": 1,
+		"xp": 200,
+
+		"acoes": [
+		  {
+			"nome": "Espada Curta",
+			"tipo": "corpo a corpo",
+			"ataque": "+4",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 2 cortante"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Provocar", "descricao": "Força alvo a focar nele (CD 13 SAB)." }
+		],
+
+		"funcao_navio": "Negociador / distração"
+	  },
+
+	  {
+		"id": "npc_bb_thorv_mastro",
+		"nome": "Thorv 'Olho do Mastro'",
+		"tipo": "Meio-orc",
+		"alinhamento": "Neutro",
+		"ca": 14,
+		"tipo_ca": "Couro reforçado",
+		"pv": 42,
+		"dados_vida": "6d8 + 12",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 16, "des": 14, "con": 16, "int": 10, "sab": 14, "car": 9 },
+
+		"habilidades": [
+		  { "nome": "Visão Aguçada", "descricao": "Vantagem em Percepção à distância." }
+		],
+
+		"sentidos": "Percepção passiva 15",
+		"idiomas": "Comum, Orc",
+		"cr": 2,
+		"xp": 450,
+
+		"acoes": [
+		  {
+			"nome": "Arco Longo",
+			"tipo": "à distância",
+			"ataque": "+6",
+			"alcance": "45m",
+			"alvo": "1 criatura",
+			"dano": "1d8 + 3 perfurante"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Marca do Alvo", "descricao": "Aliados ganham +1 para acertar o alvo marcado." }
+		],
+
+		"funcao_navio": "Atirador / vigia"
+	  },
+
+	  {
+		"id": "npc_bb_mira_curandeira",
+		"nome": "Mira 'Maresia'",
+		"tipo": "Humana",
+		"alinhamento": "Boa",
+		"ca": 13,
+		"tipo_ca": "Vestes leves",
+		"pv": 36,
+		"dados_vida": "5d8 + 10",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 10, "des": 12, "con": 14, "int": 14, "sab": 16, "car": 12 },
+
+		"habilidades": [
+		  { "nome": "Curandeira", "descricao": "Pode estabilizar automaticamente aliados." }
+		],
+
+		"sentidos": "Percepção passiva 13",
+		"idiomas": "Comum",
+		"cr": 2,
+		"xp": 450,
+
+		"acoes": [
+		  {
+			"nome": "Bastão",
+			"tipo": "corpo a corpo",
+			"ataque": "+4",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 2 contundente"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Cura Rápida", "descricao": "Cura 2d8 PV em aliado (3x por combate)." }
+		],
+
+		"funcao_navio": "Suporte / curandeira"
+	  },
+	  {
+		"id": "npc_bb_fenn_cozinheiro",
+		"nome": "Fenn 'Panela de Ferro'",
+		"tipo": "Halfling",
+		"alinhamento": "Neutro bom",
+		"ca": 13,
+		"tipo_ca": "Couro",
+		"pv": 33,
+		"dados_vida": "5d8 + 5",
+		"deslocamento": "7,5m",
+
+		"atributos": { "for": 10, "des": 16, "con": 12, "int": 13, "sab": 12, "car": 14 },
+
+		"habilidades": [
+		  { "nome": "Coragem Halfling", "descricao": "Vantagem contra medo." }
+		],
+
+		"sentidos": "Percepção passiva 12",
+		"idiomas": "Comum, Halfling",
+		"cr": 1,
+		"xp": 200,
+
+		"acoes": [
+		  {
+			"nome": "Panela Improvisada",
+			"tipo": "corpo a corpo",
+			"ataque": "+5",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 3 contundente"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Reforço de Moral", "descricao": "Aliados próximos ganham +1 em testes por 1 turno (1x combate)." }
+		],
+
+		"funcao_navio": "Cozinheiro / suporte moral"
+	  },
+	  {
+		"id": "npc_vc_capitao_rennik",
+		"nome": "Capitão Rennik Voss",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 15,
+		"tipo_ca": "Couro reforçado",
+		"pv": 78,
+		"dados_vida": "9d8 + 27",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 14, "des": 16, "con": 16, "int": 12, "sab": 12, "car": 14 },
+
+		"habilidades": [
+		  { "nome": "Comando Tático", "descricao": "Aliados a até 9m ganham +1 em ataques." }
+		],
+
+		"sentidos": "Percepção passiva 12",
+		"idiomas": "Comum",
+		"cr": 4,
+		"xp": 1100,
+
+		"acoes": [
+		  {
+			"nome": "Sabre Naval",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d8 + 4 cortante"
+		  },
+		  {
+			"nome": "Pistola de Pederneira",
+			"tipo": "à distância",
+			"ataque": "+6",
+			"alcance": "12m",
+			"alvo": "1 criatura",
+			"dano": "1d10 + 3 perfurante"
+		  }
+		],
+
+		"habilidades_especiais": [
+		  { "nome": "Ordem Rápida", "descricao": "Um aliado pode atacar como reação (1x turno)." }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_imediato_tarik",
+		"nome": "Tarik Mão-Firme",
+		"tipo": "Humano",
+		"alinhamento": "Leal neutro",
+		"ca": 16,
+		"tipo_ca": "Armadura média",
+		"pv": 65,
+		"dados_vida": "8d8 + 24",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 16, "des": 12, "con": 16, "int": 11, "sab": 14, "car": 10 },
+
+		"habilidades": [
+		  { "nome": "Postura Defensiva", "descricao": "Aliados adjacentes ganham +1 CA." }
+		],
+
+		"sentidos": "Percepção passiva 13",
+		"idiomas": "Comum",
+		"cr": 3,
+		"xp": 700,
+
+		"acoes": [
+		  {
+			"nome": "Machado Naval",
+			"tipo": "corpo a corpo",
+			"ataque": "+5",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d10 + 3 cortante"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_arqueira_syl",
+		"nome": "Syl Vento Leve",
+		"tipo": "Elfa",
+		"alinhamento": "Neutro",
+		"ca": 14,
+		"tipo_ca": "Couro",
+		"pv": 40,
+		"dados_vida": "6d8 + 12",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 10, "des": 18, "con": 14, "int": 12, "sab": 13, "car": 10 },
+
+		"habilidades": [
+		  { "nome": "Atiradora Precisa", "descricao": "Ignora meia cobertura." }
+		],
+
+		"sentidos": "Percepção passiva 14",
+		"idiomas": "Comum, Élfico",
+		"cr": 2,
+		"xp": 450,
+
+		"acoes": [
+		  {
+			"nome": "Arco Longo",
+			"tipo": "à distância",
+			"ataque": "+6",
+			"alcance": "45m",
+			"alvo": "1 criatura",
+			"dano": "1d8 + 4 perfurante"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_arqueira_lyss",
+		"nome": "Lyss Flecha Curva",
+		"tipo": "Humana",
+		"alinhamento": "Neutro",
+		"ca": 13,
+		"tipo_ca": "Couro leve",
+		"pv": 38,
+		"dados_vida": "6d8 + 10",
+		"deslocamento": "9m",
+
+		"atributos": { "for": 10, "des": 16, "con": 14, "int": 11, "sab": 12, "car": 10 },
+
+		"habilidades": [
+		  { "nome": "Fogo Cruzado", "descricao": "Ganha +2 para acertar se alvo já foi atingido." }
+		],
+
+		"sentidos": "Percepção passiva 12",
+		"idiomas": "Comum",
+		"cr": 2,
+		"xp": 450,
+
+		"acoes": [
+		  {
+			"nome": "Arco Curto",
+			"tipo": "à distância",
+			"ataque": "+5",
+			"alcance": "30m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 3 perfurante"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_bruto_1",
+		"nome": "Bruto do Convés",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 14,
+		"tipo_ca": "Couro",
+		"pv": 52,
+		"dados_vida": "7d8 + 21",
+		"deslocamento": "9m",
+		"atributos": { "for": 17, "des": 12, "con": 16, "int": 8, "sab": 10, "car": 9 },
+		"cr": 2,
+		"xp": 450,
+		"acoes": [
+		  {
+			"nome": "Porrete Pesado",
+			"tipo": "corpo a corpo",
+			"ataque": "+5",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d10 + 3 contundente"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_bruto_2",
+		"nome": "Bruto do Convés",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 14,
+		"tipo_ca": "Couro",
+		"pv": 52,
+		"dados_vida": "7d8 + 21",
+		"deslocamento": "9m",
+		"atributos": { "for": 17, "des": 12, "con": 16, "int": 8, "sab": 10, "car": 9 },
+		"cr": 2,
+		"xp": 450,
+		"acoes": [
+		  {
+			"nome": "Porrete Pesado",
+			"tipo": "corpo a corpo",
+			"ataque": "+5",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d10 + 3 contundente"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_marujos_1",
+		"nome": "Marujo Armado",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 13,
+		"tipo_ca": "Couro",
+		"pv": 30,
+		"dados_vida": "5d8",
+		"deslocamento": "9m",
+		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
+		"cr": 1,
+		"xp": 200,
+		"acoes": [
+		  {
+			"nome": "Espada Curta",
+			"tipo": "corpo a corpo",
+			"ataque": "+4",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 2 cortante"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_marujos_2",
+		"nome": "Marujo Armado",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 13,
+		"tipo_ca": "Couro",
+		"pv": 30,
+		"dados_vida": "5d8",
+		"deslocamento": "9m",
+		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
+		"cr": 1,
+		"xp": 200,
+		"acoes": [
+		  {
+			"nome": "Espada Curta",
+			"tipo": "corpo a corpo",
+			"ataque": "+4",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 2 cortante"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_marujos_3",
+		"nome": "Marujo Armado",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 13,
+		"tipo_ca": "Couro",
+		"pv": 30,
+		"dados_vida": "5d8",
+		"deslocamento": "9m",
+		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
+		"cr": 1,
+		"xp": 200,
+		"acoes": [
+		  {
+			"nome": "Espada Curta",
+			"tipo": "corpo a corpo",
+			"ataque": "+4",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 2 cortante"
+		  }
+		]
+	  },
+
+	  {
+		"id": "npc_vc_marujos_4",
+		"nome": "Marujo Armado",
+		"tipo": "Humano",
+		"alinhamento": "Neutro",
+		"ca": 13,
+		"tipo_ca": "Couro",
+		"pv": 30,
+		"dados_vida": "5d8",
+		"deslocamento": "9m",
+		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
+		"cr": 1,
+		"xp": 200,
+		"acoes": [
+		  {
+			"nome": "Espada Curta",
+			"tipo": "corpo a corpo",
+			"ataque": "+4",
+			"alcance": "1,5m",
+			"alvo": "1 criatura",
+			"dano": "1d6 + 2 cortante"
+		  }
+		]
+	  }
 ];
