@@ -118,106 +118,106 @@ const DATA_ENCONTROS = [
   ]
   },
   {
-  "id": "enc_losango_convergencia_infernal",
-  "nome": "Luta para ajudar Frieren",
-  "tipo": "combate",
-  "nivel_recomendado": 15,
-  "dificuldade": "mortal_extremo",
+	  "id": "enc_losango_convergencia_infernal",
+	  "nome": "Luta para ajudar Frieren",
+	  "tipo": "combate",
+	  "nivel_recomendado": 15,
+	  "dificuldade": "mortal_extremo",
 
-  "descricao": "Alguns demônios estão caçando uma poderosa maga élfa, os jogadores se propuzeram a ajudá-la em troca de informações.",
+	  "descricao": "Alguns demônios estão caçando uma poderosa maga élfa, os jogadores se propuzeram a ajudá-la em troca de informações.",
 
-  "contexto": {
-    "local": "Túneis subterrâneos sob Elturel",
-    "hora": "noite"
-  },
+	  "contexto": {
+		"local": "Túneis subterrâneos sob Elturel",
+		"hora": "noite"
+	  },
 
-  "inimigos": [
-    {
-      "id": "mob_erinyes_terror",
-      "quantidade": 1,
-      "posicao_inicial": "chega junto de um dos bandidos"
-    },
-    {
-      "id": "mob_adult_black_dragon",
-      "quantidade": 1,
-      "posicao_inicial": "chega dos céus quando chamado"
-    },
-    {
-      "id": "mob_glabrezu_spell_eater",
-      "quantidade": 1,
-      "posicao_inicial": "chega junto dos bandidos"
-    }
-  ],
+	  "inimigos": [
+		{
+		  "id": "mob_erinyes_terror",
+		  "quantidade": 1,
+		  "posicao_inicial": "chega junto de um dos bandidos"
+		},
+		{
+		  "id": "mob_adult_black_dragon",
+		  "quantidade": 1,
+		  "posicao_inicial": "chega dos céus quando chamado"
+		},
+		{
+		  "id": "mob_glabrezu_spell_eater",
+		  "quantidade": 1,
+		  "posicao_inicial": "chega junto dos bandidos"
+		}
+	  ],
 
-  "terreno": {
-    "descricao": "Planicie em frente ao pequeno forte dos bandidos de Baldurs Gate.",
-    "dificuldade_movimento": true,
-    "cobertura": [
-      {
-        "tipo": "estacas",
-        "descricao": "estacas de madeira cercam o forte"
-      }
-    ]
-  },
+	  "terreno": {
+		"descricao": "Planicie em frente ao pequeno forte dos bandidos de Baldurs Gate.",
+		"dificuldade_movimento": true,
+		"cobertura": [
+		  {
+			"tipo": "estacas",
+			"descricao": "estacas de madeira cercam o forte"
+		  }
+		]
+	  },
 
-  "elementos_interativos": [
-    {
-      "nome": "Poças Ácidas",
-      "tipo": "ambiente",
-      "descricao": "Água corrompida pelo dragão",
-      "interacoes": [
-        "Entrar causa 2d6 dano ácido",
-        "Pode ser empurrado para dentro"
-      ]
-    },
-  ],
+	  "elementos_interativos": [
+		{
+		  "nome": "Poças Ácidas",
+		  "tipo": "ambiente",
+		  "descricao": "Água corrompida pelo dragão",
+		  "interacoes": [
+			"Entrar causa 2d6 dano ácido",
+			"Pode ser empurrado para dentro"
+		  ]
+		},
+	  ],
 
-  "armadilhas": [
-    {
-      "nome": "Chuva Acida",
-      "descricao": "Após o dragão soltar seu bafo acido para os céus, os jogadores em toda a área recebem dano",
-      "cd_percepcao": 16,
-      "efeito": "2d6 dano acido em área"
-    }
-  ],
+	  "armadilhas": [
+		{
+		  "nome": "Chuva Acida",
+		  "descricao": "Após o dragão soltar seu bafo acido para os céus, os jogadores em toda a área recebem dano",
+		  "cd_percepcao": 16,
+		  "efeito": "2d6 dano acido em área"
+		}
+	  ],
 
-  "objetivos": [
-    {
-      "tipo": "aguentar",
-      "descricao": "durar tempo o suficiente para Frieren chegar"
-    }
-  ],
+	  "objetivos": [
+		{
+		  "tipo": "aguentar",
+		  "descricao": "durar tempo o suficiente para Frieren chegar"
+		}
+	  ],
 
-  "recompensas": {
-    "xp": 49800,
-    "itens": [
-      "Fear Feaster’s Mask",
-      "Terrorizer (Greatsword)",
-      "Escudo Devorador de Magia",
-      "Tesouro dracônico corrompido"
-    ],
-    "ouro": {
-      "PO": 789,
-      "PP": 953,
-      "PC": 1236
-    }
-  },
+	  "recompensas": {
+		"xp": 49800,
+		"itens": [
+		  "Fear Feaster’s Mask",
+		  "Terrorizer (Greatsword)",
+		  "Escudo Devorador de Magia",
+		  "Tesouro dracônico corrompido"
+		],
+		"ouro": {
+		  "PO": 789,
+		  "PP": 953,
+		  "PC": 1236
+		}
+	  },
 
-  "taticas_inimigos": [
-    "Erinyes inicia com medo em múltiplos alvos para escalar poder",
-    "Glabrezu foca conjuradores e absorve magias importantes",
-    "Dragão usa sopro ácido para dividir o grupo e controlar área",
-    "Inimigos priorizam alvos isolados ou amedrontados"
-  ],
+	  "taticas_inimigos": [
+		"Erinyes inicia com medo em múltiplos alvos para escalar poder",
+		"Glabrezu foca conjuradores e absorve magias importantes",
+		"Dragão usa sopro ácido para dividir o grupo e controlar área",
+		"Inimigos priorizam alvos isolados ou amedrontados"
+	  ],
 
-  "condicoes_especiais": [
-    "Após 5 rodadas, o ritual intensifica causando efeitos mágicos aleatórios",
-    "Se a Erinyes morrer, efeitos de medo cessam",
-    "Se o dragão cair, partes da caverna começam a desabar",
-    "Se o círculo for destruído, todos os inimigos sofrem penalidades temporárias"
-  ]
-  },
-  {
+	  "condicoes_especiais": [
+		"Após 5 rodadas, o ritual intensifica causando efeitos mágicos aleatórios",
+		"Se a Erinyes morrer, efeitos de medo cessam",
+		"Se o dragão cair, partes da caverna começam a desabar",
+		"Se o círculo for destruído, todos os inimigos sofrem penalidades temporárias"
+	  ]
+	},
+	{
 	  "id": "enc_assalto_vento_cinzento",
 	  "nome": "Assalto ao Vento Cinzento",
 	  "tipo": "combate",
