@@ -8,30 +8,29 @@ const DATA_NPCS = [
     "observacoes": "Guia"
   },
   {
-  "id": "ORI-0007",
-  "nome": "Pimby Amoras-Doces",
-  "raca": "Halfling",
-  "status": "Usando",
+	  "id": "ORI-0007",
+	  "nome": "Pimby Amoras-Doces",
+	  "raca": "Halfling",
+	  "status": "Usando",
 
-  "descricao": "Uma halfling de sorriso largo e voz açucarada, sempre carregando cestos de frutas cristalizadas e doces caseiros. Pimby parece inofensiva demais até para os padrões halflings, com gestos exageradamente gentis e uma presença quase reconfortante. Ainda assim, há algo em seu olhar que demora meio segundo a mais do que deveria quando avalia alguém.",
+	  "descricao": "Uma halfling de sorriso largo e voz açucarada, sempre carregando cestos de frutas cristalizadas e doces caseiros. Pimby parece inofensiva demais até para os padrões halflings, com gestos exageradamente gentis e uma presença quase reconfortante. Ainda assim, há algo em seu olhar que demora meio segundo a mais do que deveria quando avalia alguém.",
 
-  "observacoes": "Malagard disfarçada. A arquidiaba está enfraquecida pelo poder de Asmodeus e que transformou seu corpo no chão do Sexto. Mantém-se em Elturel sob múltiplas camadas de disfarce e contratos menores.",
+	  "observacoes": "Malagard disfarçada. A arquidiaba está enfraquecida pelo poder de Asmodeus e que transformou seu corpo no chão do Sexto. Mantém-se em Elturel sob múltiplas camadas de disfarce e contratos menores.",
 
-  "segredo": "Deseja desesperadamente recuperar sua antiga forma e posição como arquidiaba. Acredita que fragmentos de poder ligados ao Companheiro ou às ações de Zariel possam permitir sua restauração.",
+	  "segredo": "Deseja desesperadamente recuperar sua antiga forma e posição como arquidiaba. Acredita que fragmentos de poder ligados ao Companheiro ou às ações de Zariel possam permitir sua restauração.",
 
-  "desejo": "Ser novamente temida e reverenciada como Malagard, não como uma sombra sobrevivente.",
+	  "desejo": "Ser novamente temida e reverenciada como Malagard, não como uma sombra sobrevivente.",
 
-  "comportamento": "Extremamente paciente. Prefere plantar ideias em vez de dar ordens. Demonstra falsa empatia para induzir culpa ou confiança.",
+	  "comportamento": "Extremamente paciente. Prefere plantar ideias em vez de dar ordens. Demonstra falsa empatia para induzir culpa ou confiança.",
 
-  "ligacoes": [
-    "Avernus",
-    "Shar (indiretamente)",
-    "Seguidores oportunistas de Zariel"
-  ],
+	  "ligacoes": [
+		"Avernus",
+		"Shar (indiretamente)",
+		"Seguidores oportunistas de Zariel"
+	  ],
 
-  "nivel_ameaca": "Extremo (oculto)"
-}
-,
+	  "nivel_ameaca": "Extremo (oculto)"
+	},
   {
     "id": "undefined",
     "nome": "Xalruth Karrmoran",
