@@ -851,84 +851,133 @@ const DATA_MONSTROS = [
 		"funcao_navio": "Cozinheiro / suporte moral"
 	  },
 	  {
-		"id": "npc_vc_capitao_rennik",
-		"nome": "Capitão Rennik Voss",
-		"tipo": "Humano",
-		"alinhamento": "Neutro",
-		"ca": 15,
-		"tipo_ca": "Couro reforçado",
-		"pv": 78,
-		"dados_vida": "9d8 + 27",
-		"deslocamento": "9m",
+		  "id": "npc_vc_capitao_rennik",
+		  "nome": "Capitão Rennik Voss",
+		  "tipo": "Humano",
+		  "alinhamento": "Neutro",
+		  "ca": 17,
+		  "tipo_ca": "Armadura reforçada + experiência",
+		  "pv": 165,
+		  "dados_vida": "18d8 + 72",
+		  "deslocamento": "9m",
 
-		"atributos": { "for": 14, "des": 16, "con": 16, "int": 12, "sab": 12, "car": 14 },
-
-		"habilidades": [
-		  { "nome": "Comando Tático", "descricao": "Aliados a até 9m ganham +1 em ataques." }
-		],
-
-		"sentidos": "Percepção passiva 12",
-		"idiomas": "Comum",
-		"cr": 4,
-		"xp": 1100,
-
-		"acoes": [
-		  {
-			"nome": "Sabre Naval",
-			"tipo": "corpo a corpo",
-			"ataque": "+6",
-			"alcance": "1,5m",
-			"alvo": "1 criatura",
-			"dano": "1d8 + 4 cortante"
+		  "atributos": {
+			"for": 18,
+			"des": 18,
+			"con": 18,
+			"int": 14,
+			"sab": 14,
+			"car": 16
 		  },
-		  {
-			"nome": "Pistola de Pederneira",
-			"tipo": "à distância",
-			"ataque": "+6",
-			"alcance": "12m",
-			"alvo": "1 criatura",
-			"dano": "1d10 + 3 perfurante"
-		  }
-		],
 
-		"habilidades_especiais": [
-		  { "nome": "Ordem Rápida", "descricao": "Um aliado pode atacar como reação (1x turno)." }
-		]
-	  },
+		  "habilidades": [
+			{
+			  "nome": "Comando Tático Avançado",
+			  "descricao": "Aliados a até 9m recebem +2 em ataques e dano."
+			},
+			{
+			  "nome": "Instinto de Combate",
+			  "descricao": "Vantagem em testes de iniciativa."
+			}
+		  ],
 
-	  {
-		"id": "npc_vc_imediato_tarik",
-		"nome": "Tarik Mão-Firme",
-		"tipo": "Humano",
-		"alinhamento": "Leal neutro",
-		"ca": 16,
-		"tipo_ca": "Armadura média",
-		"pv": 65,
-		"dados_vida": "8d8 + 24",
-		"deslocamento": "9m",
+		  "sentidos": "Percepção passiva 14",
+		  "idiomas": "Comum",
+		  "cr": 10,
+		  "xp": 5900,
 
-		"atributos": { "for": 16, "des": 12, "con": 16, "int": 11, "sab": 14, "car": 10 },
+		  "acoes": [
+			{
+			  "nome": "Multiataque",
+			  "descricao": "Realiza dois ataques com sabre ou um ataque à distância."
+			},
+			{
+			  "nome": "Sabre Naval",
+			  "tipo": "corpo a corpo",
+			  "ataque": "+9",
+			  "alcance": "1,5m",
+			  "alvo": "1 criatura",
+			  "dano": "1d8 + 5 cortante + 1d6 adicional"
+			},
+			{
+			  "nome": "Pistola de Elite",
+			  "tipo": "à distância",
+			  "ataque": "+9",
+			  "alcance": "18m",
+			  "alvo": "1 criatura",
+			  "dano": "2d10 + 4 perfurante"
+			}
+		  ],
 
-		"habilidades": [
-		  { "nome": "Postura Defensiva", "descricao": "Aliados adjacentes ganham +1 CA." }
-		],
+		  "habilidades_especiais": [
+			{
+			  "nome": "Ordem de Ataque",
+			  "descricao": "Um aliado pode usar reação para realizar um ataque."
+			},
+			{
+			  "nome": "Determinação do Capitão",
+			  "descricao": "Ao cair abaixo de 50% PV, ganha resistência a dano por 2 turnos."
+			}
+		  ]
+		},
+		{
+		  "id": "npc_vc_imediato_tarik",
+		  "nome": "Tarik Mão-Firme",
+		  "tipo": "Humano",
+		  "alinhamento": "Leal neutro",
+		  "ca": 18,
+		  "tipo_ca": "Armadura pesada naval",
+		  "pv": 130,
+		  "dados_vida": "15d8 + 60",
+		  "deslocamento": "9m",
 
-		"sentidos": "Percepção passiva 13",
-		"idiomas": "Comum",
-		"cr": 3,
-		"xp": 700,
+		  "atributos": {
+			"for": 18,
+			"des": 12,
+			"con": 18,
+			"int": 12,
+			"sab": 16,
+			"car": 12
+		  },
 
-		"acoes": [
-		  {
-			"nome": "Machado Naval",
-			"tipo": "corpo a corpo",
-			"ataque": "+5",
-			"alcance": "1,5m",
-			"alvo": "1 criatura",
-			"dano": "1d10 + 3 cortante"
-		  }
-		]
-	  },
+		  "habilidades": [
+			{
+			  "nome": "Postura de Guarda",
+			  "descricao": "Aliados adjacentes recebem +2 CA."
+			},
+			{
+			  "nome": "Protetor Nato",
+			  "descricao": "Pode interceptar ataques direcionados ao capitão (1x por turno)."
+			}
+		  ],
+
+		  "sentidos": "Percepção passiva 15",
+		  "idiomas": "Comum",
+		  "cr": 8,
+		  "xp": 3900,
+
+		  "acoes": [
+			{
+			  "nome": "Multiataque",
+			  "descricao": "Realiza dois ataques com machado."
+			},
+			{
+			  "nome": "Machado Pesado",
+			  "tipo": "corpo a corpo",
+			  "ataque": "+8",
+			  "alcance": "1,5m",
+			  "alvo": "1 criatura",
+			  "dano": "1d10 + 5 cortante"
+			}
+		  ],
+
+		  "habilidades_especiais": [
+			{
+			  "nome": "Linha Inquebrável",
+			  "descricao": "Enquanto estiver acima de 50% PV, não pode ser empurrado ou derrubado."
+			}
+		  ]
+		},
 
 	  {
 		"id": "npc_vc_arqueira_syl",
