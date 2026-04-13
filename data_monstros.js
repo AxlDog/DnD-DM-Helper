@@ -1448,5 +1448,267 @@ const DATA_MONSTROS = [
 		  "dano": "3d6 contundente"
 		}
 	  ]
+	},
+	{
+	  "id": "mob_guardiao_tumulo",
+	  "nome": "Guardião de Túmulo",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Neutro maligno",
+	  "ca": 15,
+	  "tipo_ca": "Armadura natural",
+	  "pv": 75,
+	  "dados_vida": "10d8 + 30",
+	  "deslocamento": "6m",
+
+	  "atributos": {
+		"for": 16,
+		"des": 10,
+		"con": 16,
+		"int": 6,
+		"sab": 10,
+		"car": 6
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Emergir do Solo",
+		  "descricao": "Pode surgir do chão como ação bônus no primeiro turno."
+		}
+	  ],
+
+	  "sentidos": "Visão no escuro 18m, Percepção passiva 10",
+	  "idiomas": "—",
+	  "cr": 4,
+	  "xp": 1100,
+
+	  "acoes": [
+		{
+		  "nome": "Golpe Pesado",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+6",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "2d8 + 4 contundente"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Corpo Resistente",
+		  "descricao": "Resistência a dano cortante e perfurante não mágico."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_espirito_inquieto",
+	  "nome": "Espírito Inquieto",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Caótico maligno",
+	  "ca": 13,
+	  "tipo_ca": "Forma etérea",
+	  "pv": 45,
+	  "dados_vida": "7d8 + 14",
+	  "deslocamento": "voo 12m",
+
+	  "atributos": {
+		"for": 6,
+		"des": 14,
+		"con": 14,
+		"int": 10,
+		"sab": 12,
+		"car": 14
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Forma Incorpórea",
+		  "descricao": "Pode atravessar objetos e criaturas."
+		}
+	  ],
+
+	  "sentidos": "Visão no escuro 18m, Percepção passiva 11",
+	  "idiomas": "Comum",
+	  "cr": 2,
+	  "xp": 450,
+
+	  "acoes": [
+		{
+		  "nome": "Toque Gelado",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+5",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "3d6 necrótico"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Sussurros da Morte",
+		  "descricao": "Criaturas a até 3m têm desvantagem em testes de Sabedoria."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_lich_senhor_ossos",
+	  "nome": "Lich, Senhor dos Ossos Silenciosos",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Leal maligno",
+	  "ca": 19,
+	  "tipo_ca": "Armadura arcana + Coroa do Arcanista Profano",
+	  "pv": 180,
+	  "dados_vida": "19d8 + 95",
+	  "deslocamento": "9m",
+
+	  "atributos": {
+		"for": 10,
+		"des": 16,
+		"con": 20,
+		"int": 20,
+		"sab": 16,
+		"car": 18
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Resistência Lendária",
+		  "descricao": "3x por dia, pode escolher passar em um teste de resistência que falhou."
+		},
+		{
+		  "nome": "Regeneração Necromântica",
+		  "descricao": "Recupera 10 PV por turno se estiver próximo ao foco necromântico."
+		},
+		{
+		  "nome": "Coroa do Arcanista Profano",
+		  "descricao": "A CD das magias do lich aumenta em +1 (já incluído, CD 20)."
+		},
+		{
+		  "nome": "Colar do Conjurador Voraz",
+		  "descricao": "O lich adiciona seu modificador de Inteligência (+5) ao dano de suas cantrips."
+		}
+	  ],
+
+	  "sentidos": "Visão no escuro 36m, Percepção passiva 13",
+	  "idiomas": "Comum, Infernal, Abissal",
+	  "cr": 12,
+	  "xp": 8400,
+
+	  "acoes": [
+		{
+		  "nome": "Toque Paralisante",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+8",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "3d6 necrótico",
+		  "efeito": "CON CD 20 ou fica paralisado por 1 turno"
+		},
+		{
+		  "nome": "Raio da Morte",
+		  "tipo": "à distância",
+		  "ataque": "+9",
+		  "alcance": "18m",
+		  "alvo": "1 criatura",
+		  "dano": "8d8 necrótico"
+		},
+		{
+		  "nome": "Explosão Profana",
+		  "tipo": "área",
+		  "alcance": "6m",
+		  "alvo": "todas criaturas",
+		  "dano": "6d6 necrótico",
+		  "efeito": "CON CD 20 para metade"
+		},
+		{
+		  "nome": "Toque Necrótico (Cantrip)",
+		  "tipo": "à distância",
+		  "ataque": "+9",
+		  "alcance": "18m",
+		  "alvo": "1 criatura",
+		  "dano": "3d8 + 5 necrótico"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Comandar Mortos",
+		  "descricao": "Mortos-vivos aliados recebem +2 em ataques enquanto o lich estiver consciente."
+		},
+		{
+		  "nome": "Filactério Oculto",
+		  "descricao": "Ao morrer, retorna em 1d10 dias se o filactério não for destruído."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_noiva_cadaver",
+	  "nome": "Noiva Cadáver",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Caótico maligno",
+	  "ca": 15,
+	  "tipo_ca": "Forma espectral",
+	  "pv": 135,
+	  "dados_vida": "18d8 + 54",
+	  "deslocamento": "voo 12m",
+
+	  "atributos": {
+		"for": 8,
+		"des": 16,
+		"con": 16,
+		"int": 12,
+		"sab": 14,
+		"car": 20
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Forma Incorpórea",
+		  "descricao": "Pode atravessar criaturas e objetos."
+		},
+		{
+		  "nome": "Presença Dilacerante",
+		  "descricao": "Criaturas a até 6m têm desvantagem em testes de resistência contra medo."
+		}
+	  ],
+
+	  "sentidos": "Visão no escuro 18m, Percepção passiva 12",
+	  "idiomas": "Comum",
+	  "cr": 10,
+	  "xp": 5900,
+
+	  "acoes": [
+		{
+		  "nome": "Toque Espectral",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+8",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "4d6 necrótico"
+		},
+		{
+		  "nome": "Lamento da Noiva",
+		  "tipo": "área",
+		  "alcance": "9m",
+		  "alvo": "todas criaturas",
+		  "dano": "6d6 psíquico",
+		  "efeito": "SAB CD 16 ou fica amedrontado por 1 minuto"
+		},
+		{
+		  "nome": "Grito Mortal",
+		  "tipo": "área",
+		  "alcance": "9m",
+		  "alvo": "criaturas que a ouvem",
+		  "dano": "0",
+		  "efeito": "CON CD 16 ou cai a 0 PV; sucesso sofre 4d6 necrótico",
+		  "recarga": "5-6"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Véu de Lamento",
+		  "descricao": "Quando reduzida a 0 PV pela primeira vez, permanece com 1 PV e libera automaticamente o Lamento da Noiva."
+		}
+	  ]
 	}
 ];
