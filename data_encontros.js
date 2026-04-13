@@ -524,5 +524,192 @@ const DATA_ENCONTROS = [
 		"nome": "Lança de Zeus",
 		"descricao": "Arma de arremesso +1. Ao ser lançada, se transforma em um raio. Causa 1d6 extra de dano elétrico. Uma vez por descanso longo, causa 3d6 adicionais e pode saltar para um segundo alvo próximo."
 	  }
+	},
+	{
+	  "id": "enc_campo_lich",
+	  "nome": "O Senhor dos Ossos Silenciosos",
+	  "tipo": "combate",
+	  "nivel_recomendado": 10,
+	  "dificuldade": "mortal",
+
+	  "descricao": "O campo se estende em silêncio absoluto, coberto por lápides tortas e terra revirada. O ar é frio demais para a estação, e cada passo parece ecoar mais do que deveria. No centro, uma figura imóvel observa... como se já soubesse que vocês viriam.",
+
+	  "contexto": {
+		"local": "Campo dos Mortos, próximo a Baldur's Gate",
+		"hora": "noite"
+	  },
+
+	  "inimigos": [
+		{
+		  "id": "mob_lich_senhor_ossos",
+		  "quantidade": 1,
+		  "posicao_inicial": "centro do campo"
+		},
+		{
+		  "id": "mob_guardiao_tumulo",
+		  "quantidade": 4,
+		  "posicao_inicial": "enterrados ao redor"
+		},
+		{
+		  "id": "mob_espirito_inquieto",
+		  "quantidade": 3,
+		  "posicao_inicial": "flutuando entre lápides"
+		}
+	  ],
+
+	  "terreno": {
+		"descricao": "Campo aberto com lápides, covas abertas e solo instável.",
+		"dificuldade_movimento": true,
+		"cobertura": [
+		  {
+			"tipo": "meia",
+			"descricao": "Lápides de pedra"
+		  },
+		  {
+			"tipo": "total",
+			"descricao": "Criptas parcialmente abertas"
+		  }
+		]
+	  },
+
+	  "elementos_interativos": [
+		{
+		  "nome": "Túmulos Instáveis",
+		  "tipo": "ambiente",
+		  "descricao": "Solo fraco e cavado recentemente",
+		  "interacoes": [
+			"Criaturas podem cair (Teste DES CD 13)",
+			"Mortos-vivos podem emergir se ativado pelo lich"
+		  ]
+		},
+		{
+		  "nome": "Foco de Energia Necromântica",
+		  "tipo": "objeto",
+		  "descricao": "Um ponto onde a energia da morte é mais forte",
+		  "interacoes": [
+			"Lich recupera 10 PV ao iniciar turno próximo",
+			"Pode ser destruído (CA 14, 30 PV)"
+		  ]
+		}
+	  ],
+
+	  "armadilhas": [
+		{
+		  "nome": "Mão dos Mortos",
+		  "descricao": "Braços emergem do solo tentando segurar intrusos",
+		  "cd_percepcao": 15,
+		  "cd_desarme": 14,
+		  "efeito": "Alvo fica Restrained por 1 turno"
+		}
+	  ],
+
+	  "objetivos": [
+		{
+		  "tipo": "derrotar",
+		  "descricao": "Destruir o Lich ou interromper sua ligação com o filactério"
+		}
+	  ],
+
+	  "recompensas": {
+		"xp": 15000,
+		"itens": [
+		  "Grimório Necromântico",
+		  "Anel de Proteção +1",
+		  "Fragmento do Filactério"
+		],
+		"ouro": {
+		  "PO": 500,
+		  "PP": 300,
+		  "PC": 0
+		}
+	  },
+
+	  "taticas_inimigos": [
+		"Lich mantém distância e controla o campo",
+		"Invoca mortos-vivos constantemente",
+		"Foca conjuradores primeiro",
+		"Usa terreno para separar o grupo"
+	  ],
+
+	  "condicoes_especiais": [
+		"Se o foco necromântico não for destruído, o lich regenera vida continuamente",
+		"Ao cair, o lich pode retornar futuramente se o filactério não for destruído"
+	  ]
+	},
+	{
+	  "id": "enc_campo_mortos_inquietos",
+	  "nome": "Mortos que Não Aceitam",
+	  "tipo": "combate",
+	  "nivel_recomendado": 6,
+	  "dificuldade": "medio",
+
+	  "descricao": "O vento sopra entre lápides quebradas, carregando um som baixo… quase como murmúrios. A terra parece fresca demais, como se tivesse sido revirada recentemente.\nEntão, dedos emergem do solo.\nE mais.\nE mais.",
+
+	  "contexto": {
+		"local": "Campos dos Mortos",
+		"hora": "entardecer"
+	  },
+
+	  "inimigos": [
+		{
+		  "id": "mob_guardiao_tumulo",
+		  "quantidade": 2,
+		  "posicao_inicial": "enterrados próximos aos jogadores"
+		},
+		{
+		  "id": "mob_espirito_inquieto",
+		  "quantidade": 2,
+		  "posicao_inicial": "flutuando entre lápides"
+		}
+	  ],
+
+	  "terreno": {
+		"descricao": "Solo instável e covas abertas dificultam movimentação.",
+		"dificuldade_movimento": true,
+		"cobertura": [
+		  {
+			"tipo": "meia",
+			"descricao": "Lápides antigas"
+		  }
+		]
+	  }
+	},
+	{
+	  "id": "enc_campo_noiva_cadaver",
+	  "nome": "A Noiva da Névoa",
+	  "tipo": "combate",
+	  "nivel_recomendado": 8,
+	  "dificuldade": "dificil",
+
+	  "descricao": "A névoa se adensa até engolir completamente o horizonte.\nUm vulto surge lentamente… vestido em trapos que um dia foram um vestido.\nUm choro ecoa — fino, quebrado… impossível de ignorar.\nQuando ela levanta o rosto, não há vida ali.\nApenas dor.",
+
+	  "contexto": {
+		"local": "Campos dos Mortos",
+		"hora": "noite"
+	  },
+
+	  "inimigos": [
+		{
+		  "id": "mob_noiva_cadaver",
+		  "quantidade": 1,
+		  "posicao_inicial": "centro da névoa"
+		},
+		{
+		  "id": "mob_espirito_inquieto",
+		  "quantidade": 2,
+		  "posicao_inicial": "ocultos na névoa"
+		}
+	  ],
+
+	  "terreno": {
+		"descricao": "Névoa densa reduz visibilidade e abafa sons.",
+		"dificuldade_movimento": false,
+		"cobertura": [
+		  {
+			"tipo": "leve",
+			"descricao": "Névoa espessa (desvantagem em percepção visual à distância)"
+		  }
+		]
+	  }
 	}
 ];
