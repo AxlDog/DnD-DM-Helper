@@ -386,7 +386,7 @@ const DATA_ENCONTROS = [
 	  "nome": "Caçadores de Destroços Amaldiçoados",
 	  "tipo": "combate",
 	  "dificuldade": "medio",
-
+	  "descricao": "Fragmentos de madeira e barris quebrados balançam lentamente sobre a água escura. Alguns corpos flutuam entre os destroços… imóveis demais.\nO mar está silencioso, pesado.\nEntão, um dos corpos vira a cabeça na direção do barco.\nMãos pálidas surgem da água… e começam a subir pelo casco.",
 	  "detecao": {
 		"passiva": 13,
 		"ativa": "Percepção CD 13 ou Intuição CD 12",
@@ -423,6 +423,7 @@ const DATA_ENCONTROS = [
 	  "nome": "Corsários do Abismo Amaldiçoados",
 	  "tipo": "combate",
 	  "dificuldade": "alto",
+	  "descricao": "No horizonte, um navio surge… sem vento.\nSuas velas rasgadas não se movem, mas ele se aproxima mesmo assim.\nA madeira do casco é escura, quase negra — como se tivesse sido queimada e esquecida no fundo do mar.\nQuando ele encosta ao lado, figuras silenciosas já estão olhando para vocês… olhos vazios, esperando.",
 
 	  "detecao": {
 		"passiva": 15,
@@ -432,9 +433,18 @@ const DATA_ENCONTROS = [
 	  },
 
 	  "inimigos": [
-		"1x Capitão Amaldiçoado (CA 17, PV 140, armadura +1, pistola mágica)",
-		"2x Arqueiros Amaldiçoados (PV 50)",
-		"4x Piratas Amaldiçoados (PV 40)"
+		{
+		  "id": "mob_capitao_amaldicoado",
+		  "quantidade": 1
+		},
+		{
+		  "id": "mob_saqueador_amaldicoado",
+		  "quantidade": 3
+		},
+		{
+		  "id": "mob_pirata_amaldicoado",
+		  "quantidade": 5
+		}
 	  ],
 
 	  "habilidades_especiais": [
@@ -471,17 +481,26 @@ const DATA_ENCONTROS = [
 	  "nome": "Avatar da Tempestade Desperto",
 	  "tipo": "combate",
 	  "dificuldade": "alto",
+	  "descricao": "O céu escurece em questão de segundos, como se o dia tivesse sido arrancado do mundo.\nO ar vibra — pequenos estalos elétricos cruzam o convés.\nUm trovão explode, não no céu… mas ao redor do navio.\nNo centro da tempestade, uma forma se condensa — feita de vento, luz e fúria.",
 
 	  "detecao": {
-		"passiva": 16,
-		"ativa": "Percepção CD 16",
+		"passiva": 18,
+		"ativa": "Percepção CD 18",
 		"sucesso": "O ar vibra e pequenas descargas elétricas cruzam o céu",
 		"falha": "A tempestade começa com um impacto direto"
 	  },
 
 	  "inimigos": [
-		"1x Elemental da Tempestade (PV 180)",
-		"2x Espíritos do Vento (PV 45 cada)"
+		{
+		  "id": "mob_espirito_vento",
+		  "quantidade": 2,
+		  "posicao_inicial": "chega dos céus junto com o elemental"
+		},
+		{
+		  "id": "mob_elemental_tempestade",
+		  "quantidade": 1,
+		  "posicao_inicial": "chega trazendo consigo uma tempestade"
+		}
 	  ],
 
 	  "habilidades_especiais": [
