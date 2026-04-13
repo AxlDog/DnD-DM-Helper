@@ -1342,7 +1342,7 @@ const DATA_MONSTROS = [
 	  "acoes": [
 		{
 		  "nome": "Multi-ataque",
-		  "tipo": "Faz 3 ataques, Sabre Maldito/Pistola do Abismo",
+		  "tipo": "Faz 3 ataques, Sabre Maldito/Pistola do Abismo"
 		},
 		{
 		  "nome": "Sabre Maldito",
