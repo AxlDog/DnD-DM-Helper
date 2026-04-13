@@ -1195,5 +1195,258 @@ const DATA_MONSTROS = [
 			"dano": "1d6 + 2 cortante"
 		  }
 		]
-	  }
+	},
+	{
+	  "id": "mob_pirata_amaldicoado",
+	  "nome": "Pirata Amaldiçoado",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Caótico maligno",
+	  "ca": 13,
+	  "tipo_ca": "Couro encharcado",
+	  "pv": 35,
+	  "dados_vida": "6d8 + 6",
+	  "deslocamento": "9m, natação 9m",
+
+	  "atributos": {
+		"for": 14,
+		"des": 12,
+		"con": 12,
+		"int": 8,
+		"sab": 10,
+		"car": 6
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Maldição do Tesouro",
+		  "descricao": "Ao morrer, se desfaz em água escura e retorna ao navio após algumas horas."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 10",
+	  "idiomas": "Comum (fragmentado)",
+	  "cr": 1,
+	  "xp": 200,
+
+	  "acoes": [
+		{
+		  "nome": "Sabre Enferrujado",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+4",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d6 + 2 cortante"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Corpo Salino",
+		  "descricao": "Resistência a dano perfurante não mágico."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_saqueador_amaldicoado",
+	  "nome": "Saqueador Amaldiçoado",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Caótico maligno",
+	  "ca": 15,
+	  "tipo_ca": "Armadura leve +1",
+	  "pv": 70,
+	  "dados_vida": "10d8 + 20",
+	  "deslocamento": "9m, natação 9m",
+
+	  "atributos": {
+		"for": 16,
+		"des": 14,
+		"con": 14,
+		"int": 10,
+		"sab": 10,
+		"car": 8
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Maldição do Tesouro",
+		  "descricao": "Retorna ao navio após a morte."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 11",
+	  "idiomas": "Comum",
+	  "cr": 3,
+	  "xp": 700,
+
+	  "acoes": [
+		{
+			"Multi-ataque": "Faz dois ataques por rodada."
+		},
+		{
+		  "nome": "Pistola +1 Corroída",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+6",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 4 perfurante + 1 mágico"
+		},
+		{
+		  "nome": "Espada +1 Corroída",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+6",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 4 cortante + 1 mágico"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Fúria Afogada",
+		  "descricao": "Abaixo de 50% PV causa +2 dano."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_capitao_amaldicoado",
+	  "nome": "Capitão Amaldiçoado",
+	  "tipo": "Morto-vivo",
+	  "alinhamento": "Caótico maligno",
+	  "ca": 17,
+	  "tipo_ca": "Armadura +1",
+	  "pv": 140,
+	  "dados_vida": "16d8 + 64",
+	  "deslocamento": "9m, natação 9m",
+
+	  "atributos": {
+		"for": 18,
+		"des": 16,
+		"con": 18,
+		"int": 12,
+		"sab": 12,
+		"car": 14
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Coração Amaldiçoado",
+		  "descricao": "Não pode ser destruído permanentemente sem o tesouro."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 12",
+	  "idiomas": "Comum, Abissal",
+	  "cr": 9,
+	  "xp": 5000,
+
+	  "acoes": [
+		{
+		  "nome": "Multi-ataque",
+		  "tipo": "Faz 3 ataques, Sabre Maldito/Pistola do Abismo",
+		},
+		{
+		  "nome": "Sabre Maldito",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+8",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 5 cortante + 1d6 necrótico"
+		},
+		{
+		  "nome": "Pistola do Abismo",
+		  "recarregar": "Um tiro por rodada, precisa de 3+ para funcionar",
+		  "tipo": "à distância",
+		  "ataque": "+9",
+		  "alcance": "18m",
+		  "alvo": "1 criatura",
+		  "dano": "2d10 + 4 perfurante + 4d6 necrótico"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Tripulação Infinita",
+		  "descricao": "Aliados retornam após a morte enquanto o capitão existir."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_elemental_tempestade",
+	  "nome": "Elemental da Tempestade",
+	  "tipo": "Elemental",
+	  "alinhamento": "Neutro",
+	  "ca": 16,
+	  "tipo_ca": "Forma elétrica",
+	  "pv": 180,
+	  "dados_vida": "19d10 + 76",
+	  "deslocamento": "0m, voo 18m",
+
+	  "atributos": {
+		"for": 18,
+		"des": 18,
+		"con": 18,
+		"int": 6,
+		"sab": 12,
+		"car": 10
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Campo Elétrico",
+		  "descricao": "Inimigos próximos sofrem 1d6 elétrico por turno."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 11",
+	  "idiomas": "Primordial",
+	  "cr": 10,
+	  "xp": 5900,
+
+	  "acoes": [
+		{
+		  "nome": "Raio Concentrado 3x",
+		  "tipo": "à distância",
+		  "ataque": "+8",
+		  "alcance": "18m",
+		  "alvo": "1 criatura",
+		  "dano": "3d8 elétrico"
+		}
+	  ]
+	},
+	{
+	  "id": "mob_espirito_vento",
+	  "nome": "Espírito do Vento",
+	  "tipo": "Elemental",
+	  "alinhamento": "Neutro",
+	  "ca": 14,
+	  "tipo_ca": "Forma gasosa",
+	  "pv": 45,
+	  "dados_vida": "7d8 + 14",
+	  "deslocamento": "voo 18m",
+
+	  "atributos": {
+		"for": 8,
+		"des": 16,
+		"con": 14,
+		"int": 6,
+		"sab": 10,
+		"car": 8
+	  },
+
+	  "sentidos": "Percepção passiva 10",
+	  "idiomas": "Primordial",
+	  "cr": 2,
+	  "xp": 450,
+
+	  "acoes": [
+		{
+		  "nome": "Rajada 2x",
+		  "tipo": "à distância",
+		  "ataque": "+5",
+		  "alcance": "12m",
+		  "alvo": "Area, empurra os alvos 2 hex",
+		  "dano": "3d6 contundente"
+		}
+	  ]
+	}
 ];
