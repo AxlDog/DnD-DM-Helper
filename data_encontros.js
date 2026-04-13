@@ -381,5 +381,129 @@ const DATA_ENCONTROS = [
 		"Criaturas no mar precisam gastar movimento extra para subir",
 		"Combate prolongado pode atrair guardas do cais"
 	  ]
+	},
+	{
+	  "nome": "Caçadores de Destroços Amaldiçoados",
+	  "tipo": "combate",
+	  "dificuldade": "medio",
+
+	  "detecao": {
+		"passiva": 13,
+		"ativa": "Percepção CD 13 ou Intuição CD 12",
+		"sucesso": "Os corpos flutuando parecem intactos demais... e alguns se movem levemente contra a maré",
+		"falha": "Os piratas emergem diretamente ao lado do barco"
+	  },
+
+	  "inimigos": [
+		"1x Saqueador Amaldiçoado (Capitão menor, PV 70, espada +1)",
+		"4x Piratas Amaldiçoados (PV 35 cada)"
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Maldição do Tesouro Afundado",
+		  "descricao": "Quando um pirata amaldiçoado morre, seu corpo se desfaz em água escura e sal. Ele não concede XP adicional e retorna ao navio principal após 1d4 horas."
+		}
+	  ],
+
+	  "taticas": [
+		"Piratas tentam puxar jogadores para o mar",
+		"Atacam em grupo e não recuam",
+		"Ignoram autopreservação"
+	  ],
+
+	  "recompensas": [
+		"Espada longa +1 corroída",
+		"Fragmentos de ouro amaldiçoado (pista do encontro maior)"
+	  ],
+
+	  "gancho": "Os piratas murmuram sobre 'o coração do navio' e 'o capitão que nunca morre'"
+	},
+	{
+	  "nome": "Corsários do Abismo Amaldiçoados",
+	  "tipo": "combate",
+	  "dificuldade": "alto",
+
+	  "detecao": {
+		"passiva": 15,
+		"ativa": "Percepção CD 15 ou Sobrevivência CD 14",
+		"sucesso": "Um navio negro surge sem vento, velas rasgadas mas firmes",
+		"falha": "O navio já está ao lado, como se sempre estivesse lá"
+	  },
+
+	  "inimigos": [
+		"1x Capitão Amaldiçoado (CA 17, PV 140, armadura +1, pistola mágica)",
+		"2x Arqueiros Amaldiçoados (PV 50)",
+		"4x Piratas Amaldiçoados (PV 40)"
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Maldição do Tesouro Afundado",
+		  "descricao": "Ao morrer, os piratas se dissolvem em água escura e retornam ao navio após algumas horas. Enquanto o capitão existir, a tripulação sempre retorna."
+		},
+		{
+		  "nome": "Coração Amaldiçoado",
+		  "descricao": "O capitão não pode ser destruído permanentemente enquanto o tesouro amaldiçoado não for encontrado."
+		}
+	  ],
+
+	  "acoes_capitao": [
+		{
+		  "nome": "Pistola do Abismo",
+		  "descricao": "Ataque à distância +9, alcance 18m, 2d10 + 4 perfurante + 2d6 necrótico. Em acerto crítico, o alvo deve passar em CON CD 15 ou ficar enfraquecido (desvantagem em ataques) por 1 turno."
+		}
+	  ],
+
+	  "taticas": [
+		"Capitão foca alvos perigosos com a pistola",
+		"Tripulação avança sem medo da morte",
+		"Arqueiros pressionam retaguarda"
+	  ],
+
+	  "recompensas": [
+		"Armadura +1 corroída",
+		"Mapa parcial do tesouro amaldiçoado",
+		"300 PO (alguns amaldiçoados)"
+	  ]
+	},
+	{
+	  "nome": "Avatar da Tempestade Desperto",
+	  "tipo": "combate",
+	  "dificuldade": "alto",
+
+	  "detecao": {
+		"passiva": 16,
+		"ativa": "Percepção CD 16",
+		"sucesso": "O ar vibra e pequenas descargas elétricas cruzam o céu",
+		"falha": "A tempestade começa com um impacto direto"
+	  },
+
+	  "inimigos": [
+		"1x Elemental da Tempestade (PV 180)",
+		"2x Espíritos do Vento (PV 45 cada)"
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Campo Elétrico",
+		  "descricao": "Criaturas a até 3m do elemental sofrem 1d6 de dano elétrico no início do turno."
+		}
+	  ],
+
+	  "taticas": [
+		"Empurra inimigos para fora do barco",
+		"Mantém pressão constante em área"
+	  ],
+
+	  "recompensas": [
+		"Lança de Zeus",
+		"Fragmento elemental (200 PO)"
+	  ],
+
+	  "item_especial": {
+		"nome": "Lança de Zeus",
+		"descricao": "Arma de arremesso +1. Ao ser lançada, se transforma em um raio. Causa 1d6 extra de dano elétrico. Uma vez por descanso longo, causa 3d6 adicionais e pode saltar para um segundo alvo próximo."
+	  }
 	}
 ];
