@@ -1489,20 +1489,14 @@ function renderEncontros(dados) {
   });
 }
 
-/**
- * Abre o modal focado nos monstros do encontro, com controles de HP e Iniciativa.
- */
-/**
- * Carrega a visualização de encontros
- */
 function loadEncontros() {
-  setActiveMenu(7); 
+  setActiveMenu(6); 
   setView("encontros");
 
   const content = document.getElementById("content");
   if (!content) return;
 
-  // Modificado: Adicionado o botão "Criar Encontro Rápido" no header
+  // Cabeçalho da seção de encontros
   content.innerHTML = `
     <div class="header-section">
       <h2>⚔️ Encontros Táticos</h2>
@@ -1523,8 +1517,8 @@ function loadEncontros() {
 
 /**
  * =========================================================
- * ENCONTRO RÁPIDO (AD-HOC)
- * Permite selecionar monstros do banco para combate rápido
+ * ENCONTRO RÁPIDO (AD-HOC) COM FILTROS
+ * Permite selecionar monstros com filtros de ambiente e nome
  * =========================================================
  */
 function openCustomEncounterModal() {
@@ -1533,47 +1527,52 @@ function openCustomEncounterModal() {
     return;
   }
 
+  // Extrair todos os ambientes únicos para o filtro
+  const todosAmbientes = new Set();
+  DATA_MONSTROS.forEach(m => {
+    if (m.ambientes && Array.isArray(m.ambientes)) {
+      m.ambientes.forEach(amb => todosAmbientes.add(amb));
+    }
+  });
+
   // Criação do Overlay no DOM
   const overlay = document.createElement('div');
   overlay.className = 'quick-monster-overlay';
   overlay.id = 'customEncounterModal';
   overlay.onclick = (e) => {
-    if (e.target === overlay) document.body.removeChild(overlay); // Fecha ao clicar fora
+    if (e.target === overlay) document.body.removeChild(overlay);
   };
 
-  // Gera a lista de monstros com inputs numéricos para a quantidade
-  const monsterListHtml = DATA_MONSTROS.map(m => `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333;">
-      <div>
-        <strong style="color: #cda434;">${m.nome}</strong> 
-        <small style="color: #aaa; display: block;">${m.tipo} | CR ${m.cr}</small>
-      </div>
-      <div>
-        <input type="number" id="custom_qty_${m.id}" min="0" value="0" 
-          style="width: 60px; padding: 8px; background: #222; color: #fff; border: 1px solid #E69A28; text-align: center; border-radius: 4px; font-size: 1.1em;">
-      </div>
-    </div>
-  `).join('');
-
   overlay.innerHTML = `
-    <div class="quick-monster-content" style="max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; background: #1a1a1a; padding: 20px; border: 1px solid #cda434; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+    <div class="quick-monster-content" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; background: #1a1a1a; padding: 20px; border: 1px solid #cda434; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; box-shadow: 0 0 30px rgba(0,0,0,0.7);">
       
-      <header class="quick-monster-header" style="flex-shrink: 0; display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 10px;">
+      <header class="quick-monster-header" style="flex-shrink: 0; display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 15px;">
         <div>
           <h3 style="color: #cda434; margin: 0;">➕ Encontro Rápido</h3>
-          <span style="font-size: 0.85em; color: #aaa;">Selecione os inimigos e as quantidades</span>
+          <span style="font-size: 0.85em; color: #aaa;">Selecione os inimigos para o combate</span>
         </div>
         <button onclick="document.getElementById('customEncounterModal').remove()" style="background: none; border: none; color: #fff; font-size: 1.5em; cursor: pointer;">✖</button>
       </header>
+
+      <!-- BARRA DE FILTROS -->
+      <div class="filter-bar" style="display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;">
+        <input type="text" id="filterName" placeholder="Buscar por nome..." oninput="filterQuickMonsters()" 
+          style="flex: 2; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        
+        <select id="filterEnvironment" onchange="filterQuickMonsters()" 
+          style="flex: 1; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+          <option value="">🌍 Todos Ambientes</option>
+          ${Array.from(todosAmbientes).sort().map(amb => `<option value="${amb}">${amb.charAt(0).toUpperCase() + amb.slice(1)}</option>`).join('')}
+        </select>
+      </div>
       
-      <!-- Corpo rolável com a lista de monstros -->
-      <div class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;">
-        ${monsterListHtml}
+      <!-- Lista de monstros (Container dinâmico) -->
+      <div id="quickMonsterList" class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;">
+        <!-- Renderizado via JS -->
       </div>
 
-      <!-- Rodapé fixo com o botão de iniciar -->
       <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; flex-shrink: 0;">
-        <button class="btn-loja" onclick="startCustomEncounter()" style="width: 100%; padding: 12px; font-size: 1.1em; background: #cda434; color: #000; font-weight: bold;">
+        <button class="btn-loja" onclick="startCustomEncounter()" style="width: 100%; padding: 12px; font-size: 1.1em; background: #cda434; color: #000; font-weight: bold; cursor: pointer;">
           ⚔️ Iniciar Combate
         </button>
       </div>
@@ -1581,47 +1580,84 @@ function openCustomEncounterModal() {
   `;
 
   document.body.appendChild(overlay);
+  filterQuickMonsters(); // Inicializa a lista
 }
 
 /**
- * Coleta os monstros selecionados e cria um objeto de encontro na hora
+ * Filtra a lista de monstros no modal baseado nos inputs
+ */
+function filterQuickMonsters() {
+  const container = document.getElementById("quickMonsterList");
+  const nameQuery = document.getElementById("filterName").value.toLowerCase();
+  const envQuery = document.getElementById("filterEnvironment").value;
+
+  if (!container) return;
+
+  const filtrados = DATA_MONSTROS.filter(m => {
+    const matchName = m.nome.toLowerCase().includes(nameQuery);
+    const matchEnv = !envQuery || (m.ambientes && m.ambientes.includes(envQuery));
+    return matchName && matchEnv;
+  });
+
+  container.innerHTML = filtrados.length > 0 ? filtrados.map(m => `
+    <div class="monster-selection-row" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #333; transition: background 0.2s;">
+      <div>
+        <strong style="color: #cda434; font-size: 1.05em;">${m.nome}</strong> 
+        <div style="color: #aaa; font-size: 0.85em;">
+          ${m.tipo} | CR ${m.cr || '?'}
+          <br>
+          <span style="color: #666; font-style: italic;">${m.ambientes ? m.ambientes.join(', ') : 'Sem ambiente'}</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <input type="number" id="custom_qty_${m.id}" min="0" value="${window.tempSelectedQuantities?.[m.id] || 0}" 
+          onchange="updateTempQuantity('${m.id}', this.value)"
+          style="width: 60px; padding: 8px; background: #222; color: #fff; border: 1px solid #E69A28; text-align: center; border-radius: 4px;">
+      </div>
+    </div>
+  `).join('') : `<p style="text-align: center; color: #666; padding: 20px;">Nenhum monstro encontrado.</p>`;
+}
+
+/**
+ * Mantém as quantidades selecionadas mesmo ao filtrar
+ */
+function updateTempQuantity(id, val) {
+  if (!window.tempSelectedQuantities) window.tempSelectedQuantities = {};
+  window.tempSelectedQuantities[id] = parseInt(val) || 0;
+}
+
+/**
+ * Coleta os monstros selecionados e inicia o combate
  */
 function startCustomEncounter() {
   const inimigosSelecionados = [];
+  const quantities = window.tempSelectedQuantities || {};
 
-  // Verifica a quantidade digitada para cada monstro do banco
-  DATA_MONSTROS.forEach(m => {
-    const input = document.getElementById(`custom_qty_${m.id}`);
-    if (input) {
-      const qty = parseInt(input.value) || 0;
-      if (qty > 0) {
-        inimigosSelecionados.push({ id: m.id, quantidade: qty });
-      }
+  Object.entries(quantities).forEach(([id, qty]) => {
+    if (qty > 0) {
+      inimigosSelecionados.push({ id: id, quantidade: qty });
     }
   });
 
   if (inimigosSelecionados.length === 0) {
-    // Alerta caso o mestre clique em Iniciar sem escolher ninguém
-    alert("Adicione pelo menos um monstro aumentando a quantidade para iniciar o encontro.");
+    alert("Selecione pelo menos um monstro para continuar.");
     return;
   }
 
-  // Monta um objeto de Encontro no mesmo formato que os encontros salvos (DATA_ENCONTROS)
   const encontroAdHoc = {
     id: `custom_enc_${Date.now()}`,
     nome: "Encontro Imprevisto",
-    descricao: "Um combate gerado rapidamente pelo mestre no calor do momento.",
-    dificuldade: "Desconhecida",
-    nivel_recomendado: "?",
+    descricao: "Um combate gerado rapidamente.",
+    dificuldade: "Personalizada",
     inimigos: inimigosSelecionados,
-    taticas_inimigos: ["O mestre decide as ações em tempo real, improvisando as táticas."],
-    terreno: { descricao: "O terreno atual onde os aventureiros se encontram." }
+    taticas_inimigos: ["O mestre decide as táticas."],
+    terreno: { descricao: "Local atual." }
   };
 
-  // Fecha o modal de seleção
+  // Limpa o estado temporário e remove modal
+  window.tempSelectedQuantities = {};
   document.getElementById('customEncounterModal').remove();
   
-  // Abre o Tracker de Combate principal usando o encontro recém-criado
   openEncounterModal(encontroAdHoc);
 }
 
