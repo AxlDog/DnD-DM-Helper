@@ -998,7 +998,7 @@ function salvarNPCGerado(npc) {
 //----------------- LOJA -------------------
 
 function loadLoja() {
-  setActiveMenu(8);
+  setActiveMenu(7);
   setView("loja");
 
   document.getElementById("content").innerHTML = `
@@ -1460,175 +1460,31 @@ function liberarAbasMestre(revelar) {
 }
 
 function loadEncontros() {
-  setActiveMenu(7); 
-  setView("encontros");
+  // Define o item do menu ativo (ajuste o índice conforme necessário, usei 6 como exemplo)
+  if (typeof setActiveMenu === 'function') setActiveMenu(7);
+  
+  // Define a visualização ativa para controle de navegação/CSS
+  if (typeof setView === 'function') setView("encontros");
 
-  const content = document.getElementById("content");
-  if (!content) return;
+  const contentArea = document.getElementById("content");
+  if (!contentArea) return;
 
-  // Cabeçalho da seção de encontros
-  content.innerHTML = `
-    <div class="header-section">
-      <h2>⚔️ Encontros Táticos</h2>
-      <p>Gestão de combates, táticas inimigas e objetivos de cena.</p>
-      <button class="btn-loja" onclick="openCustomEncounterModal()" style="margin-top: 10px; background: #E69A28; color: #000; font-weight: bold;">
-        ➕ Criar Encontro Rápido
-      </button>
+  // Injeta a estrutura básica da página de encontros
+  contentArea.innerHTML = `
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">⚔️ Encontros e Combates</h2>
     </div>
-    <div class="card-grid" id="encontrosGrid">
-      <div class="loading-spinner">A carregar planos de batalha...</div>
-    </div>
+    <div class="card-grid" id="encontrosGrid"></div>
   `;
 
+  // Chama a função de renderização passando a constante global DATA_ENCONTROS
+  // Certifique-se de que DATA_ENCONTROS esteja acessível neste escopo
   if (typeof DATA_ENCONTROS !== 'undefined') {
     renderEncontros(DATA_ENCONTROS);
+  } else {
+    console.warn("A constante DATA_ENCONTROS não foi encontrada.");
+    document.getElementById("encontrosGrid").innerHTML = '<p class="text-gray-500">Nenhum dado de encontro disponível.</p>';
   }
-}
-
-/**
- * =========================================================
- * ENCONTRO RÁPIDO (AD-HOC) COM FILTROS
- * Permite selecionar monstros com filtros de ambiente e nome
- * =========================================================
- */
-function openCustomEncounterModal() {
-  if (typeof DATA_MONSTROS === 'undefined' || DATA_MONSTROS.length === 0) {
-    alert("O bestiário ainda não foi carregado ou está vazio.");
-    return;
-  }
-
-  // Extrair todos os ambientes únicos para o filtro
-  const todosAmbientes = new Set();
-  DATA_MONSTROS.forEach(m => {
-    if (m.ambientes && Array.isArray(m.ambientes)) {
-      m.ambientes.forEach(amb => todosAmbientes.add(amb));
-    }
-  });
-
-  // Criação do Overlay no DOM
-  const overlay = document.createElement('div');
-  overlay.className = 'quick-monster-overlay';
-  overlay.id = 'customEncounterModal';
-  overlay.onclick = (e) => {
-    if (e.target === overlay) document.body.removeChild(overlay);
-  };
-
-  overlay.innerHTML = `
-    <div class="quick-monster-content" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; background: #1a1a1a; padding: 20px; border: 1px solid #cda434; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; box-shadow: 0 0 30px rgba(0,0,0,0.7);">
-      
-      <header class="quick-monster-header" style="flex-shrink: 0; display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 15px;">
-        <div>
-          <h3 style="color: #cda434; margin: 0;">➕ Encontro Rápido</h3>
-          <span style="font-size: 0.85em; color: #aaa;">Selecione os inimigos para o combate</span>
-        </div>
-        <button onclick="document.getElementById('customEncounterModal').remove()" style="background: none; border: none; color: #fff; font-size: 1.5em; cursor: pointer;">✖</button>
-      </header>
-
-      <!-- BARRA DE FILTROS -->
-      <div class="filter-bar" style="display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;">
-        <input type="text" id="filterName" placeholder="Buscar por nome..." oninput="filterQuickMonsters()" 
-          style="flex: 2; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
-        
-        <select id="filterEnvironment" onchange="filterQuickMonsters()" 
-          style="flex: 1; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
-          <option value="">🌍 Todos Ambientes</option>
-          ${Array.from(todosAmbientes).sort().map(amb => `<option value="${amb}">${amb.charAt(0).toUpperCase() + amb.slice(1)}</option>`).join('')}
-        </select>
-      </div>
-      
-      <!-- Lista de monstros (Container dinâmico) -->
-      <div id="quickMonsterList" class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;">
-        <!-- Renderizado via JS -->
-      </div>
-
-      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; flex-shrink: 0;">
-        <button class="btn-loja" onclick="startCustomEncounter()" style="width: 100%; padding: 12px; font-size: 1.1em; background: #cda434; color: #000; font-weight: bold; cursor: pointer;">
-          ⚔️ Iniciar Combate
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(overlay);
-  filterQuickMonsters(); // Inicializa a lista
-}
-
-/**
- * Filtra a lista de monstros no modal baseado nos inputs
- */
-function filterQuickMonsters() {
-  const container = document.getElementById("quickMonsterList");
-  const nameQuery = document.getElementById("filterName").value.toLowerCase();
-  const envQuery = document.getElementById("filterEnvironment").value;
-
-  if (!container) return;
-
-  const filtrados = DATA_MONSTROS.filter(m => {
-    const matchName = m.nome.toLowerCase().includes(nameQuery);
-    const matchEnv = !envQuery || (m.ambientes && m.ambientes.includes(envQuery));
-    return matchName && matchEnv;
-  });
-
-  container.innerHTML = filtrados.length > 0 ? filtrados.map(m => `
-    <div class="monster-selection-row" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #333; transition: background 0.2s;">
-      <div>
-        <strong style="color: #cda434; font-size: 1.05em;">${m.nome}</strong> 
-        <div style="color: #aaa; font-size: 0.85em;">
-          ${m.tipo} | CR ${m.cr || '?'}
-          <br>
-          <span style="color: #666; font-style: italic;">${m.ambientes ? m.ambientes.join(', ') : 'Sem ambiente'}</span>
-        </div>
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <input type="number" id="custom_qty_${m.id}" min="0" value="${window.tempSelectedQuantities?.[m.id] || 0}" 
-          onchange="updateTempQuantity('${m.id}', this.value)"
-          style="width: 60px; padding: 8px; background: #222; color: #fff; border: 1px solid #E69A28; text-align: center; border-radius: 4px;">
-      </div>
-    </div>
-  `).join('') : `<p style="text-align: center; color: #666; padding: 20px;">Nenhum monstro encontrado.</p>`;
-}
-
-/**
- * Mantém as quantidades selecionadas mesmo ao filtrar
- */
-function updateTempQuantity(id, val) {
-  if (!window.tempSelectedQuantities) window.tempSelectedQuantities = {};
-  window.tempSelectedQuantities[id] = parseInt(val) || 0;
-}
-
-/**
- * Coleta os monstros selecionados e inicia o combate
- */
-function startCustomEncounter() {
-  const inimigosSelecionados = [];
-  const quantities = window.tempSelectedQuantities || {};
-
-  Object.entries(quantities).forEach(([id, qty]) => {
-    if (qty > 0) {
-      inimigosSelecionados.push({ id: id, quantidade: qty });
-    }
-  });
-
-  if (inimigosSelecionados.length === 0) {
-    alert("Selecione pelo menos um monstro para continuar.");
-    return;
-  }
-
-  const encontroAdHoc = {
-    id: `custom_enc_${Date.now()}`,
-    nome: "Encontro Imprevisto",
-    descricao: "Um combate gerado rapidamente.",
-    dificuldade: "Personalizada",
-    inimigos: inimigosSelecionados,
-    taticas_inimigos: ["O mestre decide as táticas."],
-    terreno: { descricao: "Local atual." }
-  };
-
-  // Limpa o estado temporário e remove modal
-  window.tempSelectedQuantities = {};
-  document.getElementById('customEncounterModal').remove();
-  
-  openEncounterModal(encontroAdHoc);
 }
 
 function renderEncontros(dados) {
@@ -1659,6 +1515,101 @@ function renderEncontros(dados) {
     
     grid.appendChild(card);
   });
+}
+
+/**
+ * Abre o modal focado nos monstros do encontro, com controles de HP e Iniciativa.
+ */
+function openEncounterModal(encontro) {
+  const modal = document.getElementById("npcModal");
+  const body = document.getElementById("npcModalBody");
+  const modalContent = modal.querySelector(".modal-content");
+
+  if (!modal || !body) return;
+
+  if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
+    modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
+  }
+
+  let inimigosHtml = "";
+  
+  if (encontro.inimigos && Array.isArray(encontro.inimigos)) {
+    inimigosHtml = encontro.inimigos.map(ref => {
+      const monstro = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === ref.id) : null;
+      const nomeBase = monstro ? monstro.nome : ref.id;
+      const monstroId = monstro ? monstro.id : null;
+      const cr = monstro ? `ND ${monstro.cr}` : "ND ?";
+      const pv = monstro ? parseInt(monstro.pv) || 0 : 0;
+      const ca = monstro ? monstro.ca : "?";
+
+      // Cria cards individuais
+      return Array.from({ length: ref.quantidade }, (_, i) => {
+        const sufixo = ref.quantidade > 1 ? ` #${i + 1}` : "";
+        const uniqueId = `${ref.id}_${i}`; // ID único para controle de HP no DOM
+        
+        return `
+          <div class="monster-card-unit" id="monster-card-${uniqueId}">
+            <div class="monster-card-header">
+              <span class="monster-tag">${cr}</span>
+              <span class="monster-name clickable-name" onclick="openMonsterDetails(event, '${monstroId}')" title="Ver Ficha Rápida">
+                ${nomeBase}${sufixo} ℹ️
+              </span>
+            </div>
+
+            <div class="monster-combat-controls">
+              <div class="init-control" title="Iniciativa">
+                <span>⏱️</span>
+                <input type="number" class="combat-input init-input" placeholder="0" />
+              </div>
+
+              <div class="monster-stats-row">
+                <span>🛡️ CA: ${ca}</span>
+                <span>❤️ <span id="hp-val-${uniqueId}">${pv}</span> / ${pv}</span>
+              </div>
+            </div>
+
+            <div class="hp-control-panel">
+              <input type="number" id="hp-input-${uniqueId}" class="combat-input dmg-input" placeholder="Qtd" min="0">
+              <button class="btn-combat btn-heal" onclick="applyDamage(event, '${uniqueId}', false)" title="Curar Vida">💚</button>
+              <button class="btn-combat btn-dmg" onclick="applyDamage(event, '${uniqueId}', true)" title="Causar Dano">💥</button>
+            </div>
+
+            <div class="monster-card-footer">
+              📍 ${ref.posicao_inicial}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }).join('');
+  }
+
+  body.innerHTML = `
+    <div class="local-modal-container">
+      <header class="local-modal-header">
+        <h2>${encontro.nome || "Registro de Combate"}</h2>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;">
+          ${getDificuldadeLabel(encontro.dificuldade)} | Nível ${encontro.nivel_recomendado || '?'}
+        </p>
+      </header>
+      
+      <div class="local-modal-scroll">
+        <div class="monster-section">
+          <h3 class="section-title">Iniciativa e Inimigos</h3>
+          <div class="monster-unit-grid">
+            ${inimigosHtml || '<p>Nenhum monstro registrado.</p>'}
+          </div>
+        </div>
+      </div>
+
+      <div id="modalFooter" class="modal-footer">
+        <button class="btn-forja" onclick="document.getElementById('npcModal').classList.add('hidden')">
+          Fechar Registro
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.remove("hidden");
 }
 
 /**
