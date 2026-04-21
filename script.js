@@ -1459,34 +1459,6 @@ function liberarAbasMestre(revelar) {
   });
 }
 
-function loadEncontros() {
-  // Define o item do menu ativo (ajuste o índice conforme necessário, usei 6 como exemplo)
-  if (typeof setActiveMenu === 'function') setActiveMenu(7);
-  
-  // Define a visualização ativa para controle de navegação/CSS
-  if (typeof setView === 'function') setView("encontros");
-
-  const contentArea = document.getElementById("content");
-  if (!contentArea) return;
-
-  // Injeta a estrutura básica da página de encontros
-  contentArea.innerHTML = `
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold text-gray-800">⚔️ Encontros e Combates</h2>
-    </div>
-    <div class="card-grid" id="encontrosGrid"></div>
-  `;
-
-  // Chama a função de renderização passando a constante global DATA_ENCONTROS
-  // Certifique-se de que DATA_ENCONTROS esteja acessível neste escopo
-  if (typeof DATA_ENCONTROS !== 'undefined') {
-    renderEncontros(DATA_ENCONTROS);
-  } else {
-    console.warn("A constante DATA_ENCONTROS não foi encontrada.");
-    document.getElementById("encontrosGrid").innerHTML = '<p class="text-gray-500">Nenhum dado de encontro disponível.</p>';
-  }
-}
-
 function renderEncontros(dados) {
   const grid = document.getElementById("encontrosGrid");
   if (!grid) return;
@@ -1520,96 +1492,137 @@ function renderEncontros(dados) {
 /**
  * Abre o modal focado nos monstros do encontro, com controles de HP e Iniciativa.
  */
-function openEncounterModal(encontro) {
-  const modal = document.getElementById("npcModal");
-  const body = document.getElementById("npcModalBody");
-  const modalContent = modal.querySelector(".modal-content");
+/**
+ * Carrega a visualização de encontros
+ */
+function loadEncontros() {
+  setActiveMenu(7); 
+  setView("encontros");
 
-  if (!modal || !body) return;
+  const content = document.getElementById("content");
+  if (!content) return;
 
-  if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
-    modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
+  // Modificado: Adicionado o botão "Criar Encontro Rápido" no header
+  content.innerHTML = `
+    <div class="header-section">
+      <h2>⚔️ Encontros Táticos</h2>
+      <p>Gestão de combates, táticas inimigas e objetivos de cena.</p>
+      <button class="btn-loja" onclick="openCustomEncounterModal()" style="margin-top: 10px; background: #E69A28; color: #000; font-weight: bold;">
+        ➕ Criar Encontro Rápido
+      </button>
+    </div>
+    <div class="card-grid" id="encontrosGrid">
+      <div class="loading-spinner">A carregar planos de batalha...</div>
+    </div>
+  `;
+
+  if (typeof DATA_ENCONTROS !== 'undefined') {
+    renderEncontros(DATA_ENCONTROS);
+  }
+}
+
+/**
+ * =========================================================
+ * ENCONTRO RÁPIDO (AD-HOC)
+ * Permite selecionar monstros do banco para combate rápido
+ * =========================================================
+ */
+function openCustomEncounterModal() {
+  if (typeof DATA_MONSTROS === 'undefined' || DATA_MONSTROS.length === 0) {
+    alert("O bestiário ainda não foi carregado ou está vazio.");
+    return;
   }
 
-  let inimigosHtml = "";
-  
-  if (encontro.inimigos && Array.isArray(encontro.inimigos)) {
-    inimigosHtml = encontro.inimigos.map(ref => {
-      const monstro = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === ref.id) : null;
-      const nomeBase = monstro ? monstro.nome : ref.id;
-      const monstroId = monstro ? monstro.id : null;
-      const cr = monstro ? `ND ${monstro.cr}` : "ND ?";
-      const pv = monstro ? parseInt(monstro.pv) || 0 : 0;
-      const ca = monstro ? monstro.ca : "?";
+  // Criação do Overlay no DOM
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'customEncounterModal';
+  overlay.onclick = (e) => {
+    if (e.target === overlay) document.body.removeChild(overlay); // Fecha ao clicar fora
+  };
 
-      // Cria cards individuais
-      return Array.from({ length: ref.quantidade }, (_, i) => {
-        const sufixo = ref.quantidade > 1 ? ` #${i + 1}` : "";
-        const uniqueId = `${ref.id}_${i}`; // ID único para controle de HP no DOM
-        
-        return `
-          <div class="monster-card-unit" id="monster-card-${uniqueId}">
-            <div class="monster-card-header">
-              <span class="monster-tag">${cr}</span>
-              <span class="monster-name clickable-name" onclick="openMonsterDetails(event, '${monstroId}')" title="Ver Ficha Rápida">
-                ${nomeBase}${sufixo} ℹ️
-              </span>
-            </div>
+  // Gera a lista de monstros com inputs numéricos para a quantidade
+  const monsterListHtml = DATA_MONSTROS.map(m => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333;">
+      <div>
+        <strong style="color: #cda434;">${m.nome}</strong> 
+        <small style="color: #aaa; display: block;">${m.tipo} | CR ${m.cr}</small>
+      </div>
+      <div>
+        <input type="number" id="custom_qty_${m.id}" min="0" value="0" 
+          style="width: 60px; padding: 8px; background: #222; color: #fff; border: 1px solid #E69A28; text-align: center; border-radius: 4px; font-size: 1.1em;">
+      </div>
+    </div>
+  `).join('');
 
-            <div class="monster-combat-controls">
-              <div class="init-control" title="Iniciativa">
-                <span>⏱️</span>
-                <input type="number" class="combat-input init-input" placeholder="0" />
-              </div>
-
-              <div class="monster-stats-row">
-                <span>🛡️ CA: ${ca}</span>
-                <span>❤️ <span id="hp-val-${uniqueId}">${pv}</span> / ${pv}</span>
-              </div>
-            </div>
-
-            <div class="hp-control-panel">
-              <input type="number" id="hp-input-${uniqueId}" class="combat-input dmg-input" placeholder="Qtd" min="0">
-              <button class="btn-combat btn-heal" onclick="applyDamage(event, '${uniqueId}', false)" title="Curar Vida">💚</button>
-              <button class="btn-combat btn-dmg" onclick="applyDamage(event, '${uniqueId}', true)" title="Causar Dano">💥</button>
-            </div>
-
-            <div class="monster-card-footer">
-              📍 ${ref.posicao_inicial}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }).join('');
-  }
-
-  body.innerHTML = `
-    <div class="local-modal-container">
-      <header class="local-modal-header">
-        <h2>${encontro.nome || "Registro de Combate"}</h2>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;">
-          ${getDificuldadeLabel(encontro.dificuldade)} | Nível ${encontro.nivel_recomendado || '?'}
-        </p>
+  overlay.innerHTML = `
+    <div class="quick-monster-content" style="max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; background: #1a1a1a; padding: 20px; border: 1px solid #cda434; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+      
+      <header class="quick-monster-header" style="flex-shrink: 0; display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 10px;">
+        <div>
+          <h3 style="color: #cda434; margin: 0;">➕ Encontro Rápido</h3>
+          <span style="font-size: 0.85em; color: #aaa;">Selecione os inimigos e as quantidades</span>
+        </div>
+        <button onclick="document.getElementById('customEncounterModal').remove()" style="background: none; border: none; color: #fff; font-size: 1.5em; cursor: pointer;">✖</button>
       </header>
       
-      <div class="local-modal-scroll">
-        <div class="monster-section">
-          <h3 class="section-title">Iniciativa e Inimigos</h3>
-          <div class="monster-unit-grid">
-            ${inimigosHtml || '<p>Nenhum monstro registrado.</p>'}
-          </div>
-        </div>
+      <!-- Corpo rolável com a lista de monstros -->
+      <div class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;">
+        ${monsterListHtml}
       </div>
 
-      <div id="modalFooter" class="modal-footer">
-        <button class="btn-forja" onclick="document.getElementById('npcModal').classList.add('hidden')">
-          Fechar Registro
+      <!-- Rodapé fixo com o botão de iniciar -->
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; flex-shrink: 0;">
+        <button class="btn-loja" onclick="startCustomEncounter()" style="width: 100%; padding: 12px; font-size: 1.1em; background: #cda434; color: #000; font-weight: bold;">
+          ⚔️ Iniciar Combate
         </button>
       </div>
     </div>
   `;
 
-  modal.classList.remove("hidden");
+  document.body.appendChild(overlay);
+}
+
+/**
+ * Coleta os monstros selecionados e cria um objeto de encontro na hora
+ */
+function startCustomEncounter() {
+  const inimigosSelecionados = [];
+
+  // Verifica a quantidade digitada para cada monstro do banco
+  DATA_MONSTROS.forEach(m => {
+    const input = document.getElementById(`custom_qty_${m.id}`);
+    if (input) {
+      const qty = parseInt(input.value) || 0;
+      if (qty > 0) {
+        inimigosSelecionados.push({ id: m.id, quantidade: qty });
+      }
+    }
+  });
+
+  if (inimigosSelecionados.length === 0) {
+    // Alerta caso o mestre clique em Iniciar sem escolher ninguém
+    alert("Adicione pelo menos um monstro aumentando a quantidade para iniciar o encontro.");
+    return;
+  }
+
+  // Monta um objeto de Encontro no mesmo formato que os encontros salvos (DATA_ENCONTROS)
+  const encontroAdHoc = {
+    id: `custom_enc_${Date.now()}`,
+    nome: "Encontro Imprevisto",
+    descricao: "Um combate gerado rapidamente pelo mestre no calor do momento.",
+    dificuldade: "Desconhecida",
+    nivel_recomendado: "?",
+    inimigos: inimigosSelecionados,
+    taticas_inimigos: ["O mestre decide as ações em tempo real, improvisando as táticas."],
+    terreno: { descricao: "O terreno atual onde os aventureiros se encontram." }
+  };
+
+  // Fecha o modal de seleção
+  document.getElementById('customEncounterModal').remove();
+  
+  // Abre o Tracker de Combate principal usando o encontro recém-criado
+  openEncounterModal(encontroAdHoc);
 }
 
 /**
