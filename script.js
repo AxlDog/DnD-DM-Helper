@@ -1460,7 +1460,7 @@ function liberarAbasMestre(revelar) {
 }
 
 function loadEncontros() {
-  setActiveMenu(6); 
+  setActiveMenu(7); 
   setView("encontros");
 
   const content = document.getElementById("content");
