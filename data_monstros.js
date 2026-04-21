@@ -1710,5 +1710,269 @@ const DATA_MONSTROS = [
 		  "descricao": "Quando reduzida a 0 PV pela primeira vez, permanece com 1 PV e libera automaticamente o Lamento da Noiva."
 		}
 	  ]
+	},
+	{
+	  "id": "mob_guarda_corrente_negra",
+	  "nome": "Guarda da Corrente Negra",
+	  "tipo": "Humanoide",
+	  "alinhamento": "Leal maligno",
+	  "ca": 16,
+	  "tipo_ca": "Armadura leve reforçada",
+	  "pv": 52,
+	  "dados_vida": "8d8 + 16",
+	  "deslocamento": "9m",
+
+	  "atributos": {
+		"for": 14,
+		"des": 14,
+		"con": 14,
+		"int": 10,
+		"sab": 12,
+		"car": 10
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Treinamento Coordenado",
+		  "descricao": "Recebe +1 em ataques se estiver a até 1,5m de outro guarda aliado."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 11",
+	  "idiomas": "Comum",
+	  "cr": 3,
+	  "xp": 700,
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza dois ataques com espada curta."
+		},
+		{
+		  "nome": "Espada Curta",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+5",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d6 + 2 cortante"
+		},
+		{
+		  "nome": "Besta Leve",
+		  "tipo": "à distância",
+		  "ataque": "+4",
+		  "alcance": "24m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 perfurante"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Postura Defensiva",
+		  "descricao": "Como ação bônus, ganha +2 CA até o próximo turno."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_vigilante_corrente",
+	  "nome": "Vigilante da Corrente",
+	  "tipo": "Humanoide",
+	  "alinhamento": "Leal maligno",
+	  "ca": 15,
+	  "tipo_ca": "Armadura leve",
+	  "pv": 45,
+	  "dados_vida": "7d8 + 14",
+	  "deslocamento": "9m",
+
+	  "atributos": {
+		"for": 12,
+		"des": 16,
+		"con": 14,
+		"int": 12,
+		"sab": 14,
+		"car": 10
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Olhos da Patrulha",
+		  "descricao": "Vantagem em testes de Percepção."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 14",
+	  "idiomas": "Comum",
+	  "cr": 3,
+	  "xp": 700,
+
+	  "acoes": [
+		{
+		  "nome": "Disparo Preciso",
+		  "tipo": "à distância",
+		  "ataque": "+6",
+		  "alcance": "30m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 3 perfurante"
+		},
+		{
+		  "nome": "Rede de Contenção",
+		  "tipo": "à distância",
+		  "ataque": "+5",
+		  "alcance": "6m",
+		  "alvo": "1 criatura",
+		  "dano": "0",
+		  "efeito": "Alvo fica Restrained (FOR CD 13 para escapar)"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Alarme Silencioso",
+		  "descricao": "Como reação, alerta todos os guardas em 18m, concedendo vantagem na iniciativa."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_executor_corrente",
+	  "nome": "Executor da Corrente Negra",
+	  "tipo": "Humanoide",
+	  "alinhamento": "Leal maligno",
+	  "ca": 17,
+	  "tipo_ca": "Armadura arcana",
+	  "pv": 88,
+	  "dados_vida": "11d8 + 33",
+	  "deslocamento": "9m",
+
+	  "atributos": {
+		"for": 12,
+		"des": 14,
+		"con": 16,
+		"int": 14,
+		"sab": 12,
+		"car": 16
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Toque do Patrono",
+		  "descricao": "Seus ataques causam +1d6 necrótico."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 11",
+	  "idiomas": "Comum, Infernal",
+	  "cr": 6,
+	  "xp": 2300,
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza dois ataques ou usa magia."
+		},
+		{
+		  "nome": "Lâmina Negra",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+6",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 2 cortante + 1d6 necrótico"
+		},
+		{
+		  "nome": "Rajada Sombria",
+		  "tipo": "à distância",
+		  "ataque": "+7",
+		  "alcance": "18m",
+		  "alvo": "1 criatura",
+		  "dano": "2d10 necrótico"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Vínculo Sombrio",
+		  "descricao": "Quando um aliado cai a 0 PV a até 9m, o executor ganha +2 em ataques por 2 turnos."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_darian_varkros",
+	  "nome": "Darian Varkros, Senhor das Correntes",
+	  "tipo": "Humanoide",
+	  "alinhamento": "Leal maligno",
+	  "ca": 18,
+	  "tipo_ca": "Armadura arcana + Proteções do Patrono",
+	  "pv": 165,
+	  "dados_vida": "18d8 + 72",
+	  "deslocamento": "9m",
+
+	  "atributos": {
+		"for": 10,
+		"des": 14,
+		"con": 18,
+		"int": 14,
+		"sab": 12,
+		"car": 20
+	  },
+
+	  "habilidades": [
+		{
+		  "nome": "Pacto das Correntes",
+		  "descricao": "Criaturas afetadas por suas magias têm desvantagem para escapar de efeitos de restrição."
+		},
+		{
+		  "nome": "Resistência Mágica",
+		  "descricao": "Vantagem em testes de resistência contra magia."
+		}
+	  ],
+
+	  "sentidos": "Percepção passiva 11",
+	  "idiomas": "Comum, Infernal",
+	  "cr": 11,
+	  "xp": 7200,
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza duas Rajadas Místicas ou usa uma magia."
+		},
+		{
+		  "nome": "Rajada Mística",
+		  "tipo": "à distância",
+		  "ataque": "+9",
+		  "alcance": "36m",
+		  "alvo": "1 criatura",
+		  "dano": "2d10 + 5 força",
+		  "efeito": "Empurra o alvo 3m para trás"
+		},
+		{
+		  "nome": "Correntes do Patrono",
+		  "tipo": "à distância",
+		  "ataque": "+8",
+		  "alcance": "18m",
+		  "alvo": "1 criatura",
+		  "dano": "3d8 necrótico",
+		  "efeito": "Alvo fica Restrained (FOR CD 16 para escapar)"
+		},
+		{
+		  "nome": "Dominar Servos",
+		  "tipo": "área",
+		  "alcance": "9m",
+		  "alvo": "criaturas à escolha",
+		  "dano": "0",
+		  "efeito": "SAB CD 16 ou fica encantado por 1 turno",
+		  "recarga": "5-6"
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Marca do Proprietário",
+		  "descricao": "Quando uma criatura cai abaixo de 50% de vida, Darian causa +2d6 dano extra contra ela."
+		},
+		{
+		  "nome": "Chamado do Patrono",
+		  "descricao": "1x por combate, invoca 2 Guardas da Corrente Negra com metade dos PV."
+		}
+	  ]
 	}
 ];
