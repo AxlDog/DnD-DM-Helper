@@ -1773,7 +1773,7 @@ function renderEncounterModalContent(encontro) {
                       <input type="number" value="${m.iniciativa}" onchange="updateInic('${m.instanceId}', this.value)" style="width: 50px; background: #111; color: #fff; border: 1px solid #444; text-align: center; border-radius: 4px; padding: 4px;">
                     </td>
                     <td style="padding: 10px;">
-                      <div style="cursor: pointer; text-decoration: underline; color: ${isDead ? '#888' : '#fff'};" onclick="openMonsterDetails(event, '${m.mobId}')" title="Ver Ficha Rápida">
+                      <div style="cursor: pointer; text-decoration: underline; color: ${isDead ? '#888' : '#aaa'};" onclick="openMonsterDetails(event, '${m.mobId}')" title="Ver Ficha Rápida">
                         <strong>${m.nome}</strong> ℹ️
                       </div>
                       <small style="color: #aaa;">CA: ${m.ca} | HP Máx: ${m.hpMax}</small>
