@@ -1661,37 +1661,262 @@ function startCustomEncounter() {
   openEncounterModal(encontroAdHoc);
 }
 
+// Estado global para não perder os HPs e iniciativas ao trocar de aba
+let currentCombat = {
+  encontroId: null,
+  monstros: [] // { instanceId, mobId, nome, hpMax, iniciativa, modificadores: [], ca, ativo: true }
+};
+
 /**
- * Aplica dano ou cura na interface do card do monstro específico.
+ * Abre o modal de encontro e inicializa as instâncias de combate
  */
-function applyDamage(event, uniqueId, isDamage) {
-  if (event) event.stopPropagation();
+function openEncounterModal(encontro) {
+  const modal = document.getElementById("npcModal");
+  const body = document.getElementById("npcModalBody");
+  const modalContent = modal.querySelector(".modal-content");
+  
+  if (!modal || !body) return;
 
-  const valDisplay = document.getElementById(`hp-val-${uniqueId}`);
-  const inputEl = document.getElementById(`hp-input-${uniqueId}`);
-  const cardEl = document.getElementById(`monster-card-${uniqueId}`);
-
-  if (!valDisplay || !inputEl) return;
-
-  const amount = parseInt(inputEl.value) || 0;
-  if (amount === 0) return;
-
-  let currentHp = parseInt(valDisplay.innerText) || 0;
-
-  if (isDamage) {
-    currentHp -= amount;
-  } else {
-    currentHp += amount;
+  // Carrega a imagem de cabeçalho, se existir
+  if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
+    modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
   }
 
-  valDisplay.innerText = currentHp;
-  inputEl.value = ''; // Limpa o input após aplicar
+  // Inicializa o combate se for um encontro diferente do atual
+  if (currentCombat.encontroId !== encontro.id) {
+    currentCombat.encontroId = encontro.id;
+    currentCombat.monstros = [];
+    
+    if (encontro.inimigos && Array.isArray(encontro.inimigos)) {
+      encontro.inimigos.forEach(mGroup => {
+        const template = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === mGroup.id) : null;
+        if (template) {
+          const qtd = parseInt(mGroup.quantidade) || 1;
+          for (let i = 0; i < qtd; i++) {
+            currentCombat.monstros.push({
+              instanceId: `mob_${mGroup.id}_${Date.now()}_${i}`,
+              mobId: mGroup.id,
+              nome: qtd > 1 ? `${template.nome} #${i + 1}` : template.nome,
+              hpMax: parseInt(template.pv) || 0,
+              iniciativa: 0,
+              ca: template.ca || "?",
+              modificadores: [], // Vetor: valores negativos (dano) e positivos (cura)
+              ativo: true
+            });
+          }
+        }
+      });
+    }
+  }
 
-  // Feedback visual para monstro abatido
-  if (currentHp*5 == 0) {
-    cardEl.classList.add('monster-dead');
-  } else {
-    cardEl.classList.remove('monster-dead');
+  renderEncounterModalContent(encontro);
+  modal.classList.remove("hidden");
+}
+
+/**
+ * Renderiza o conteúdo dinâmico do modal com sistema de ABAS
+ */
+function renderEncounterModalContent(encontro) {
+  const body = document.getElementById("npcModalBody");
+  if (!body) return;
+  
+  const mobIds = [...new Set((encontro.inimigos || []).map(m => m.id))];
+  const monstrosTemplates = typeof DATA_MONSTROS !== 'undefined' 
+    ? DATA_MONSTROS.filter(m => mobIds.includes(m.id)) 
+    : [];
+
+  // Função para calcular o HP atual com base no vetor de danos e curas
+  const calculateHP = (m) => {
+    const totalMod = m.modificadores.reduce((acc, val) => acc + val, 0);
+    const atual = m.hpMax + totalMod;
+    return Math.min(m.hpMax, Math.max(0, atual));
+  };
+
+  const monstrosAtivos = currentCombat.monstros.filter(m => m.ativo);
+
+  body.innerHTML = `
+    <div class="local-modal-container">
+      <header class="local-modal-header">
+        <h2>${encontro.nome || "Registro de Combate"}</h2>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;">
+          ${getDificuldadeLabel(encontro.dificuldade || 'Desconhecida')} | Nível ${encontro.nivel_recomendado || '?'}
+        </p>
+      </header>
+      
+      <div style="display: flex; gap: 10px; padding: 10px 20px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button class="tab-btn active" id="btn-tab-tracker" onclick="switchEncounterTab('tracker')" style="padding: 8px 16px; border-radius: 4px; border: none; background: #e69a28; color: #000; font-weight: bold; cursor: pointer;">⚔️ Tracker</button>
+        <button class="tab-btn" id="btn-tab-info" onclick="switchEncounterTab('info-monstros')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">📖 Bestiário</button>
+        <button class="tab-btn" id="btn-tab-taticas" onclick="switchEncounterTab('taticas')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">🗺️ Táticas</button>
+      </div>
+
+      <div class="local-modal-scroll" style="padding: 20px;">
+        
+        <div id="tab-tracker" class="tab-content active">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid #444; color: #e69a28;">
+                <th style="padding: 10px;">Inic.</th>
+                <th style="padding: 10px;">Inimigo</th>
+                <th style="padding: 10px;">HP / Vida</th>
+                <th style="padding: 10px;">Controles</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${monstrosAtivos.map(m => {
+                const hpAtual = calculateHP(m);
+                const percent = m.hpMax > 0 ? (hpAtual / m.hpMax) * 100 : 0;
+                const isDead = hpAtual <= 0;
+                
+                return `
+                  <tr style="border-bottom: 1px solid #333; background: ${isDead ? 'rgba(255,0,0,0.1)' : 'transparent'}">
+                    <td style="padding: 10px;">
+                      <input type="number" value="${m.iniciativa}" onchange="updateInic('${m.instanceId}', this.value)" style="width: 50px; background: #111; color: #fff; border: 1px solid #444; text-align: center; border-radius: 4px; padding: 4px;">
+                    </td>
+                    <td style="padding: 10px;">
+                      <div style="cursor: pointer; text-decoration: underline; color: ${isDead ? '#888' : '#fff'};" onclick="openMonsterDetails(event, '${m.mobId}')" title="Ver Ficha Rápida">
+                        <strong>${m.nome}</strong> ℹ️
+                      </div>
+                      <small style="color: #aaa;">CA: ${m.ca} | HP Máx: ${m.hpMax}</small>
+                    </td>
+                    <td style="padding: 10px; min-width: 120px;">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.85em; margin-bottom: 4px;">
+                        <span>${hpAtual} / ${m.hpMax}</span>
+                      </div>
+                      <div style="width: 100%; height: 8px; background: #222; border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${percent}%; height: 100%; background: ${percent < 25 ? '#ef4444' : '#22c55e'}; transition: width 0.3s;"></div>
+                      </div>
+                    </td>
+                    <td style="padding: 10px;">
+                      <div style="display: flex; gap: 5px;">
+                        <input type="number" id="input-hp-${m.instanceId}" placeholder="0" style="width: 50px; background: #111; color: #fff; border: 1px solid #444; text-align: center; border-radius: 4px;">
+                        <button onclick="applyHPModifier('${m.instanceId}', 'dano')" style="background: #441111; color: #fff; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px;" title="Causar Dano">💥</button>
+                        <button onclick="applyHPModifier('${m.instanceId}', 'cura')" style="background: #114411; color: #fff; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px;" title="Curar Vida">💚</button>
+                        <button onclick="removeMobFromCombat('${m.instanceId}')" style="background: #333; color: #fff; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px;" title="Remover Combate">✖</button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+          <div style="margin-top: 15px;">
+            <button onclick="sortCombat()" style="background: #222; color: #e69a28; border: 1px solid #e69a28; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+              Reordenar Iniciativa ⏱️
+            </button>
+          </div>
+        </div>
+
+        <div id="tab-info-monstros" class="tab-content" style="display:none;">
+          ${monstrosTemplates.map(m => `
+            <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-left: 3px solid #e69a28; border-radius: 4px;">
+              <h3 style="color: #e69a28; margin-top: 0;">${m.nome}</h3>
+              <p><strong>CA:</strong> ${m.ca} (${m.tipo_ca || '-'}) | <strong>PV:</strong> ${m.pv} | <strong>Velocidade:</strong> ${m.deslocamento || '9m'}</p>
+              <p style="color: #aaa; font-style: italic; font-size: 0.9em;">${m.tipo} | ${m.alinhamento}</p>
+              
+              <div style="margin-top: 10px;">
+                <strong style="color: #ddd;">Ações Principais:</strong>
+                <ul style="padding-left: 20px; margin-top: 5px; font-size: 0.95em;">
+                  ${m.acoes ? m.acoes.map(a => `<li style="margin-bottom: 4px;"><strong>${a.nome}:</strong> ${a.descricao || `${a.ataque} / ${a.dano}`}</li>`).join('') : "<li>Sem ações detalhadas.</li>"}
+                </ul>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div id="tab-taticas" class="tab-content" style="display:none;">
+          <h3 style="color: #e69a28; margin-top: 0;">📋 Plano de Ação (Mestre)</h3>
+          <ul style="padding-left: 20px;">
+            ${(encontro.taticas_inimigos || []).map(t => `<li style="margin-bottom: 8px;">${t}</li>`).join('') || "<li>Nenhuma tática específica definida para este encontro. Improviso é a chave!</li>"}
+          </ul>
+          <h3 style="color: #e69a28; margin-top: 20px;">🏔️ Notas de Terreno</h3>
+          <p>${encontro.terreno?.descricao || "Terreno padrão. Sem efeitos ou perigos climáticos registrados."}</p>
+        </div>
+
+      </div>
+
+      <div id="modalFooter" class="modal-footer">
+        <button class="btn-forja" onclick="document.getElementById('npcModal').classList.add('hidden')">
+          Fechar Registro
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Funções Auxiliares do Tracker de Combate
+ */
+function applyHPModifier(instanceId, tipo) {
+  const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
+  const input = document.getElementById(`input-hp-${instanceId}`);
+  if (!monstro || !input) return;
+
+  const val = parseInt(input.value) || 0;
+  if (val <= 0) return;
+
+  // Dano entra negativo, cura entra positivo
+  const modifier = tipo === 'dano' ? -val : val;
+  monstro.modificadores.push(modifier);
+  
+  input.value = "";
+  refreshEncounterUI();
+}
+
+function updateInic(instanceId, val) {
+  const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
+  if (monstro) monstro.iniciativa = parseInt(val) || 0;
+}
+
+function removeMobFromCombat(instanceId) {
+  const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
+  if (monstro) {
+    monstro.ativo = false;
+    refreshEncounterUI();
+  }
+}
+
+function sortCombat() {
+  currentCombat.monstros.sort((a, b) => b.iniciativa - a.iniciativa);
+  refreshEncounterUI();
+}
+
+function refreshEncounterUI() {
+  const encontroOriginal = typeof DATA_ENCONTROS !== 'undefined' 
+    ? DATA_ENCONTROS.find(e => e.id === currentCombat.encontroId) 
+    : null;
+
+  // Renderiza mantendo os dados caso seja um encontro Ad-Hoc
+  const baseData = encontroOriginal || {
+    id: currentCombat.encontroId,
+    nome: "Combate Ativo",
+    inimigos: currentCombat.monstros.map(m => ({ id: m.mobId, quantidade: 1 }))
+  };
+  
+  renderEncounterModalContent(baseData);
+}
+
+function switchEncounterTab(tabName) {
+  // Esconde todas as abas
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  
+  // Reseta os botões
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.style.background = '#222';
+    b.style.color = '#fff';
+    b.style.border = '1px solid #444';
+  });
+  
+  // Mostra a aba correta
+  const targetTab = document.getElementById(`tab-${tabName}`);
+  if (targetTab) targetTab.style.display = 'block';
+
+  // Destaca o botão correto
+  const tabBtnMap = { 'tracker': 'btn-tab-tracker', 'info-monstros': 'btn-tab-info', 'taticas': 'btn-tab-taticas' };
+  const activeBtn = document.getElementById(tabBtnMap[tabName]);
+  if (activeBtn) {
+    activeBtn.style.background = '#e69a28';
+    activeBtn.style.color = '#000';
+    activeBtn.style.border = 'none';
   }
 }
 
