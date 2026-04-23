@@ -65,6 +65,9 @@ function loadInitialView() {
     case "loja":
       loadLoja();
     break;
+	case "bestiario":
+      loadBestiario();
+    break;
     default:
       loadDashboard();
   }
@@ -2021,6 +2024,150 @@ function openMonsterDetails(event, monstroId) {
 function getDificuldadeLabel(slug) {
   const mapa = { 'facil': 'Fácil', 'medio': 'Médio', 'dificil': 'Difícil', 'dificil_alto': 'Difícil (Alto)', 'mortal': 'Mortal' };
   return mapa[slug] || slug;
+}
+
+/*
+ * =========================================================
+ * BESTIÁRIO (Lista de Monstros)
+ * Renderização da página principal de visualização de criaturas
+ * =========================================================
+ */
+
+function loadBestiario() {
+  // Defina o índice correto do seu menu para o Bestiário (Ex: 9)
+  if (typeof setActiveMenu === 'function') setActiveMenu(9); 
+  if (typeof setView === 'function') setView("bestiario");
+
+  const content = document.getElementById("content");
+  if (!content) return;
+
+  // Estrutura base da página com a barra de filtros
+  content.innerHTML = `
+    <div class="header-section">
+      <h2>🐉 Bestiário</h2>
+      <p>Catálogo completo de criaturas, adversários e bestas do mundo.</p>
+    </div>
+
+    <div class="filter-bar" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+      <input type="text" id="buscaMonstro" placeholder="Buscar por nome..." oninput="filterBestiario()" 
+        style="flex: 2; min-width: 200px; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+      
+      <select id="filtroTipo" onchange="filterBestiario()" 
+        style="flex: 1; min-width: 150px; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        <option value="">Todos os Tipos</option>
+      </select>
+
+      <select id="filtroCR" onchange="filterBestiario()" 
+        style="flex: 1; min-width: 120px; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        <option value="">Qualquer ND (CR)</option>
+      </select>
+    </div>
+
+    <div class="card-grid" id="bestiarioGrid">
+      <div class="loading-spinner">Consultando os antigos tomos...</div>
+    </div>
+  `;
+
+  if (typeof DATA_MONSTROS !== 'undefined' && DATA_MONSTROS.length > 0) {
+    preencherFiltrosBestiario();
+    renderBestiario(DATA_MONSTROS);
+  } else {
+    document.getElementById("bestiarioGrid").innerHTML = "<p class='placeholder'>O bestiário está vazio ou não foi carregado.</p>";
+  }
+}
+
+/**
+ * Preenche dinamicamente os menus de seleção (Tipo e CR) 
+ * com base nos dados que existem de fato no DATA_MONSTROS
+ */
+function preencherFiltrosBestiario() {
+  const tipos = new Set();
+  const crs = new Set();
+
+  // Extrai valores únicos
+  DATA_MONSTROS.forEach(m => {
+    if (m.tipo) tipos.add(m.tipo.trim());
+    if (m.cr !== undefined) crs.add(m.cr);
+  });
+
+  // Preenche filtro de Tipo
+  const selectTipo = document.getElementById("filtroTipo");
+  Array.from(tipos).sort().forEach(t => {
+    selectTipo.innerHTML += `<option value="${t}">${t.charAt(0).toUpperCase() + t.slice(1)}</option>`;
+  });
+
+  // Preenche filtro de CR (Ordenando logicamente números e frações como 1/4)
+  const selectCR = document.getElementById("filtroCR");
+  const sortedCRs = Array.from(crs).sort((a, b) => {
+    const valA = (typeof a === 'string' && a.includes('/')) ? (a.split('/')[0] / a.split('/')[1]) : parseFloat(a) || 0;
+    const valB = (typeof b === 'string' && b.includes('/')) ? (b.split('/')[0] / b.split('/')[1]) : parseFloat(b) || 0;
+    return valA - valB;
+  });
+
+  sortedCRs.forEach(cr => {
+    selectCR.innerHTML += `<option value="${cr}">ND ${cr}</option>`;
+  });
+}
+
+/**
+ * Função responsável por ler os filtros e atualizar o grid
+ */
+function filterBestiario() {
+  const nameQuery = document.getElementById("buscaMonstro").value.toLowerCase();
+  const tipoQuery = document.getElementById("filtroTipo").value;
+  const crQuery = document.getElementById("filtroCR").value;
+
+  const filtrados = DATA_MONSTROS.filter(m => {
+    const matchName = !nameQuery || m.nome.toLowerCase().includes(nameQuery);
+    const matchTipo = !tipoQuery || (m.tipo && m.tipo.trim() === tipoQuery);
+    const matchCR = !crQuery || m.cr == crQuery; // Usa == para comparar "1" com 1, se necessário
+    
+    return matchName && matchTipo && matchCR;
+  });
+
+  renderBestiario(filtrados);
+}
+
+/**
+ * Renderiza os cards dos monstros no grid da tela
+ */
+function renderBestiario(monstros) {
+  const grid = document.getElementById("bestiarioGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  if (monstros.length === 0) {
+    grid.innerHTML = "<p class='placeholder' style='grid-column: 1 / -1; text-align: center;'>Nenhuma criatura atende a estes critérios.</p>";
+    return;
+  }
+
+  monstros.forEach(m => {
+    const card = document.createElement("div");
+    card.className = "card monstro-card"; // Reaproveita o estilo das suas outras páginas
+    card.style.cursor = "pointer";
+
+    card.innerHTML = `
+      <div class="card-header" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <h3 style="color: #E69A28; margin: 0; font-size: 1.2em;">${m.nome}</h3>
+        <span class="badge" style="background: #441111; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; white-space: nowrap;">ND ${m.cr || '?'}</span>
+      </div>
+      <div class="card-body">
+        <p style="margin: 0 0 8px 0; color: #aaa; font-size: 0.9em; font-style: italic;">
+          ${m.tipo || 'Desconhecido'} | ${m.alinhamento || 'Neutro'}
+        </p>
+        <div style="display: flex; gap: 15px; font-size: 0.95em;">
+          <span><strong>🛡️ CA:</strong> ${m.ca}</span>
+          <span><strong>❤️ PV:</strong> ${m.pv}</span>
+        </div>
+      </div>
+    `;
+
+    // Conectando ao Modal de Ficha Rápida que criamos na etapa anterior
+    card.onclick = (e) => openMonsterDetails(e, m.id);
+    
+    grid.appendChild(card);
+  });
 }
 
 window.onload = loadInitialView;
