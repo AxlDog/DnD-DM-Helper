@@ -998,7 +998,7 @@ function salvarNPCGerado(npc) {
 //----------------- LOJA -------------------
 
 function loadLoja() {
-  setActiveMenu(7);
+  setActiveMenu(8);
   setView("loja");
 
   document.getElementById("content").innerHTML = `
@@ -1490,7 +1490,7 @@ function renderEncontros(dados) {
 }
 
 function loadEncontros() {
-  setActiveMenu(6); 
+  setActiveMenu(7); 
   setView("encontros");
 
   const content = document.getElementById("content");
