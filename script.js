@@ -65,10 +65,7 @@ function loadInitialView() {
     case "loja":
       loadLoja();
     break;
-    case "encontros":
-      loadEncontros();
-    break;
-    case "bestiario":
+	case "bestiario":
       loadBestiario();
     break;
     default:
@@ -79,7 +76,7 @@ function loadInitialView() {
 function loadDashboard() {
   setActiveMenu(0);
   setView("dashboard");
-  document.getElementById("content").innerHTML = `<h2>📌 Sessão Atual</h2> <p>Jogadores enfrentaram Hezrol e conseguiram a vitória, mas não sem antes Eskell e Tamir ficarem inconcientes algumas vezes. Romero conseguiu concluir o ritual de purificação da água, mas o último condão de seu rosário virou luz no processo. Agora os jogadores se veem falando com um tiefling da resistência.</p>`;
+  document.getElementById("content").innerHTML = `<h2>📌 Arco Ash</h2> <p>Jogadores encontraram Frieren, uma poderosa maga, e ajudaram a derrotar demonios que haviam colocado uma recompensa em sua cabeça.</p>`;
 }
 
 function loadTimeline() {
@@ -183,6 +180,7 @@ async function loadNPCList() {
   }
 
   // 4. Prepara o esqueleto da página no "content"
+  // Criamos o div com ID "npcGrid" para que a função renderNPCs saiba onde desenhar
   mainContent.innerHTML = `
       <h2>📜 NPCs</h2>
 		<div class="card-grid" id="npcGrid"></div>
@@ -190,7 +188,7 @@ async function loadNPCList() {
   // 5. Atualiza o cache global e chama a sua função de renderização
   if (npcs && npcs.length > 0) {
       npcCache = npcs;
-      renderNPCs(npcs); 
+      renderNPCs(npcs); // Aqui chamamos a sua função original!
   } else {
       document.getElementById("npcGrid").innerHTML = "<p class='placeholder'>A taverna está vazia (Nenhum NPC encontrado).</p>";
   }
@@ -293,16 +291,21 @@ function criarNPC() {
   `;
 }
 
+/**
+ * Captura os valores da UI e chama a geração
+ */
 async function handleGerarNPC() {
   const raca = document.getElementById('racaSelect').value;
   const classe = document.getElementById('classeSelect').value;
   
+  // Feedback visual de carregamento
   const preview = document.getElementById("npcPreview");
   preview.innerHTML = `<div class="loading-container">🪄 Tecendo a alma do NPC...</div>`;
   
   await gerarNPC(raca, classe);
 }
 
+// Função auxiliar para coletar os dados do formulário acima
 function enviarManual() {
   const nome = document.getElementById("m-nome").value;
   if (!nome) return alert("O nome é obrigatório!");
@@ -315,8 +318,8 @@ function enviarManual() {
     status: "Ativo",
     faccao: document.getElementById("m-faccao").value,
     metadata: {
-      descricao: document.getElementById("m-desc").value, 
-      origem: "Canonico" 
+      descricao: document.getElementById("m-desc").value, // Note: usamos 'descricao' aqui
+      origem: "Canonico" // Definimos que é Manual
     }
   };
 
@@ -332,12 +335,14 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
     return;
   }
 
+  // 1. Cria o novo metadata mesclando o antigo com a nova chave
   const novoMetadata = {
     ...metadataAntigo,
     [titulo]: conteudo
   };
 
   try {
+    // 2. Faz o update e pede para o Supabase retornar a linha atualizada (.select().single())
     const { data: npcAtualizado, error } = await db
       .from('npcs')
       .update({ metadata: novoMetadata })
@@ -346,8 +351,16 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
       .single();
 
     if (error) throw error;
+
+    // 3. Feedback rápido de sucesso
     console.log("NPC Atualizado com sucesso:", npcAtualizado);
+
+    // 4. A MÁGICA: Chama o modal novamente com os dados fresquinhos
+    // Isso vai reconstruir o HTML do modal, limpando os campos de input
+    // e mostrando a nova informação na lista de campos.
     openGenericModal(npcAtualizado, npcAtualizado.nome);
+
+    // 5. Atualiza a lista de NPCs ao fundo para quando o usuário fechar o modal
     if (typeof loadNPCs === "function") loadNPCs();
 
   } catch (err) {
@@ -368,17 +381,19 @@ async function gerarNPC(racaSelecionada = "", classeSelecionada = "") {
     });
 
     if (error) throw error;
+
+    // LOG DE VERIFICAÇÃO (O que você pediu)
     console.log("%c[RETORNO IA]", "background: #222; color: #bada55", data);
 
     const npc = {
       id: "GEN-" + crypto.randomUUID().slice(0, 8),
-      nome: data.nome,
-      raca: raca, 
-      sexo: sexo,   
+      nome: data.nome, // Vem da IA
+      raca: raca,      // Vem da sua variável
+      sexo: sexo,      // Vem da sua variável
       status: "Vivo",
       faccao: "Independente",
       metadata: {
-        aparencia: data.aparencia,
+        aparencia: data.aparencia, // Vem da IA
         origem: "IA Gemini"
       }
     };
@@ -423,6 +438,7 @@ function renderNPCs(npcs) {
     const card = document.createElement("div");
     card.className = "card npc-card";
 
+    // Mantemos a lógica visual rápida do card
     const origemTag = npc.metadata.id_js && npc.metadata.id_js.startsWith("GEN") ? "🧪 Gerado" : "📜 Canônico";
 
     card.innerHTML = `
@@ -432,6 +448,7 @@ function renderNPCs(npcs) {
       <span class="npc-origin">${origemTag}</span>
     `;
 
+    // Agora usa a função genérica!
     card.onclick = () => openGenericModal(npc, "Ficha de NPC");
     grid.appendChild(card);
   });
@@ -451,6 +468,7 @@ const IMAGES_CACHE = {
   listHeader: "https://lh3.googleusercontent.com/u/0/d/13RnNoDIeuJiv6qoLyWEiAdTBdMqF9Kp_=s400"
 };
 
+// Pré-carregamento imediato
 function preloadImages() {
   Object.values(IMAGES_CACHE).forEach(url => {
     const img = new Image();
@@ -495,7 +513,10 @@ async function confirmarNPC(npc) {
   preview.innerHTML = "<p class='placeholder'>💾 Gravando na Grande Biblioteca...</p>";
 
   try {
+    // 1. Resolvemos a descrição (pode vir como 'aparencia' na IA ou 'descricao' no manual)
     const descricaoFinal = npc.metadata.aparencia || npc.metadata.descricao || "Sem descrição.";
+    
+    // 2. Resolvemos a origem (se não houver uma definida, assume IA Gemini)
     const origemFinal = npc.metadata.origem || "IA Gemini";
 
     const { data, error } = await db
@@ -538,12 +559,15 @@ function montarUrlImagem(fileId) {
   if (!fileId || fileId.trim() === "") return "";
   return "https://lh3.googleusercontent.com/u/0/d/" + fileId + "=s400";
 }
+/* ----------- VIEW PRINCIPAL (NÃO EXCLUIR) ----------*/
 
 function setView(view) {
   const url = new URL(window.location);
   url.searchParams.set("view", view);
   window.history.pushState({}, "", url);
 }
+
+/*--------- OUTRAS VIEWS ------*/
 
 function openModal(title, content) {
   document.getElementById("modal-body").innerHTML = `<h3>${title}</h3> <p>${content}</p>`;
@@ -565,6 +589,7 @@ function loadLocais() {
     <div class="card-grid" id="locaisGrid"></div>
   `;
 
+  // Chamamos a função de renderizar passando nossa constante local
   renderLocais(DATA_LOCAIS);
 }
 
@@ -572,12 +597,13 @@ function renderLocais(dados) {
   const grid = document.getElementById("locaisGrid");
   if (!grid) return;
 
-  grid.innerHTML = ""; 
+  grid.innerHTML = ""; // Limpa o grid
 
   dados.forEach((local) => {
     const card = document.createElement("div");
     card.className = "card local-card";
 
+    // Mostramos apenas o essencial no card
     card.innerHTML = `
       <div class="card-header">
         <span class="badge">Nível ${local.nivel || "?"}</span>
@@ -586,10 +612,15 @@ function renderLocais(dados) {
       <p><strong>Tipo:</strong> ${local.tipo || "Não definido"}</p>
     `;
 
+    // Ao clicar, abre o modal enviando o objeto completo
     card.onclick = () => openGenericModal(local, "Localização");
+    
     grid.appendChild(card);
   });
 }
+
+
+/* ----------- MODAL GENÉRICO ------------*/
 
 function openGenericModal(objeto, tituloPadrao) {
   const modal = document.getElementById("npcModal");
@@ -648,8 +679,11 @@ function openGenericModal(objeto, tituloPadrao) {
     `;
   });
 
+  // --- SEÇÃO DE EDIÇÃO (Apenas para NPCs) ---
+  // Identificamos se é NPC pela presença de 'raca' e ausência de atributos de itens
   let editSectionHtml = "";
   if (dataCompleta.raca && !dataCompleta.dano) {
+    // Codificamos o metadata para não quebrar o HTML com aspas
     const metadataString = encodeURIComponent(JSON.stringify(objeto.metadata || {}));
 
     editSectionHtml = `
@@ -698,7 +732,10 @@ function openGenericModal(objeto, tituloPadrao) {
 
 function prepararEdicaoNPC(id, metadataEncoded) {
   try {
+    // Decodifica o que o HTML "escondeu"
     const metadataDecoded = JSON.parse(decodeURIComponent(metadataEncoded));
+    
+    // Chama a função de salvamento (a que você já tem ou a debaixo)
     salvarEdicaoNPC(id, metadataDecoded);
   } catch (e) {
     console.error("Erro ao processar metadados do NPC:", e);
@@ -708,6 +745,7 @@ function prepararEdicaoNPC(id, metadataEncoded) {
 
 function formatarValor(valor) {
   if (Array.isArray(valor)) {
+    // Se for array de objetos (como exploracao_locais_acampamento)
     if (typeof valor[0] === 'object') {
       return valor.map(v => `<div class="sub-item">${formatarValor(v)}</div>`).join("");
     }
@@ -715,6 +753,7 @@ function formatarValor(valor) {
   } 
   
   if (typeof valor === 'object' && valor !== null) {
+    // Se for um objeto (como npc_principal), transforma em lista de strings
     return Object.entries(valor)
       .map(([k, v]) => `<strong>${k}:</strong> ${formatarValor(v)}`)
       .join("<br>");
@@ -722,6 +761,8 @@ function formatarValor(valor) {
   
   return valor || "—";
 }
+
+/*-------------------------------------*/
 
 function section(title, content) {
   if (!content || content.trim() === "") return "";
@@ -734,11 +775,14 @@ function loadPontosPrincipais() {
   setActiveMenu(2);
   setView("pontos-principais");
 
+  // Prepara o container principal
   document.getElementById("content").innerHTML = `
     <h2>⭐ Pontos Principais</h2>
     <div class="card-grid" id="ppGrid"></div>
   `;
 
+  // Chama a renderização usando sua constante de dados locais
+  // Nota: Certifique-se de que o nome da constante seja DATA_PONTOS_PRINCIPAIS (ou o que você definiu)
   if (typeof DATA_PONTOS_PRINCIPAIS !== 'undefined') {
     renderPontosPrincipais(DATA_PONTOS_PRINCIPAIS);
   } else {
@@ -763,12 +807,15 @@ function renderPontosPrincipais(pontos) {
     const card = document.createElement("div");
     card.className = "card local-card";
 
+    // Mostramos apenas o essencial: Nome, Tipo e Região
     card.innerHTML = `
       <h3>${p["nome"] || "Local sem Nome"}</h3>
       <h5 class="muted">Quem controla <p>${p["quem controla"] || "Sem dono"} · ${p["regiao"] || "Desconhecida"}</p></h5>
     `;
 
+    // Conectando ao modal genérico
     card.onclick = () => openGenericModal(p, "Ponto de Interesse");
+    
     grid.appendChild(card);
   });
 }
@@ -782,40 +829,51 @@ function openPontoPrincipalModal(local) {
 
   body.innerHTML = `
   <div class="local-modal-container">
+
     <header class="local-modal-header">
       <h2>${local["Nome"]}</h2>
       <p class="local-meta">
         <span><strong>Tipo:</strong> ${local["Tipo"]}</span>
       </p>
     </header>
+
     <div class="local-modal-scroll">
+
       <div class="local-modal-grid">
+
         <section class="local-col">
           <h3>Aparência</h3>
           <p>${local["Aparência"] || "—"}</p>
         </section>
+
         <section class="local-col">
           <h3>Descrição</h3>
           <p>${local["Descrição"] || "—"}</p>
         </section>
+
         <section class="local-col">
           <h3>NPCs Envolvidos</h3>
           <p>${local["NPCs Envolvidos"] || "—"}</p>
         </section>
+
         <section class="local-col">
           <h3>Conflitos</h3>
           <p>${local["Conflitos"] || "—"}</p>
         </section>
+
         <section class="local-col">
           <h3>Itens / Relíquias</h3>
           <p>${local["Itens / Relíquias"] || "—"}</p>
         </section>
+
         <section class="local-col">
           <h3>Consequências</h3>
           <p>${local["Consequências"] || "—"}</p>
         </section>
+
       </div>
     </div>
+
   </div>
 `;
 
@@ -850,12 +908,16 @@ function renderFaccoes(faccoes) {
     const card = document.createElement("div");
     card.className = "card faccao-card";
 
+    // Mantemos o card minimalista como você pediu
     card.innerHTML = `
       <h3>${item.faccao || "Facção sem nome"}</h3>
       <p><strong>Liderança:</strong> ${item.comandantes || "Desconhecida"}</p>
     `;
 
+    // AGORA USANDO O MODAL GENÉRICO
+    // Passamos o 'item' e um título padrão caso o objeto não tenha a chave 'faccao'
     card.onclick = () => openGenericModal(item, "Detalhes da Facção");
+    
     grid.appendChild(card);
   });
 }
@@ -871,12 +933,18 @@ function openFaccaoModal(faccao) {
     modalContent.style.backgroundImage = `url('${IMAGES_CACHE.previewHeader}')`;
   }
 
+  // 1. Pegamos o nome da facção para o Header
+  // O || serve para aceitar tanto "faccao" quanto "Facção"
   const nomeFaccao = faccao.faccao || faccao["Facção"] || "Facção";
+
+  // 2. Geramos as colunas dinamicamente para o restante dos dados
   let colunasHtml = "";
 
   Object.entries(faccao).forEach(([chave, valor]) => {
+    // Pulamos a chave do nome da facção, pois ela já vai no <h2> do header
     if (chave.toLowerCase() === "faccao") return;
 
+    // Formatamos o nome da chave (ex: "comandantes" vira "Comandantes")
     const label = chave.charAt(0).toUpperCase() + chave.slice(1);
 
     colunasHtml += `
@@ -887,6 +955,7 @@ function openFaccaoModal(faccao) {
     `;
   });
 
+  // 3. Montamos o HTML final
   body.innerHTML = `
     <div class="local-modal-container">
       <header class="local-modal-header">
@@ -904,12 +973,13 @@ function openFaccaoModal(faccao) {
   modal.classList.remove("hidden");
 }
 
-let GEN_NPCS = [];  
+let GEN_NPCS = [];  // Planilha
 
 function mergeNPCs(genNPCs) {
   return [...DATA_NPCS, ...genNPCs];
 }
 
+// Função para salvar NPC gerado
 function salvarNPCGerado(npc) {
   const npcParaSalvar = {
     nome: npc.nome,
@@ -958,6 +1028,7 @@ function loadLoja() {
   `;
 }
 
+// Prepara a tela para mostrar os preços e ativa os filtros
 function setupPrecosView() {
   document.getElementById("lojaFiltros").classList.remove("hidden");
   document.getElementById("lojaGrid").innerHTML = "<p class='placeholder'>Escolha uma categoria para ver os preços.</p>";
@@ -967,6 +1038,7 @@ function filtrarLoja(categoria) {
   const grid = document.getElementById("lojaGrid");
   grid.innerHTML = "";
 
+  // Supondo que você terá um DATA_LOJA
   if (typeof DATA_LOJA === 'undefined') {
     grid.innerHTML = "<p class='placeholder'>Erro: Banco de dados da loja não encontrado.</p>";
     return;
@@ -1009,11 +1081,13 @@ function showSubFilters(tipo) {
     return;
   }
 
+  // Cria botões para cada subcategoria (ex: "Armas Simples Corpo a Corpo")
   dadosTipo.categorias.forEach(sub => {
     const btn = document.createElement("button");
     btn.className = "btn-sub-filter";
     btn.innerText = sub.categoria;
     
+    // Passamos o tipo (Weapon) e o nome da subcategoria para renderizar
     btn.onclick = () => renderItensLoja(tipo, sub.categoria);
     subContainer.appendChild(btn);
   });
@@ -1032,6 +1106,7 @@ function renderItensLoja(tipo, subNome) {
     const card = document.createElement("div");
     card.className = "card item-card";
     
+    // Lógica expandida para múltiplos tipos
     let infoSecundaria = "";
 
     switch (tipo) {
@@ -1042,7 +1117,11 @@ function renderItensLoja(tipo, subNome) {
         infoSecundaria = `<p class="item-meta"><strong>CA:</strong> ${item.classeArmadura}</p>`;
         break;
       case 'Gear':
+        infoSecundaria = item.peso ? `<p class="item-meta"><strong>Peso:</strong> ${item.peso}</p>` : "";
+        break;
       case 'Tool':
+        // Gear e Tools geralmente focam no peso ou tipo, mas podemos deixar vazio
+        // ou exibir o peso se você tiver essa chave no banco.
         infoSecundaria = item.peso ? `<p class="item-meta"><strong>Peso:</strong> ${item.peso}</p>` : "";
         break;
       default:
@@ -1069,11 +1148,14 @@ function ativarEdicaoItem(item) {
   const container = document.getElementById("modalFields");
   const btnSalvar = document.getElementById("btnSalvarForja");
   
+  // Mostra o botão salvar que estava escondido
   if (btnSalvar) btnSalvar.style.display = "block";
 
+  // Identifica o tipo de item
   const isArma = !!item.dano;
   const isArmadura = !!item.classeArmadura;
 
+  // Parte comum: Nome do Item
   let htmlForja = `
     <div class="forja-field">
       <label>Nome do Item Especial</label>
@@ -1103,6 +1185,7 @@ function ativarEdicaoItem(item) {
     </div>
   `;
 
+  // Parte Específica: ARMAS (Dano Extra)
   if (isArma) {
     htmlForja += `
       <div class="forja-field">
@@ -1122,6 +1205,7 @@ function ativarEdicaoItem(item) {
     `;
   }
 
+  // Parte Específica: ARMADURAS (Propriedades Defensivas)
   if (isArmadura) {
     htmlForja += `
       <div class="forja-field">
@@ -1156,23 +1240,27 @@ function ativarEdicaoItem(item) {
 let itemFinal = null;
 
 function salvarItemCustomizado(custoBase) {
+  // 1. Captura os valores dos inputs
   const nome = document.getElementById("editNome").value;
   const bonus = parseInt(document.getElementById("editBonus").value);
   const spellLevel = document.getElementById("editSpell").value;
   const solicita = document.getElementById("solicita").value;
   
+  // 2. Tabelas de Preços (Modificadores)
   const PRECO_BONUS = { 0: 0, 1: 400, 2: 4000, 3: 40000 };
   const PRECO_SPELL = {
     "nenhuma": 0, "cantrip": 30, "nível 1": 50, "nível 2": 200, 
     "nível 3": 300, "nível 4": 2000, "nível 5": 3000, "nível 6": 20000
   };
   
+  // Preços para Dano Extra (Armas) ou Propriedades (Armaduras)
   const danoExtra = document.getElementById("editDanoExtra")?.value || "";
   const PRECO_DANO = { "": 0, "+1d4": 300, "+1d6": 1000, "+1d8": 1500, "+1d10": 10000 };
   
   const efeitoDefesa = document.getElementById("editEfeitoDefesa")?.value || "";
   const PRECO_DEFESA = { "": 0, "Resistência": 1500, "Adamante": 1000, "Furtiva": 800, "Vigilante": 800 };
 
+  // 3. Cálculo do Preço Total
   const valorBaseNumerico = parseMoedaParaGP(custoBase);
   const custoEncantamento = PRECO_BONUS[bonus] + PRECO_SPELL[spellLevel] + PRECO_DANO[danoExtra] + PRECO_DEFESA[efeitoDefesa];
   const precoTotal = valorBaseNumerico + custoEncantamento;
@@ -1187,8 +1275,10 @@ function salvarItemCustomizado(custoBase) {
     solicitacao: solicita
   };
 
+  // 4. Renderizar o "Resultado Final" no Modal
   const container = document.getElementById("modalFields");
   
+  // 1. Preparar as linhas do recibo (Só aparecem se tiverem valor)
   const linhasRecibo = [
     { label: "Item Base", valor: custoBase },
     { label: `Bônus Mágico (+${bonus})`, valor: PRECO_BONUS[bonus] > 0 ? `${PRECO_BONUS[bonus].toLocaleString('pt-BR')} GP` : null },
@@ -1196,6 +1286,7 @@ function salvarItemCustomizado(custoBase) {
     { label: `Adicional: ${danoExtra || efeitoDefesa}`, valor: (PRECO_DANO[danoExtra] || PRECO_DEFESA[efeitoDefesa]) > 0 ? `${(PRECO_DANO[danoExtra] || PRECO_DEFESA[efeitoDefesa]).toLocaleString('pt-BR')} GP` : null }
   ];
 
+  // Filtra apenas o que não é nulo para não encher o recibo de zeros
   const htmlLinhas = linhasRecibo
     .filter(linha => linha.valor !== null)
     .map(linha => `
@@ -1205,6 +1296,7 @@ function salvarItemCustomizado(custoBase) {
       </div>
     `).join('');
 
+  // 2. Renderizar o Recibo Final 
   container.innerHTML = `
     <div class="recibo-antigo" style="grid-column: span 2;">
       <h2>📜 RECIBO DE FORJA</h2>
@@ -1243,6 +1335,9 @@ function salvarItemCustomizado(custoBase) {
 
 function enviarItem(item) {
   const container = document.getElementById("modalFields");
+  const originalHTML = container.innerHTML; // Guarda o recibo caso dê erro
+
+  // Feedback visual imediato no botão
   const btn = document.getElementById("btnConfirmarEnvio");
   if (btn) {
     btn.disabled = true;
@@ -1252,6 +1347,7 @@ function enviarItem(item) {
 
   google.script.run
     .withSuccessHandler(function(res) {
+      // SUBSTITUI O CONTEÚDO DO MODAL POR UMA MENSAGEM DE SUCESSO
       container.innerHTML = `
         <div class="recibo-antigo" style="grid-column: span 2; text-align: center; padding: 40px 20px; animation: fadeIn 0.5s;">
           <div style="font-size: 50px; margin-bottom: 20px;">⚒️</div>
@@ -1263,58 +1359,93 @@ function enviarItem(item) {
           </button>
         </div>
       `;
+      console.log("Salvo com sucesso na planilha!");
     })
     .withFailureHandler(function(err) {
+      // SE DER ERRO, VOLTA O BOTÃO AO NORMAL E AVISA
       if (btn) {
         btn.disabled = false;
         btn.innerHTML = "❌ Erro ao enviar. Tentar novamente?";
         btn.style.background = "#ff4444";
       }
       alert("Houve um erro mágico ao contatar a forja. Verifique o console.");
+      console.error("Erro ao salvar:", err);
     })
     .salvarItemNoGoogle(item);
 }
 
 function parseMoedaParaGP(custoString) {
   if (!custoString) return 0;
+
+  // Remove pontos de milhar (ex: 1.500 vira 1500) e troca vírgula por ponto
   const valorLimpo = custoString.replace(/\./g, '').replace(',', '.');
   const numero = parseFloat(valorLimpo);
   const unidade = custoString.toUpperCase();
 
   if (unidade.includes("SP")) return numero * 0.1;
   if (unidade.includes("CP")) return numero * 0.01;
-  return numero; 
+  return numero; // Assume GP por padrão
 }
 
-const SENHA_MESTRE = "sensei"; 
-const SENHA_JOGADOR = "lindos"; 
-
 function verificarAcesso() {
-  const senha = document.getElementById("inputSenha") ? document.getElementById("inputSenha").value : "";
-  const lockscreen = document.getElementById("lockscreen");
+  const senhaDigitada = document.getElementById("inputSenha").value;
+  const erro = document.getElementById("erroSenha");
+  const lock = document.getElementById("lockscreen");
 
-  if (senha === SENHA_MESTRE) {
-    if (lockscreen) lockscreen.style.display = "none";
-    liberarAbasMestre(true);
-    localStorage.setItem("acesso", senha);
-  } else if (senha === SENHA_JOGADOR) {
-    if (lockscreen) lockscreen.style.display = "none";
-    liberarAbasMestre(false);
-    localStorage.setItem("acesso", senha);
+  if (senhaDigitada === SENHA_MESTRE) {
+    lock.style.display = "none"; // Remove a tela de bloqueio
+    configurarVisibilidadeJogadores();
   } else {
-    const erroSenha = document.getElementById("erroSenha");
-    if (erroSenha) erroSenha.style.display = "block";
+    erro.style.display = "block";
+    document.getElementById("inputSenha").value = "";
   }
 }
 
+function configurarVisibilidadeJogadores() {
+  // Aqui escondemos os botões/seções que eles NÃO devem ver
+  // Supondo que seus botões de menu tenham IDs ou classes:
+  
+  const sessoesEscondidas = ["aba-npcs-secretos", "aba-mapas-mestre", "aba-lore-proibida"];
+  
+  sessoesEscondidas.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  console.log("Acesso concedido: Sessão Atual, Linha do Tempo e Mercado liberados.");
+}
+
+const SENHA_MESTRE = "sensei"; // Senha para liberar TUDO
+const SENHA_JOGADOR = "lindos"; // Senha para liberar apenas o básico
+
+function verificarAcesso() {
+  const senha = document.getElementById("inputSenha").value;
+  const lockscreen = document.getElementById("lockscreen");
+
+  if (senha === SENHA_MESTRE) {
+    // Mestre: Libera as abas extras
+    lockscreen.style.display = "none";
+    liberarAbasMestre(true);
+    localStorage.setItem("acesso", senha);
+  } else if (senha === SENHA_JOGADOR) {
+    // Jogador: Abre o site, mas mantém abas escondidas
+    lockscreen.style.display = "none";
+    liberarAbasMestre(false);
+    localStorage.setItem("acesso", senha);
+  } else {
+    document.getElementById("erroSenha").style.display = "block";
+  }
+}
+
+// Coloque isso logo abaixo da sua função verificarAcesso
 document.addEventListener("DOMContentLoaded", function() {
   const campoSenha = document.getElementById("inputSenha");
   
   if (campoSenha) {
     campoSenha.addEventListener("keypress", function(event) {
       if (event.key === "Enter") {
-        event.preventDefault(); 
-        verificarAcesso();      
+        event.preventDefault(); // Evita que a página recarregue
+        verificarAcesso();      // Chama a sua função
       }
     });
   }
@@ -1331,32 +1462,11 @@ function liberarAbasMestre(revelar) {
   });
 }
 
-function loadEncontros() {
-  if (typeof setActiveMenu === 'function') setActiveMenu(7);
-  if (typeof setView === 'function') setView("encontros");
-
-  const contentArea = document.getElementById("content");
-  if (!contentArea) return;
-
-  contentArea.innerHTML = `
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold text-gray-800">⚔️ Encontros e Combates</h2>
-    </div>
-    <div class="card-grid" id="encontrosGrid"></div>
-  `;
-
-  if (typeof DATA_ENCONTROS !== 'undefined') {
-    renderEncontros(DATA_ENCONTROS);
-  } else {
-    document.getElementById("encontrosGrid").innerHTML = '<p class="text-gray-500">Nenhum dado de encontro disponível.</p>';
-  }
-}
-
 function renderEncontros(dados) {
   const grid = document.getElementById("encontrosGrid");
   if (!grid) return;
 
-  grid.innerHTML = "";
+  grid.innerHTML = ""; // Limpa o grid
 
   if (!dados || dados.length === 0) {
     grid.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhum encontro cadastrado.</p>';
@@ -1365,8 +1475,9 @@ function renderEncontros(dados) {
 
   dados.forEach((encontro) => {
     const card = document.createElement("div");
-    card.className = "card encounter-card";
+    card.className = "card encounter-card"; // Seguindo o padrão de classes do projeto
 
+    // Mostramos apenas o essencial no card seguindo o padrão visual de renderLocais
     card.innerHTML = `
       <div class="card-header">
         <h3>${encontro.nome || "Sem Nome"}</h3>
@@ -1374,89 +1485,356 @@ function renderEncontros(dados) {
       <p class="line-clamp-1">${encontro.descricao || "Sem descrição definida."}</p>
     `;
 
+    // Ao clicar, abre o modal enviando o objeto completo seguindo o padrão openGenericModal
     card.onclick = () => openEncounterModal(encontro);
+    
     grid.appendChild(card);
   });
 }
 
+function loadEncontros() {
+  setActiveMenu(7); 
+  setView("encontros");
+
+  const content = document.getElementById("content");
+  if (!content) return;
+
+  // Cabeçalho da seção de encontros
+  content.innerHTML = `
+    <div class="header-section">
+      <h2>⚔️ Encontros Táticos</h2>
+      <p>Gestão de combates, táticas inimigas e objetivos de cena.</p>
+      <button class="btn-loja" onclick="openCustomEncounterModal()" style="margin-top: 10px; background: #E69A28; color: #000; font-weight: bold;">
+        ➕ Criar Encontro Rápido
+      </button>
+    </div>
+    <div class="card-grid" id="encontrosGrid">
+      <div class="loading-spinner">A carregar planos de batalha...</div>
+    </div>
+  `;
+
+  if (typeof DATA_ENCONTROS !== 'undefined') {
+    renderEncontros(DATA_ENCONTROS);
+  }
+}
+
+/**
+ * =========================================================
+ * ENCONTRO RÁPIDO (AD-HOC) COM FILTROS
+ * Permite selecionar monstros com filtros de ambiente e nome
+ * =========================================================
+ */
+function openCustomEncounterModal() {
+  if (typeof DATA_MONSTROS === 'undefined' || DATA_MONSTROS.length === 0) {
+    alert("O bestiário ainda não foi carregado ou está vazio.");
+    return;
+  }
+
+  // Extrair todos os ambientes únicos para o filtro
+  const todosAmbientes = new Set();
+  DATA_MONSTROS.forEach(m => {
+    if (m.ambientes && Array.isArray(m.ambientes)) {
+      m.ambientes.forEach(amb => todosAmbientes.add(amb));
+    }
+  });
+
+  // Criação do Overlay no DOM
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'customEncounterModal';
+  overlay.onclick = (e) => {
+    if (e.target === overlay) document.body.removeChild(overlay);
+  };
+
+  overlay.innerHTML = `
+    <div class="quick-monster-content" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; background: #1a1a1a; padding: 20px; border: 1px solid #cda434; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; box-shadow: 0 0 30px rgba(0,0,0,0.7);">
+      
+      <header class="quick-monster-header" style="flex-shrink: 0; display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 15px;">
+        <div>
+          <h3 style="color: #cda434; margin: 0;">➕ Encontro Rápido</h3>
+          <span style="font-size: 0.85em; color: #aaa;">Selecione os inimigos para o combate</span>
+        </div>
+        <button onclick="document.getElementById('customEncounterModal').remove()" style="background: none; border: none; color: #fff; font-size: 1.5em; cursor: pointer;">✖</button>
+      </header>
+
+      <!-- BARRA DE FILTROS -->
+      <div class="filter-bar" style="display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;">
+        <input type="text" id="filterName" placeholder="Buscar por nome..." oninput="filterQuickMonsters()" 
+          style="flex: 2; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        
+        <select id="filterEnvironment" onchange="filterQuickMonsters()" 
+          style="flex: 1; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+          <option value="">🌍 Todos Ambientes</option>
+          ${Array.from(todosAmbientes).sort().map(amb => `<option value="${amb}">${amb.charAt(0).toUpperCase() + amb.slice(1)}</option>`).join('')}
+        </select>
+      </div>
+      
+      <!-- Lista de monstros (Container dinâmico) -->
+      <div id="quickMonsterList" class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;">
+        <!-- Renderizado via JS -->
+      </div>
+
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; flex-shrink: 0;">
+        <button class="btn-loja" onclick="startCustomEncounter()" style="width: 100%; padding: 12px; font-size: 1.1em; background: #cda434; color: #000; font-weight: bold; cursor: pointer;">
+          ⚔️ Iniciar Combate
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  filterQuickMonsters(); // Inicializa a lista
+}
+
+/**
+ * Filtra a lista de monstros no modal baseado nos inputs
+ */
+function filterQuickMonsters() {
+  const container = document.getElementById("quickMonsterList");
+  const nameQuery = document.getElementById("filterName").value.toLowerCase();
+  const envQuery = document.getElementById("filterEnvironment").value;
+
+  if (!container) return;
+
+  const filtrados = DATA_MONSTROS.filter(m => {
+    const matchName = m.nome.toLowerCase().includes(nameQuery);
+    const matchEnv = !envQuery || (m.ambientes && m.ambientes.includes(envQuery));
+    return matchName && matchEnv;
+  });
+
+  container.innerHTML = filtrados.length > 0 ? filtrados.map(m => `
+    <div class="monster-selection-row" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #333; transition: background 0.2s;">
+      <div>
+        <strong style="color: #cda434; font-size: 1.05em;">${m.nome}</strong> 
+        <div style="color: #aaa; font-size: 0.85em;">
+          ${m.tipo} | CR ${m.cr || '?'}
+          <br>
+          <span style="color: #666; font-style: italic;">${m.ambientes ? m.ambientes.join(', ') : 'Sem ambiente'}</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <input type="number" id="custom_qty_${m.id}" min="0" value="${window.tempSelectedQuantities?.[m.id] || 0}" 
+          onchange="updateTempQuantity('${m.id}', this.value)"
+          style="width: 60px; padding: 8px; background: #222; color: #fff; border: 1px solid #E69A28; text-align: center; border-radius: 4px;">
+      </div>
+    </div>
+  `).join('') : `<p style="text-align: center; color: #666; padding: 20px;">Nenhum monstro encontrado.</p>`;
+}
+
+/**
+ * Mantém as quantidades selecionadas mesmo ao filtrar
+ */
+function updateTempQuantity(id, val) {
+  if (!window.tempSelectedQuantities) window.tempSelectedQuantities = {};
+  window.tempSelectedQuantities[id] = parseInt(val) || 0;
+}
+
+/**
+ * Coleta os monstros selecionados e inicia o combate
+ */
+function startCustomEncounter() {
+  const inimigosSelecionados = [];
+  const quantities = window.tempSelectedQuantities || {};
+
+  Object.entries(quantities).forEach(([id, qty]) => {
+    if (qty > 0) {
+      inimigosSelecionados.push({ id: id, quantidade: qty });
+    }
+  });
+
+  if (inimigosSelecionados.length === 0) {
+    alert("Selecione pelo menos um monstro para continuar.");
+    return;
+  }
+
+  const encontroAdHoc = {
+    id: `custom_enc_${Date.now()}`,
+    nome: "Encontro Imprevisto",
+    descricao: "Um combate gerado rapidamente.",
+    dificuldade: "Personalizada",
+    inimigos: inimigosSelecionados,
+    taticas_inimigos: ["O mestre decide as táticas."],
+    terreno: { descricao: "Local atual." }
+  };
+
+  // Limpa o estado temporário e remove modal
+  window.tempSelectedQuantities = {};
+  document.getElementById('customEncounterModal').remove();
+  
+  openEncounterModal(encontroAdHoc);
+}
+
+// Estado global para não perder os HPs e iniciativas ao trocar de aba
+let currentCombat = {
+  encontroId: null,
+  monstros: [] // { instanceId, mobId, nome, hpMax, iniciativa, modificadores: [], ca, ativo: true }
+};
+
+/**
+ * Abre o modal de encontro e inicializa as instâncias de combate
+ */
 function openEncounterModal(encontro) {
   const modal = document.getElementById("npcModal");
   const body = document.getElementById("npcModalBody");
   const modalContent = modal.querySelector(".modal-content");
-
+  
   if (!modal || !body) return;
 
+  // Carrega a imagem de cabeçalho, se existir
   if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
     modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
   }
 
-  let inimigosHtml = "";
-  
-  if (encontro.inimigos && Array.isArray(encontro.inimigos)) {
-    inimigosHtml = encontro.inimigos.map(ref => {
-      const monstro = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === ref.id) : null;
-      const nomeBase = monstro ? monstro.nome : ref.id;
-      const monstroId = monstro ? monstro.id : null;
-      const cr = monstro ? `ND ${monstro.cr}` : "ND ?";
-      const pv = monstro ? parseInt(monstro.pv) || 0 : 0;
-      const ca = monstro ? monstro.ca : "?";
-
-      return Array.from({ length: ref.quantidade }, (_, i) => {
-        const sufixo = ref.quantidade > 1 ? ` #${i + 1}` : "";
-        const uniqueId = `${ref.id}_${i}`; 
-        
-        return `
-          <div class="monster-card-unit" id="monster-card-${uniqueId}">
-            <div class="monster-card-header">
-              <span class="monster-tag">${cr}</span>
-              <span class="monster-name clickable-name" onclick="openMonsterDetails(event, '${monstroId}')" title="Ver Ficha Rápida">
-                ${nomeBase}${sufixo} ℹ️
-              </span>
-            </div>
-
-            <div class="monster-combat-controls">
-              <div class="init-control" title="Iniciativa">
-                <span>⏱️</span>
-                <input type="number" class="combat-input init-input" placeholder="0" />
-              </div>
-
-              <div class="monster-stats-row">
-                <span>🛡️ CA: ${ca}</span>
-                <span>❤️ <span id="hp-val-${uniqueId}">${pv}</span> / ${pv}</span>
-              </div>
-            </div>
-
-            <div class="hp-control-panel">
-              <input type="number" id="hp-input-${uniqueId}" class="combat-input dmg-input" placeholder="Qtd" min="0">
-              <button class="btn-combat btn-heal" onclick="applyDamage(event, '${uniqueId}', false)" title="Curar Vida">💚</button>
-              <button class="btn-combat btn-dmg" onclick="applyDamage(event, '${uniqueId}', true)" title="Causar Dano">💥</button>
-            </div>
-
-            <div class="monster-card-footer">
-              📍 ${ref.posicao_inicial}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }).join('');
+  // Inicializa o combate se for um encontro diferente do atual
+  if (currentCombat.encontroId !== encontro.id) {
+    currentCombat.encontroId = encontro.id;
+    currentCombat.monstros = [];
+    
+    if (encontro.inimigos && Array.isArray(encontro.inimigos)) {
+      encontro.inimigos.forEach(mGroup => {
+        const template = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === mGroup.id) : null;
+        if (template) {
+          const qtd = parseInt(mGroup.quantidade) || 1;
+          for (let i = 0; i < qtd; i++) {
+            currentCombat.monstros.push({
+              instanceId: `mob_${mGroup.id}_${Date.now()}_${i}`,
+              mobId: mGroup.id,
+              nome: qtd > 1 ? `${template.nome} #${i + 1}` : template.nome,
+              hpMax: parseInt(template.pv) || 0,
+              iniciativa: 0,
+              ca: template.ca || "?",
+              modificadores: [], // Vetor: valores negativos (dano) e positivos (cura)
+              ativo: true
+            });
+          }
+        }
+      });
+    }
   }
+
+  renderEncounterModalContent(encontro);
+  modal.classList.remove("hidden");
+}
+
+/**
+ * Renderiza o conteúdo dinâmico do modal com sistema de ABAS
+ */
+function renderEncounterModalContent(encontro) {
+  const body = document.getElementById("npcModalBody");
+  if (!body) return;
+  
+  const mobIds = [...new Set((encontro.inimigos || []).map(m => m.id))];
+  const monstrosTemplates = typeof DATA_MONSTROS !== 'undefined' 
+    ? DATA_MONSTROS.filter(m => mobIds.includes(m.id)) 
+    : [];
+
+  // Função para calcular o HP atual com base no vetor de danos e curas
+  const calculateHP = (m) => {
+    const totalMod = m.modificadores.reduce((acc, val) => acc + val, 0);
+    const atual = m.hpMax + totalMod;
+    return Math.min(m.hpMax, Math.max(0, atual));
+  };
+
+  const monstrosAtivos = currentCombat.monstros.filter(m => m.ativo);
 
   body.innerHTML = `
     <div class="local-modal-container">
       <header class="local-modal-header">
         <h2>${encontro.nome || "Registro de Combate"}</h2>
         <p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;">
-          ${getDificuldadeLabel(encontro.dificuldade)} | Nível ${encontro.nivel_recomendado || '?'}
+          ${getDificuldadeLabel(encontro.dificuldade || 'Desconhecida')} | Nível ${encontro.nivel_recomendado || '?'}
         </p>
       </header>
       
-      <div class="local-modal-scroll">
-        <div class="monster-section">
-          <h3 class="section-title">Iniciativa e Inimigos</h3>
-          <div class="monster-unit-grid">
-            ${inimigosHtml || '<p>Nenhum monstro registrado.</p>'}
+      <div style="display: flex; gap: 10px; padding: 10px 20px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button class="tab-btn active" id="btn-tab-tracker" onclick="switchEncounterTab('tracker')" style="padding: 8px 16px; border-radius: 4px; border: none; background: #e69a28; color: #000; font-weight: bold; cursor: pointer;">⚔️ Tracker</button>
+        <button class="tab-btn" id="btn-tab-info" onclick="switchEncounterTab('info-monstros')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">📖 Bestiário</button>
+        <button class="tab-btn" id="btn-tab-taticas" onclick="switchEncounterTab('taticas')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">🗺️ Táticas</button>
+      </div>
+
+      <div class="local-modal-scroll" style="padding: 20px;">
+        
+        <div id="tab-tracker" class="tab-content active">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid #444; color: #e69a28;">
+                <th style="padding: 10px;">Inic.</th>
+                <th style="padding: 10px;">Inimigo</th>
+                <th style="padding: 10px;">HP / Vida</th>
+                <th style="padding: 10px;">Controles</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${monstrosAtivos.map(m => {
+                const hpAtual = calculateHP(m);
+                const percent = m.hpMax > 0 ? (hpAtual / m.hpMax) * 100 : 0;
+                const isDead = hpAtual <= 0;
+                
+                return `
+                  <tr style="border-bottom: 1px solid #333; background: ${isDead ? 'rgba(255,0,0,0.1)' : 'transparent'}">
+                    <td style="padding: 10px;">
+                      <input type="number" value="${m.iniciativa}" onchange="updateInic('${m.instanceId}', this.value)" style="width: 50px; background: #111; color: #fff; border: 1px solid #444; text-align: center; border-radius: 4px; padding: 4px;">
+                    </td>
+                    <td style="padding: 10px;">
+                      <div style="cursor: pointer; text-decoration: underline; color: ${isDead ? '#888' : '#aaa'};" onclick="openMonsterDetails(event, '${m.mobId}')" title="Ver Ficha Rápida">
+                        <strong>${m.nome}</strong> ℹ️
+                      </div>
+                      <small style="color: #aaa;">CA: ${m.ca} | HP Máx: ${m.hpMax}</small>
+                    </td>
+                    <td style="padding: 10px; min-width: 120px;">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.85em; margin-bottom: 4px;">
+                        <span>${hpAtual} / ${m.hpMax}</span>
+                      </div>
+                      <div style="width: 100%; height: 8px; background: #222; border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${percent}%; height: 100%; background: ${percent < 25 ? '#ef4444' : '#22c55e'}; transition: width 0.3s;"></div>
+                      </div>
+                    </td>
+                    <td style="padding: 10px;">
+                      <div style="display: flex; gap: 5px;">
+                        <input type="number" id="input-hp-${m.instanceId}" placeholder="0" style="width: 50px; background: #111; color: #fff; border: 1px solid #444; text-align: center; border-radius: 4px;">
+                        <button onclick="applyHPModifier('${m.instanceId}', 'dano')" style="background: #441111; color: #fff; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px;" title="Causar Dano">💥</button>
+                        <button onclick="applyHPModifier('${m.instanceId}', 'cura')" style="background: #114411; color: #fff; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px;" title="Curar Vida">💚</button>
+                        <button onclick="removeMobFromCombat('${m.instanceId}')" style="background: #333; color: #fff; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px;" title="Remover Combate">✖</button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+          <div style="margin-top: 15px;">
+            <button onclick="sortCombat()" style="background: #222; color: #e69a28; border: 1px solid #e69a28; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+              Reordenar Iniciativa ⏱️
+            </button>
           </div>
         </div>
+
+        <div id="tab-info-monstros" class="tab-content" style="display:none;">
+          ${monstrosTemplates.map(m => `
+            <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-left: 3px solid #e69a28; border-radius: 4px;">
+              <h3 style="color: #e69a28; margin-top: 0;">${m.nome}</h3>
+              <p><strong>CA:</strong> ${m.ca} (${m.tipo_ca || '-'}) | <strong>PV:</strong> ${m.pv} | <strong>Velocidade:</strong> ${m.deslocamento || '9m'}</p>
+              <p style="color: #aaa; font-style: italic; font-size: 0.9em;">${m.tipo} | ${m.alinhamento}</p>
+              
+              <div style="margin-top: 10px;">
+                <strong style="color: #ddd;">Ações Principais:</strong>
+                <ul style="padding-left: 20px; margin-top: 5px; font-size: 0.95em;">
+                  ${m.acoes ? m.acoes.map(a => `<li style="margin-bottom: 4px;"><strong>${a.nome}:</strong> ${a.descricao || `${a.ataque} / ${a.dano}`}</li>`).join('') : "<li>Sem ações detalhadas.</li>"}
+                </ul>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div id="tab-taticas" class="tab-content" style="display:none;">
+          <h3 style="color: #e69a28; margin-top: 0;">📋 Plano de Ação (Mestre)</h3>
+          <ul style="padding-left: 20px;">
+            ${(encontro.taticas_inimigos || []).map(t => `<li style="margin-bottom: 8px;">${t}</li>`).join('') || "<li>Nenhuma tática específica definida para este encontro. Improviso é a chave!</li>"}
+          </ul>
+          <h3 style="color: #e69a28; margin-top: 20px;">🏔️ Notas de Terreno</h3>
+          <p>${encontro.terreno?.descricao || "Terreno padrão. Sem efeitos ou perigos climáticos registrados."}</p>
+        </div>
+
       </div>
 
       <div id="modalFooter" class="modal-footer">
@@ -1466,38 +1844,186 @@ function openEncounterModal(encontro) {
       </div>
     </div>
   `;
-
-  modal.classList.remove("hidden");
 }
 
-function applyDamage(event, uniqueId, isDamage) {
+/**
+ * Funções Auxiliares do Tracker de Combate
+ */
+function applyHPModifier(instanceId, tipo) {
+  const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
+  const input = document.getElementById(`input-hp-${instanceId}`);
+  if (!monstro || !input) return;
+
+  const val = parseInt(input.value) || 0;
+  if (val <= 0) return;
+
+  // Dano entra negativo, cura entra positivo
+  const modifier = tipo === 'dano' ? -val : val;
+  monstro.modificadores.push(modifier);
+  
+  input.value = "";
+  refreshEncounterUI();
+}
+
+function updateInic(instanceId, val) {
+  const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
+  if (monstro) monstro.iniciativa = parseInt(val) || 0;
+}
+
+function removeMobFromCombat(instanceId) {
+  const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
+  if (monstro) {
+    monstro.ativo = false;
+    refreshEncounterUI();
+  }
+}
+
+function sortCombat() {
+  currentCombat.monstros.sort((a, b) => b.iniciativa - a.iniciativa);
+  refreshEncounterUI();
+}
+
+function refreshEncounterUI() {
+  const encontroOriginal = typeof DATA_ENCONTROS !== 'undefined' 
+    ? DATA_ENCONTROS.find(e => e.id === currentCombat.encontroId) 
+    : null;
+
+  // Renderiza mantendo os dados caso seja um encontro Ad-Hoc
+  const baseData = encontroOriginal || {
+    id: currentCombat.encontroId,
+    nome: "Combate Ativo",
+    inimigos: currentCombat.monstros.map(m => ({ id: m.mobId, quantidade: 1 }))
+  };
+  
+  renderEncounterModalContent(baseData);
+}
+
+function switchEncounterTab(tabName) {
+  // Esconde todas as abas
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  
+  // Reseta os botões
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.style.background = '#222';
+    b.style.color = '#fff';
+    b.style.border = '1px solid #444';
+  });
+  
+  // Mostra a aba correta
+  const targetTab = document.getElementById(`tab-${tabName}`);
+  if (targetTab) targetTab.style.display = 'block';
+
+  // Destaca o botão correto
+  const tabBtnMap = { 'tracker': 'btn-tab-tracker', 'info-monstros': 'btn-tab-info', 'taticas': 'btn-tab-taticas' };
+  const activeBtn = document.getElementById(tabBtnMap[tabName]);
+  if (activeBtn) {
+    activeBtn.style.background = '#e69a28';
+    activeBtn.style.color = '#000';
+    activeBtn.style.border = 'none';
+  }
+}
+
+/*
+ * =========================================================
+ * FICHA RÁPIDA DE MONSTRO
+ * Estrutura segura com processamento dinâmico de ações
+ * =========================================================
+ */
+function openMonsterDetails(event, monstroId) {
   if (event) event.stopPropagation();
+  if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
 
-  const valDisplay = document.getElementById(`hp-val-${uniqueId}`);
-  const inputEl = document.getElementById(`hp-input-${uniqueId}`);
-  const cardEl = document.getElementById(`monster-card-${uniqueId}`);
+  const monstro = DATA_MONSTROS.find(m => m.id === monstroId);
+  if (!monstro) return;
 
-  if (!valDisplay || !inputEl) return;
+  // Monta Atributos - Previne erros no parser e garante valor 10 de fallback se nulo
+  const attrs = monstro.atributos || {'for':10, 'des':10, 'con':10, 'int':10, 'sab':10, 'car':10};
+  const attrHtml = `
+    <div class="quick-attr-grid">
+      <div><strong>FOR</strong><br>${attrs['for'] || 10}</div>
+      <div><strong>DES</strong><br>${attrs.des || 10}</div>
+      <div><strong>CON</strong><br>${attrs.con || 10}</div>
+      <div><strong>INT</strong><br>${attrs.int || 10}</div>
+      <div><strong>SAB</strong><br>${attrs.sab || 10}</div>
+      <div><strong>CAR</strong><br>${attrs.car || 10}</div>
+    </div>
+  `;
 
-  const amount = parseInt(inputEl.value) || 0;
-  if (amount === 0) return;
+  // DICIONÁRIO DINÂMICO DE AÇÕES (Mais direto e anti-erros)
+  const categoriasPossiveis = {
+    habilidades: "Habilidades",
+    habilidades_especiais: "Características Especiais",
+    acoes: "Ações",
+    acoes_bonus: "Ações Bônus",
+    reacoes: "Reações",
+    acoes_lendarias: "Ações Lendárias",
+    magias: "Magias"
+  };
 
-  let currentHp = parseInt(valDisplay.innerText) || 0;
+  let sessoesDinamicasHtml = '';
 
-  if (isDamage) {
-    currentHp -= amount;
-  } else {
-    currentHp += amount;
+  for (const [chave, titulo] of Object.entries(categoriasPossiveis)) {
+    const lista = monstro[chave];
+    
+    // Verifica se a categoria existe e se o array não está vazio
+    if (lista && Array.isArray(lista) && lista.length > 0) {
+      sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
+      
+      const itensMapeados = lista.map(item => {
+        if (typeof item === 'string') return `<li>${item}</li>`; // Trata strings puras (ex: magias)
+        
+        const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
+        let desc = item.descricao || '';
+        
+        // Fallback rápido se não houver 'descricao' mas houver status de ataque
+        if (!desc && item.ataque) {
+          desc = `<em>Ataque:</em> ${item.ataque} | <em>Dano:</em> ${item.dano || '-'}`;
+        } else if (!desc && item.dano) {
+          desc = `<em>Dano:</em> ${item.dano}`;
+        }
+
+        return `<li>${nome}${desc}</li>`;
+      }).join(''); // 'join' no array evita aparecimento de vírgulas (,) espúrias no HTML final
+
+      sessoesDinamicasHtml += `${itensMapeados}</ul>`;
+    }
   }
 
-  valDisplay.innerText = currentHp;
-  inputEl.value = ''; 
+  // Criação do Overlay no DOM
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'quickMonsterModal';
+  overlay.onclick = (e) => {
+    if (e.target === overlay) document.body.removeChild(overlay); // Fecha ao clicar fora
+  };
 
-  if (currentHp <= 0) {
-    cardEl.classList.add('monster-dead');
-  } else {
-    cardEl.classList.remove('monster-dead');
-  }
+  overlay.innerHTML = `
+    <div class="quick-monster-content">
+      <header class="quick-monster-header">
+        <div>
+          <h3>${monstro.nome}</h3>
+          <span class="quick-subtitle">${monstro.tipo || 'Desconhecido'} | ${monstro.alinhamento || 'Neutro'}</span>
+        </div>
+        <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
+      </header>
+      
+      <div class="quick-monster-body">
+        <p><strong>🛡️ CA:</strong> ${monstro.ca} <small>(${monstro.tipo_ca || '-'})</small></p>
+        <p><strong>❤️ PV:</strong> ${monstro.pv} <small>(${monstro.dados_vida || '-'})</small></p>
+        <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
+        ${attrHtml}
+        <div class="quick-divider"></div>
+        ${sessoesDinamicasHtml}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+function getDificuldadeLabel(slug) {
+  const mapa = { 'facil': 'Fácil', 'medio': 'Médio', 'dificil': 'Difícil', 'dificil_alto': 'Difícil (Alto)', 'mortal': 'Mortal' };
+  return mapa[slug] || slug;
 }
 
 /*
@@ -1508,12 +2034,14 @@ function applyDamage(event, uniqueId, isDamage) {
  */
 
 function loadBestiario() {
+  // Defina o índice correto do seu menu para o Bestiário (Ex: 9)
   if (typeof setActiveMenu === 'function') setActiveMenu(9); 
   if (typeof setView === 'function') setView("bestiario");
 
   const content = document.getElementById("content");
   if (!content) return;
 
+  // Estrutura base da página com a barra de filtros
   content.innerHTML = `
     <div class="header-section">
       <h2>🐉 Bestiário</h2>
@@ -1548,20 +2076,27 @@ function loadBestiario() {
   }
 }
 
+/**
+ * Preenche dinamicamente os menus de seleção (Tipo e CR) 
+ * com base nos dados que existem de fato no DATA_MONSTROS
+ */
 function preencherFiltrosBestiario() {
   const tipos = new Set();
   const crs = new Set();
 
+  // Extrai valores únicos
   DATA_MONSTROS.forEach(m => {
     if (m.tipo) tipos.add(m.tipo.trim());
     if (m.cr !== undefined) crs.add(m.cr);
   });
 
+  // Preenche filtro de Tipo
   const selectTipo = document.getElementById("filtroTipo");
   Array.from(tipos).sort().forEach(t => {
     selectTipo.innerHTML += `<option value="${t}">${t.charAt(0).toUpperCase() + t.slice(1)}</option>`;
   });
 
+  // Preenche filtro de CR (Ordenando logicamente números e frações como 1/4)
   const selectCR = document.getElementById("filtroCR");
   const sortedCRs = Array.from(crs).sort((a, b) => {
     const valA = (typeof a === 'string' && a.includes('/')) ? (a.split('/')[0] / a.split('/')[1]) : parseFloat(a) || 0;
@@ -1574,6 +2109,9 @@ function preencherFiltrosBestiario() {
   });
 }
 
+/**
+ * Função responsável por ler os filtros e atualizar o grid
+ */
 function filterBestiario() {
   const nameQuery = document.getElementById("buscaMonstro").value.toLowerCase();
   const tipoQuery = document.getElementById("filtroTipo").value;
@@ -1582,7 +2120,7 @@ function filterBestiario() {
   const filtrados = DATA_MONSTROS.filter(m => {
     const matchName = !nameQuery || m.nome.toLowerCase().includes(nameQuery);
     const matchTipo = !tipoQuery || (m.tipo && m.tipo.trim() === tipoQuery);
-    const matchCR = !crQuery || m.cr == crQuery; 
+    const matchCR = !crQuery || m.cr == crQuery; // Usa == para comparar "1" com 1, se necessário
     
     return matchName && matchTipo && matchCR;
   });
@@ -1590,6 +2128,9 @@ function filterBestiario() {
   renderBestiario(filtrados);
 }
 
+/**
+ * Renderiza os cards dos monstros no grid da tela
+ */
 function renderBestiario(monstros) {
   const grid = document.getElementById("bestiarioGrid");
   if (!grid) return;
@@ -1603,7 +2144,7 @@ function renderBestiario(monstros) {
 
   monstros.forEach(m => {
     const card = document.createElement("div");
-    card.className = "card monstro-card"; 
+    card.className = "card monstro-card"; // Reaproveita o estilo das suas outras páginas
     card.style.cursor = "pointer";
 
     card.innerHTML = `
@@ -1622,222 +2163,11 @@ function renderBestiario(monstros) {
       </div>
     `;
 
+    // Conectando ao Modal de Ficha Rápida que criamos na etapa anterior
     card.onclick = (e) => openMonsterDetails(e, m.id);
+    
     grid.appendChild(card);
   });
-}
-
-/*
- * =========================================================
- * FICHA RÁPIDA DE MONSTRO & APRIMORAMENTO IA
- * =========================================================
- */
-function openMonsterDetails(event, monstroId) {
-  if (event) event.stopPropagation();
-  if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
-
-  const monstro = DATA_MONSTROS.find(m => m.id === monstroId);
-  if (!monstro) return;
-
-  const attrs = monstro.atributos || {'for':10, 'des':10, 'con':10, 'int':10, 'sab':10, 'car':10};
-  const attrHtml = `
-    <div class="quick-attr-grid">
-      <div><strong>FOR</strong><br>${attrs['for'] || 10}</div>
-      <div><strong>DES</strong><br>${attrs.des || 10}</div>
-      <div><strong>CON</strong><br>${attrs.con || 10}</div>
-      <div><strong>INT</strong><br>${attrs.int || 10}</div>
-      <div><strong>SAB</strong><br>${attrs.sab || 10}</div>
-      <div><strong>CAR</strong><br>${attrs.car || 10}</div>
-    </div>
-  `;
-
-  const categoriasPossiveis = {
-    habilidades: "Habilidades",
-    habilidades_especiais: "Características Especiais",
-    acoes: "Ações",
-    acoes_bonus: "Ações Bônus",
-    reacoes: "Reações",
-    acoes_lendarias: "Ações Lendárias",
-    magias: "Magias"
-  };
-
-  let sessoesDinamicasHtml = '';
-
-  for (const [chave, titulo] of Object.entries(categoriasPossiveis)) {
-    const lista = monstro[chave];
-    
-    if (lista && Array.isArray(lista) && lista.length > 0) {
-      sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
-      
-      const itensMapeados = lista.map(item => {
-        if (typeof item === 'string') return `<li>${item}</li>`; 
-        
-        const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
-        let desc = item.descricao || '';
-        
-        if (!desc && item.ataque) {
-          desc = `<em>Ataque:</em> ${item.ataque} | <em>Dano:</em> ${item.dano || '-'}`;
-        } else if (!desc && item.dano) {
-          desc = `<em>Dano:</em> ${item.dano}`;
-        }
-
-        return `<li>${nome}${desc}</li>`;
-      }).join(''); 
-
-      sessoesDinamicasHtml += `${itensMapeados}</ul>`;
-    }
-  }
-
-  const overlay = document.createElement('div');
-  overlay.className = 'quick-monster-overlay';
-  overlay.id = 'quickMonsterModal';
-  overlay.onclick = (e) => {
-    if (e.target === overlay) document.body.removeChild(overlay); 
-  };
-
-  overlay.innerHTML = `
-    <div class="quick-monster-content">
-      <header class="quick-monster-header">
-        <div>
-          <h3>${monstro.nome}</h3>
-          <span class="quick-subtitle">${monstro.tipo || 'Desconhecido'} | ${monstro.alinhamento || 'Neutro'}</span>
-        </div>
-        <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
-      </header>
-      
-      <div class="quick-monster-body" id="quickMonsterBodyArea">
-        <p><strong>🛡️ CA:</strong> ${monstro.ca} <small>(${monstro.tipo_ca || '-'})</small></p>
-        <p><strong>❤️ PV:</strong> ${monstro.pv} <small>(${monstro.dados_vida || '-'})</small></p>
-        <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
-        ${attrHtml}
-        <div class="quick-divider"></div>
-        ${sessoesDinamicasHtml}
-        
-        <div class="quick-divider" style="margin: 15px 0; border-top: 1px dashed #444;"></div>
-        <button class="btn-loja" onclick="abrirAprimoramento('${monstro.id}')" style="width: 100%; padding: 10px; background: #2a113a; color: #e69a28; font-weight: bold; border: 1px solid #5a2e7a; cursor: pointer; border-radius: 4px;">
-          ✨ Aprimorar com Classe (IA)
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(overlay);
-}
-
-/**
- * Interface para aprimorar um monstro
- */
-function abrirAprimoramento(monstroId) {
-  const bodyArea = document.getElementById('quickMonsterBodyArea');
-  if (!bodyArea) return;
-  
-  bodyArea.innerHTML = `
-    <h3 style="color: #E69A28; margin-top: 0;">✨ Aprimorar Criatura</h3>
-    <p style="font-size: 0.9em; color: #aaa;">Infundir as habilidades de uma classe neste monstro base. A IA ajustará os atributos, CA, PV e adicionará as novas ações.</p>
-    
-    <div style="margin-bottom: 15px; margin-top: 15px;">
-      <label style="display: block; margin-bottom: 5px; color: #ddd;">Classe ou Profissão</label>
-      <select id="aprimorarClasse" style="width: 100%; padding: 10px; background: #222; border: 1px solid #E69A28; color: #fff; border-radius: 4px;">
-        <option value="Guerreiro">Guerreiro</option>
-        <option value="Mago">Mago</option>
-        <option value="Ladino">Ladino</option>
-        <option value="Clérigo">Clérigo</option>
-        <option value="Paladino">Paladino</option>
-        <option value="Bárbaro">Bárbaro</option>
-        <option value="Bruxo">Bruxo</option>
-        <option value="Assassino">Assassino (NPC)</option>
-        <option value="Comandante">Comandante (NPC)</option>
-      </select>
-    </div>
-
-    <div style="margin-bottom: 20px;">
-      <label style="display: block; margin-bottom: 5px; color: #ddd;">Incremento de ND (CR)</label>
-      <input type="number" id="aprimorarCR" value="1" min="1" max="10" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
-      <small style="color: #888;">Quantos níveis de desafio adicionar.</small>
-    </div>
-
-    <button onclick="solicitarAprimoramento('${monstroId}')" style="width: 100%; padding: 12px; background: #E69A28; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">
-      🔮 Forjar Evolução
-    </button>
-    <button onclick="document.getElementById('quickMonsterModal').remove(); openMonsterDetails(null, '${monstroId}');" style="width: 100%; padding: 10px; background: transparent; color: #aaa; border: 1px solid #444; border-radius: 4px; cursor: pointer;">
-      Cancelar
-    </button>
-  `;
-}
-
-/**
- * Solicitação para a Edge Function no Supabase para gerar a evolução
- */
-async function solicitarAprimoramento(monstroId) {
-  const classe = document.getElementById("aprimorarClasse").value;
-  const incrementoCR = parseInt(document.getElementById("aprimorarCR").value) || 1;
-  const monstroOriginal = typeof DATA_MONSTROS !== 'undefined' ? DATA_MONSTROS.find(m => m.id === monstroId) : null;
-
-  if (!monstroOriginal) return alert("Monstro base não encontrado.");
-
-  const bodyArea = document.getElementById('quickMonsterBodyArea');
-  bodyArea.innerHTML = `
-    <div style="text-align: center; padding: 40px 20px;">
-      <div style="font-size: 40px; margin-bottom: 20px; animation: pulse 1.5s infinite;">🔮</div>
-      <h3 style="color: #E69A28;">Aprimorando com IA...</h3>
-      <p style="color: #aaa; font-size: 0.9em;">Reescrevendo a biologia e infundindo conhecimento de ${classe}...</p>
-    </div>
-  `;
-
-  try {
-    const { data, error } = await db.functions.invoke('aprimorar_monstro_gemini', {
-      body: { 
-        monstro: monstroOriginal, 
-        classe: classe, 
-        incremento_cr: incrementoCR 
-      }
-    });
-
-    if (error) throw error;
-
-    console.log("[Monstro Aprimorado IA]", data);
-
-    const crOriginal = parseFloat(monstroOriginal.cr) || 0;
-    
-    // Constrói o novo objeto do Monstro baseando-se na resposta da IA
-    const novoMonstro = {
-      ...data,
-      id: "MOB-UPG-" + Date.now(),
-      nome: data.nome || `${monstroOriginal.nome} (${classe})`,
-      cr: crOriginal + incrementoCR
-    };
-
-    // Adiciona o monstro aos dados da sessão atual
-    if (typeof DATA_MONSTROS !== 'undefined') {
-      DATA_MONSTROS.push(novoMonstro);
-    }
-
-    // Se estivermos na tela do Bestiário, atualiza a lista no fundo
-    if (document.getElementById("bestiarioGrid")) {
-       filterBestiario(); 
-    }
-
-    // Recarrega a ficha com a nova versão
-    const overlay = document.getElementById('quickMonsterModal');
-    if (overlay) overlay.remove();
-    openMonsterDetails(null, novoMonstro.id);
-
-  } catch (err) {
-    console.error("Erro na IA ao aprimorar:", err);
-    bodyArea.innerHTML = `
-      <div style="text-align: center; padding: 30px 20px;">
-        <p style="color: #ef4444; margin-bottom: 20px;">❌ Falha de comunicação com os planos arcanos: ${err.message}</p>
-        <button onclick="document.getElementById('quickMonsterModal').remove(); openMonsterDetails(null, '${monstroId}');" style="padding: 10px 20px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
-          Voltar à Ficha Original
-        </button>
-      </div>
-    `;
-  }
-}
-
-function getDificuldadeLabel(slug) {
-  const mapa = { 'facil': 'Fácil', 'medio': 'Médio', 'dificil': 'Difícil', 'dificil_alto': 'Difícil (Alto)', 'mortal': 'Mortal' };
-  return mapa[slug] || slug;
 }
 
 window.onload = loadInitialView;
