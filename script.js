@@ -294,81 +294,36 @@ function criarNPC() {
 /**
  * Captura os valores da UI e chama a geração
  */
-async function solicitarAprimoramento(monstroId, retryCount = 0) {
-  const classe = document.getElementById("aprimorarClasse")?.value || "Guerreiro";
-  const incrementoCR = parseInt(document.getElementById("aprimorarCR")?.value) || 2;
-  const monstroOriginal = DATA_MONSTROS.find(m => m.id === monstroId);
+async function handleGerarNPC() {
+  const raca = document.getElementById('racaSelect').value;
+  const classe = document.getElementById('classeSelect').value;
+  
+  // Feedback visual de carregamento
+  const preview = document.getElementById("npcPreview");
+  preview.innerHTML = `<div class="loading-container">🪄 Tecendo a alma do NPC...</div>`;
+  
+  await gerarNPC(raca, classe);
+}
 
-  const bodyArea = document.getElementById('quickMonsterBodyArea');
-  bodyArea.innerHTML = `
-    <div style="text-align: center; padding: 40px;">
-      <div class="spinner" style="border: 4px solid #333; border-top: 4px solid #E69A28; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
-      <p>🔮 Tecendo energias arcanas...</p>
-      <small style="color:#888;">Tentativa ${retryCount + 1} de 3</small>
-    </div>
-    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
-  `;
+// Função auxiliar para coletar os dados do formulário acima
+function enviarManual() {
+  const nome = document.getElementById("m-nome").value;
+  if (!nome) return alert("O nome é obrigatório!");
 
-  const systemPrompt = `Você é um mestre de RPG especialista em D&D 5e. Sua tarefa é aprimorar um monstro existente fundindo-o com uma classe.
-  Retorne APENAS um JSON válido seguindo estritamente esta estrutura:
-  {
-    "nome": "Novo Nome",
-    "tipo": "Tipo Atualizado",
-    "cr": "Novo ND",
-    "ca": "Novo CA",
-    "pv": "Novo PV",
-    "atributos": {"for": 0, "des": 0, "con": 0, "int": 0, "sab": 0, "car": 0},
-    "habilidades": [{"nome": "", "descricao": ""}],
-    "acoes": [{"nome": "", "descricao": ""}]
-  }`;
-
-  const userQuery = `Aprimore este monstro: ${JSON.stringify(monstroOriginal)}. 
-  Classe: ${classe}. Aumento de ND desejado: +${incrementoCR}.
-  O monstro deve manter sua essência mas ganhar características icônicas da classe escolhida.`;
-
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: userQuery }] }],
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        generationConfig: { responseMimeType: "application/json" }
-      })
-    });
-
-    if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
-
-    const result = await response.json();
-    const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!textResponse) throw new Error("Resposta vazia da IA.");
-
-    const novoMonstro = JSON.parse(textResponse);
-    
-    // Ajustes finais
-    novoMonstro.id = "UPG-" + Date.now();
-    
-    // Salva e abre a nova ficha
-    DATA_MONSTROS.push(novoMonstro);
-    document.getElementById('quickMonsterModal').remove();
-    openMonsterDetails(null, novoMonstro.id);
-    if (typeof loadBestiario === 'function') loadBestiario();
-
-  } catch (err) {
-    if (retryCount < 2) {
-      const delay = [1000, 2000][retryCount];
-      setTimeout(() => solicitarAprimoramento(monstroId, retryCount + 1), delay);
-      return;
+  const npcManual = {
+    id: "CAN-" + Date.now(),
+    nome: nome,
+    raca: document.getElementById("m-raca").value || "Humano",
+    sexo: document.getElementById("m-sexo").value,
+    status: "Ativo",
+    faccao: document.getElementById("m-faccao").value,
+    metadata: {
+      descricao: document.getElementById("m-desc").value, // Note: usamos 'descricao' aqui
+      origem: "Canonico" // Definimos que é Manual
     }
+  };
 
-    bodyArea.innerHTML = `
-      <div style="padding: 20px; border: 1px solid #ff4444; background: #211; color: #ff8888; border-radius: 4px;">
-        <p><strong>⚠️ Falha na Geração:</strong></p>
-        <p style="font-size: 0.85em;">${err.message}</p>
-        <button onclick="abrirAprimoramento('${monstroId}')" style="margin-top:10px; background:#444; color:#fff; border:none; padding:5px 10px; cursor:pointer;">Voltar</button>
-      </div>
-    `;
-  }
+  confirmarNPC(npcManual);
 }
 
 async function salvarEdicaoNPC(id, metadataAntigo) {
@@ -1974,7 +1929,6 @@ function switchEncounterTab(tabName) {
  * Estrutura segura com processamento dinâmico de ações
  * =========================================================
  */
-
 function openMonsterDetails(event, monstroId) {
   if (event) event.stopPropagation();
   if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
@@ -2098,7 +2052,7 @@ async function solicitarAprimoramento(monstroId) {
   bodyArea.innerHTML = `<div style="text-align: center; padding: 40px;">🔮 Tecendo novos poderes...</div>`;
 
   try {
-    const { data, error } = await db.functions.invoke('aprimorar_monstro_gemini', {
+    const { data, error } = await db.functions.invoke('rapid-handler', {
       body: { monstro: monstroOriginal, classe: classe, incremento_cr: incrementoCR }
     });
 
