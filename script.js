@@ -2021,6 +2021,7 @@ function abrirAprimoramento(monstroId) {
       <label style="display: block; color: #ddd;">Classe Desejada</label>
       <select id="aprimorarClasse" style="width: 100%; padding: 10px; background: #222; border: 1px solid #E69A28; color: #fff;">
         <option value="Guerreiro">Guerreiro</option>
+		<option value="Bruxo">Bruxo</option>
         <option value="Mago">Mago</option>
         <option value="Ladino">Ladino</option>
         <option value="Clérigo">Clérigo</option>
