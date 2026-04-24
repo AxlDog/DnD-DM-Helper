@@ -1929,6 +1929,7 @@ function switchEncounterTab(tabName) {
  * Estrutura segura com processamento dinâmico de ações
  * =========================================================
  */
+
 function openMonsterDetails(event, monstroId) {
   if (event) event.stopPropagation();
   if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
@@ -1936,7 +1937,6 @@ function openMonsterDetails(event, monstroId) {
   const monstro = DATA_MONSTROS.find(m => m.id === monstroId);
   if (!monstro) return;
 
-  // Monta Atributos - Previne erros no parser e garante valor 10 de fallback se nulo
   const attrs = monstro.atributos || {'for':10, 'des':10, 'con':10, 'int':10, 'sab':10, 'car':10};
   const attrHtml = `
     <div class="quick-attr-grid">
@@ -1949,7 +1949,6 @@ function openMonsterDetails(event, monstroId) {
     </div>
   `;
 
-  // DICIONÁRIO DINÂMICO DE AÇÕES (Mais direto e anti-erros)
   const categoriasPossiveis = {
     habilidades: "Habilidades",
     habilidades_especiais: "Características Especiais",
@@ -1961,64 +1960,119 @@ function openMonsterDetails(event, monstroId) {
   };
 
   let sessoesDinamicasHtml = '';
-
   for (const [chave, titulo] of Object.entries(categoriasPossiveis)) {
     const lista = monstro[chave];
-    
-    // Verifica se a categoria existe e se o array não está vazio
     if (lista && Array.isArray(lista) && lista.length > 0) {
       sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
-      
-      const itensMapeados = lista.map(item => {
-        if (typeof item === 'string') return `<li>${item}</li>`; // Trata strings puras (ex: magias)
-        
+      sessoesDinamicasHtml += lista.map(item => {
+        if (typeof item === 'string') return `<li>${item}</li>`;
         const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
-        let desc = item.descricao || '';
-        
-        // Fallback rápido se não houver 'descricao' mas houver status de ataque
-        if (!desc && item.ataque) {
-          desc = `<em>Ataque:</em> ${item.ataque} | <em>Dano:</em> ${item.dano || '-'}`;
-        } else if (!desc && item.dano) {
-          desc = `<em>Dano:</em> ${item.dano}`;
-        }
-
+        let desc = item.descricao || (item.ataque ? `Ataque: ${item.ataque} | Dano: ${item.dano}` : '');
         return `<li>${nome}${desc}</li>`;
-      }).join(''); // 'join' no array evita aparecimento de vírgulas (,) espúrias no HTML final
-
-      sessoesDinamicasHtml += `${itensMapeados}</ul>`;
+      }).join('');
+      sessoesDinamicasHtml += `</ul>`;
     }
   }
 
-  // Criação do Overlay no DOM
   const overlay = document.createElement('div');
   overlay.className = 'quick-monster-overlay';
   overlay.id = 'quickMonsterModal';
-  overlay.onclick = (e) => {
-    if (e.target === overlay) document.body.removeChild(overlay); // Fecha ao clicar fora
-  };
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
 
   overlay.innerHTML = `
     <div class="quick-monster-content">
       <header class="quick-monster-header">
         <div>
           <h3>${monstro.nome}</h3>
-          <span class="quick-subtitle">${monstro.tipo || 'Desconhecido'} | ${monstro.alinhamento || 'Neutro'}</span>
+          <span class="quick-subtitle">${monstro.tipo} | ND ${monstro.cr}</span>
         </div>
         <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
       </header>
       
-      <div class="quick-monster-body">
-        <p><strong>🛡️ CA:</strong> ${monstro.ca} <small>(${monstro.tipo_ca || '-'})</small></p>
-        <p><strong>❤️ PV:</strong> ${monstro.pv} <small>(${monstro.dados_vida || '-'})</small></p>
-        <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
+      <div class="quick-monster-body" id="quickMonsterBodyArea">
+        <p><strong>🛡️ CA:</strong> ${monstro.ca}</p>
+        <p><strong>❤️ PV:</strong> ${monstro.pv}</p>
         ${attrHtml}
         <div class="quick-divider"></div>
         ${sessoesDinamicasHtml}
+        
+        <div class="quick-divider" style="margin: 15px 0; border-top: 1px dashed #444;"></div>
+        <button class="btn-loja" onclick="abrirAprimoramento('${monstro.id}')" style="width: 100%; padding: 10px; background: #2a113a; color: #e69a28; font-weight: bold; border: 1px solid #5a2e7a; cursor: pointer; border-radius: 4px;">
+          ✨ Aprimorar com Classe (IA)
+        </button>
       </div>
     </div>
   `;
 
   document.body.appendChild(overlay);
+}
+
+/**
+ * Interface para seleção de Classe e ND
+ */
+function abrirAprimoramento(monstroId) {
+  const bodyArea = document.getElementById('quickMonsterBodyArea');
+  if (!bodyArea) return;
+  
+  bodyArea.innerHTML = `
+    <h3 style="color: #E69A28; margin-top: 0;">✨ Aprimorar Criatura</h3>
+    <p style="font-size: 0.9em; color: #aaa;">Escolha uma classe para fundir com este monstro.</p>
+    
+    <div style="margin: 15px 0;">
+      <label style="display: block; color: #ddd;">Classe Desejada</label>
+      <select id="aprimorarClasse" style="width: 100%; padding: 10px; background: #222; border: 1px solid #E69A28; color: #fff;">
+        <option value="Guerreiro">Guerreiro</option>
+        <option value="Mago">Mago</option>
+        <option value="Ladino">Ladino</option>
+        <option value="Clérigo">Clérigo</option>
+        <option value="Paladino">Paladino</option>
+        <option value="Bárbaro">Bárbaro</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; color: #ddd;">Incremento de ND (CR)</label>
+      <input type="number" id="aprimorarCR" value="1" min="1" max="10" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff;">
+    </div>
+
+    <button onclick="solicitarAprimoramento('${monstroId}')" style="width: 100%; padding: 12px; background: #E69A28; color: #000; font-weight: bold; border: none; cursor: pointer;">
+      🔮 Gerar Evolução
+    </button>
+  `;
+}
+
+/**
+ * Função que realiza o envio para o Supabase (Edge Function)
+ */
+async function solicitarAprimoramento(monstroId) {
+  const classe = document.getElementById("aprimorarClasse").value;
+  const incrementoCR = parseInt(document.getElementById("aprimorarCR").value) || 1;
+  const monstroOriginal = DATA_MONSTROS.find(m => m.id === monstroId);
+
+  const bodyArea = document.getElementById('quickMonsterBodyArea');
+  bodyArea.innerHTML = `<div style="text-align: center; padding: 40px;">🔮 Tecendo novos poderes...</div>`;
+
+  try {
+    const { data, error } = await db.functions.invoke('aprimorar_monstro_gemini', {
+      body: { monstro: monstroOriginal, classe: classe, incremento_cr: incrementoCR }
+    });
+
+    if (error) throw error;
+
+    const novoMonstro = {
+      ...data,
+      id: "UPG-" + Date.now(),
+      cr: (parseFloat(monstroOriginal.cr) || 0) + incrementoCR
+    };
+
+    DATA_MONSTROS.push(novoMonstro);
+    document.getElementById('quickMonsterModal').remove();
+    openMonsterDetails(null, novoMonstro.id);
+    if (typeof loadBestiario === 'function') loadBestiario();
+
+  } catch (err) {
+    bodyArea.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`;
+  }
 }
 
 function getDificuldadeLabel(slug) {
