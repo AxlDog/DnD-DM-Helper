@@ -711,5 +711,58 @@ const DATA_ENCONTROS = [
 		  }
 		]
 	  }
+	},
+	{
+	  "id": "atq_sahuagin",
+	  "nome": "Surpresa das profundezas",
+	  "tipo": "combate",
+	  "nivel_recomendado": 8,
+	  "dificuldade": "dificil",
+
+	  "descricao": "O vento não parece mais tocar as velas.\nUm silencio cobre os mares. Não há gaivotas, não há sons\nAté que... Splash. Algo sai da água.\nUm dos contratados grita, leva um momento para entender. Estamos sendo atacados.",
+
+	  "contexto": {
+		"local": "Alto Mar",
+		"hora": "dia"
+	  },
+
+	  "inimigos": [
+		{
+		  "id": "sahuagin_comum",
+		  "quantidade": 10,
+		  "posicao_inicial": "atacando em ondas"
+		},
+		{
+		  "id": "sahuagin_barao",
+		  "quantidade": 1,
+		  "posicao_inicial": "ocultos no mar"
+		},
+		{
+		  "id": "sahuagin_sacerdote",
+		  "quantidade": 1,
+		  "posicao_inicial": "atacam quando 4 comuns caem"
+		},
+		{
+		  "id": "sahuagin_guerreiro",
+		  "quantidade": 2,
+		  "posicao_inicial": "atacam quando dois comuns caem"
+		},
+		{
+		  "id": "sea_hag",
+		  "quantidade": 1,
+		  "posicao_inicial": "ocultos no mar, ataca apenas se estiver muito fácil para os jogadores"
+		}
+	  ],
+
+	  "terreno": {
+		"descricao": "No calor do dia, a batalha acontece no návio dos jogadores.",
+		"dificuldade_movimento": false,
+		"cobertura": [
+		  {
+			"tipo": "nenhuma",
+			"descricao": "Atacam vindo por baixo da água, percepção 20 para nota-los vindo."
+		  }
+		]
+	  }
 	}
 ];
