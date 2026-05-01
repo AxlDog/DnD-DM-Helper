@@ -2014,261 +2014,234 @@ const DATA_MONSTROS = [
 	  ]
 	},
 	{
-	  "id": "mob_bruxa_marinha_abissal",
-	  "nome": "Bruxa Marinha Abissal",
-	  "tipo": "Fada (hags)",
-	  "alinhamento": "Caótico maligno",
-	  "ca": 17,
-	  "tipo_ca": "Pele arcana endurecida",
-	  "pv": 168,
-	  "dados_vida": "16d10 + 80",
-	  "deslocamento": "9m, nado 12m",
-
-	  "ambientes": ["Marinho"],
-
-	  "atributos": {
-		"for": 16,
-		"des": 14,
-		"con": 20,
-		"int": 16,
-		"sab": 14,
-		"car": 18
+		"nome": "Sahuagin Sacerdote",
+		"tipo": "Humanoide (Sahuagin)",
+		"tamanho": "Médio",
+		"tendencia": "Leal e Maligno",
+		"nd": 5,
+		"xp": 1800,
+		"ca": 15,
+		"pv": 95,
+		"deslocamento": {
+		  "terra": "9m",
+		  "natacao": "12m"
+		},
+		"atributos": {
+		  "for": 14,
+		  "des": 12,
+		  "con": 20,
+		  "int": 11,
+		  "sab": 16,
+		  "car": 13
+		},
+		"resistencias": ["frio"],
+		"sentidos": {
+		  "visao_no_escuro": "36m",
+		  "percepcao_passiva": 13
+		},
+		"idiomas": ["Sahuagin", "Abissal"],
+		"tracos": [
+		  {
+			"nome": "Frenesi de Sangue",
+			"descricao": "Tem vantagem em ataques corpo a corpo contra criaturas que não estejam com todos os PV."
+		  },
+		  {
+			"nome": "Anfibio",
+			"descricao": "Pode respirar ar e água."
+		  },
+		  {
+			"nome": "Conjurador",
+			"descricao": "Conjurador de nível 5 (CD 14, +6 para atingir)."
+		  }
+		],
+		"magias": {
+		  "cd": 14,
+		  "ataque_magico": 6,
+		  "truques": ["Thaumaturgy", "Sacred Flame", "Toll the Dead"],
+		  "nivel_1": {
+			"slots": 4,
+			"magias": ["Guiding Bolt", "Command", "Shield of Faith"]
+		  },
+		  "nivel_2": {
+			"slots": 3,
+			"magias": ["Hold Person", "Spiritual Weapon"]
+		  },
+		  "nivel_3": {
+			"slots": 2,
+			"magias": ["Spirit Guardians", "Bestow Curse"]
+		  }
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques: mordida e garra."
+		  },
+		  {
+			"nome": "Mordida",
+			"ataque": "+5",
+			"dano": "1d6+2 perfurante"
+		  },
+		  {
+			"nome": "Garra",
+			"ataque": "+5",
+			"dano": "1d8+2 cortante"
+		  },
+		  {
+			"nome": "Chamado das Profundezas",
+			"recarga": "5-6",
+			"descricao": "Criaturas em 6m fazem teste de FOR CD 14 ou ficam caídas e sofrem 2d8 dano necrótico."
+		  }
+		]
 	  },
-
-	  "resistencias": [
-		"frio",
-		"necrótico",
-		"contundente, perfurante e cortante de ataques não mágicos"
-	  ],
-
-	  "imunidades_condicao": [
-		"amedrontado"
-	  ],
-
-	  "sentidos": "visão no escuro 36m, Percepção passiva 16",
-	  "idiomas": "Comum, Abissal, Aquan",
-	  "cr": 8,
-	  "xp": 3900,
-
-	  "habilidades": [
-		{
-		  "nome": "Anfíbia",
-		  "descricao": "A bruxa pode respirar ar e água."
+	  {
+		"nome": "Sahuagin Guerreiro",
+		"tipo": "Humanoide (Sahuagin)",
+		"tamanho": "Médio",
+		"tendencia": "Leal e Maligno",
+		"nd": 5,
+		"xp": 1800,
+		"ca": 17,
+		"pv": 110,
+		"deslocamento": {
+		  "terra": "9m",
+		  "natacao": "12m"
 		},
-		{
-		  "nome": "Aura das Profundezas",
-		  "descricao": "Inimigos a até 6m têm desvantagem em testes de resistência contra medo e encantamento."
+		"atributos": {
+		  "for": 18,
+		  "des": 14,
+		  "con": 18,
+		  "int": 10,
+		  "sab": 12,
+		  "car": 11
 		},
-		{
-		  "nome": "Forma Fluida",
-		  "descricao": "Pode se espremer por espaços estreitos e tem vantagem para escapar de agarrões."
-		}
-	  ],
-
-	  "magias": {
-		"cd": 15,
-		"ataque_magia": "+7",
-		"truques": ["Ray of Frost", "Minor Illusion", "Shape Water"],
-		"1_nivel": ["Hex", "Charm Person", "Fog Cloud"],
-		"2_nivel": ["Hold Person", "Mirror Image"],
-		"3_nivel": ["Bestow Curse", "Tidal Wave"],
-		"4_nivel": ["Control Water", "Phantasmal Killer"]
+		"tracos": [
+		  {
+			"nome": "Frenesi de Sangue",
+			"descricao": "Vantagem contra inimigos feridos."
+		  },
+		  {
+			"nome": "Estilo de Luta",
+			"descricao": "Defesa: +1 na CA."
+		  },
+		  {
+			"nome": "Critico Aprimorado",
+			"descricao": "Acerta crítico com 19-20."
+		  }
+		],
+		"habilidades": [
+		  {
+			"nome": "Segundo Folego",
+			"uso": "1/dia",
+			"descricao": "Recupera 1d10+5 PV."
+		  },
+		  {
+			"nome": "Surto de Acao",
+			"uso": "1/dia",
+			"descricao": "Ganha uma ação adicional no turno."
+		  }
+		],
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza três ataques."
+		  },
+		  {
+			"nome": "Tridente",
+			"ataque": "+7",
+			"dano": "1d8+4 perfurante (1d10+4 com duas mãos)"
+		  },
+		  {
+			"nome": "Mordida",
+			"ataque": "+7",
+			"dano": "1d6+4 perfurante"
+		  }
+		],
+		"reacoes": [
+		  {
+			"nome": "Aparar",
+			"descricao": "Reduz o dano em 1d10+4."
+		  }
+		]
 	  },
-
-	  "acoes": [
-		{
-		  "nome": "Multiataque",
-		  "descricao": "Realiza dois ataques de garras ou conjura uma magia e faz um ataque."
+	  {
+		"nome": "Sahuagin Barão",
+		"tipo": "Humanoide (Sahuagin)",
+		"tamanho": "Grande",
+		"tendencia": "Leal e Maligno",
+		"nd": 10,
+		"xp": 5900,
+		"ca": 18,
+		"pv": 210,
+		"deslocamento": {
+		  "terra": "9m",
+		  "natacao": "12m"
 		},
-		{
-		  "nome": "Garras Encharcadas",
-		  "tipo": "corpo a corpo",
-		  "ataque": "+8",
-		  "alcance": "1,5m",
-		  "alvo": "1 criatura",
-		  "dano": "2d8 + 4 cortante + 2d6 frio"
+		"atributos": {
+		  "for": 20,
+		  "des": 16,
+		  "con": 20,
+		  "int": 12,
+		  "sab": 14,
+		  "car": 16
 		},
-		{
-		  "nome": "Olhar do Afogamento",
-		  "tipo": "especial",
-		  "alcance": "18m",
-		  "alvo": "1 criatura",
-		  "dano": "3d10 psíquico",
-		  "efeito": "CD 15 CON ou fica sufocando (como se estivesse se afogando) por 1 turno"
-		}
-	  ],
-
-	  "acoes_lendarias": [
-		{
-		  "nome": "Movimento Sombrio",
-		  "descricao": "Move até metade do deslocamento sem provocar ataques de oportunidade.",
-		  "custo": 1
-		},
-		{
-		  "nome": "Toque da Maré",
-		  "descricao": "Uma criatura a até 6m sofre 2d6 frio e deve passar em CD 15 FOR ou cair no chão.",
-		  "custo": 1
-		},
-		{
-		  "nome": "Chamado Abissal",
-		  "descricao": "Invoca tentáculos espectrais em área de 6m (difícil terreno até o próximo turno).",
-		  "custo": 2
-		}
-	  ],
-
-	  "habilidades_especiais": [
-		{
-		  "nome": "Coração da Tempestade",
-		  "descricao": "Quando reduzida a 50% de vida, cria uma tempestade em 9m ao redor: inimigos têm desvantagem em ataques à distância e sofrem 1d6 elétrico por turno."
-		},
-		{
-		  "nome": "Ritual das Profundezas",
-		  "descricao": "Se permanecer 3 turnos sem interrupção, invoca 1d4 criaturas marinhas corrompidas (use estatísticas de sahuagin ou criaturas equivalentes)."
-		}
-	  ],
-
-	  "loot": {
-		"itens": [
-		  "Colar de Pérolas Abissais (permite respirar debaixo d’água)",
-		  "Frasco de Essência da Maré (poção de controle de água, uso único)"
+		"tracos": [
+		  {
+			"nome": "Frenesi de Sangue",
+			"descricao": "Vantagem contra inimigos feridos."
+		  },
+		  {
+			"nome": "Critico Aprimorado Superior",
+			"descricao": "Crítico com 18-20."
+		  },
+		  {
+			"nome": "Mestre de Armas",
+			"descricao": "Pode sofrer -5 no ataque para causar +10 dano."
+		  }
+		],
+		"habilidades": [
+		  {
+			"nome": "Superioridade em Combate",
+			"dados": "4d10",
+			"cd": 16,
+			"manobras": [
+			  "Ataque Desarmante",
+			  "Ataque Derrubador",
+			  "Ataque Preciso",
+			  "Ripostar"
+			]
+		  },
+		  {
+			"nome": "Indomavel",
+			"uso": "2/dia",
+			"descricao": "Pode refazer testes de resistência."
+		  }
+		],
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza quatro ataques."
+		  },
+		  {
+			"nome": "Lanca Coralina",
+			"ataque": "+9",
+			"dano": "1d10+5 perfurante"
+		  },
+		  {
+			"nome": "Mordida",
+			"ataque": "+9",
+			"dano": "1d8+5 perfurante"
+		  },
+		  {
+			"nome": "Comandar a Mare",
+			"recarga": "5-6",
+			"descricao": "Aliados em 9m ganham vantagem em ataques, +10 deslocamento e +5 dano por 1 rodada."
+		  }
+		],
+		"efeitos": [
+		  {
+			"nome": "Presenca Aterradora",
+			"descricao": "Criaturas em 6m fazem teste de SAB CD 16 ou ficam amedrontadas por 1 turno."
+		  }
 		]
 	  }
-	},
-	{
-	  "id": "mob_sahuagin_guerreiro",
-	  "nome": "Sahuagin Guerreiro",
-	  "tipo": "Humanoide (sahuagin)",
-	  "alinhamento": "Leal maligno",
-	  "ca": 14,
-	  "tipo_ca": "Armadura natural",
-	  "pv": 45,
-	  "dados_vida": "6d8 + 18",
-	  "deslocamento": "9m, nado 12m",
-
-	  "ambientes": ["Marinho"],
-
-	  "atributos": {
-		"for": 16,
-		"des": 14,
-		"con": 16,
-		"int": 10,
-		"sab": 12,
-		"car": 10
-	  },
-
-	  "sentidos": "visão no escuro 36m, Percepção passiva 13",
-	  "idiomas": "Sahuagin",
-	  "cr": 2,
-	  "xp": 450,
-
-	  "habilidades": [
-		{
-		  "nome": "Frenesi de Sangue",
-		  "descricao": "Tem vantagem em ataques corpo a corpo contra criaturas que não estejam com todos os pontos de vida."
-		},
-		{
-		  "nome": "Anfíbio",
-		  "descricao": "Pode respirar ar e água."
-		}
-	  ],
-
-	  "acoes": [
-		{
-		  "nome": "Multiataque",
-		  "descricao": "Realiza dois ataques: uma mordida e um ataque com arma."
-		},
-		{
-		  "nome": "Mordida",
-		  "tipo": "corpo a corpo",
-		  "ataque": "+5",
-		  "alcance": "1,5m",
-		  "alvo": "1 criatura",
-		  "dano": "1d6 + 3 perfurante"
-		},
-		{
-		  "nome": "Lança Serrilhada",
-		  "tipo": "corpo a corpo ou à distância",
-		  "ataque": "+5",
-		  "alcance": "1,5m ou 6/18m",
-		  "alvo": "1 criatura",
-		  "dano": "1d8 + 3 perfurante"
-		}
-	  ],
-
-	  "habilidades_especiais": [
-		{
-		  "nome": "Chamado de Caça",
-		  "descricao": "Uma vez por combate, concede vantagem em ataques para aliados sahuagin a até 6m até o próximo turno."
-		}
-	  ]
-	},
-	{
-	  "id": "mob_sahuagin_sacerdote",
-	  "nome": "Sacerdote Sahuagin",
-	  "tipo": "Humanoide (sahuagin)",
-	  "alinhamento": "Leal maligno",
-	  "ca": 13,
-	  "tipo_ca": "Armadura natural",
-	  "pv": 72,
-	  "dados_vida": "8d8 + 32",
-	  "deslocamento": "9m, nado 12m",
-
-	  "ambientes": ["Marinho"],
-
-	  "atributos": {
-		"for": 13,
-		"des": 12,
-		"con": 18,
-		"int": 11,
-		"sab": 16,
-		"car": 14
-	  },
-
-	  "sentidos": "visão no escuro 36m, Percepção passiva 15",
-	  "idiomas": "Sahuagin, Abissal",
-	  "cr": 4,
-	  "xp": 1100,
-
-	  "habilidades": [
-		{
-		  "nome": "Anfíbio",
-		  "descricao": "Pode respirar ar e água."
-		},
-		{
-		  "nome": "Frenesi de Sangue",
-		  "descricao": "Tem vantagem contra criaturas feridas."
-		}
-	  ],
-
-	  "magias": {
-		"cd": 14,
-		"ataque_magia": "+6",
-		"truques": ["Thaumaturgy", "Guidance", "Toll the Dead"],
-		"1_nivel": ["Command", "Inflict Wounds", "Shield of Faith"],
-		"2_nivel": ["Hold Person", "Spiritual Weapon"],
-		"3_nivel": ["Bestow Curse", "Spirit Guardians"]
-	  },
-
-	  "acoes": [
-		{
-		  "nome": "Tridente Ritualístico",
-		  "tipo": "corpo a corpo ou à distância",
-		  "ataque": "+5",
-		  "alcance": "1,5m ou 6/18m",
-		  "alvo": "1 criatura",
-		  "dano": "1d8 + 2 perfurante + 1d6 necrótico"
-		}
-	  ],
-
-	  "habilidades_especiais": [
-		{
-		  "nome": "Bênção do Abismo",
-		  "descricao": "Como ação bônus, concede +1d4 em ataques ou testes para um aliado por 1 minuto (concentração)."
-		},
-		{
-		  "nome": "Maré Profana",
-		  "descricao": "1x por descanso curto, cria uma aura de 6m por 3 turnos: inimigos têm deslocamento reduzido pela metade e aliados ganham +2 na CA."
-		}
-	  ]
-	}
 ];
