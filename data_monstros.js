@@ -2458,5 +2458,86 @@ const DATA_MONSTROS = [
 		  "descricao": "O marid conjura Fog Cloud."
 		}
 	  ]
+	},
+	{
+	  "nome": "Sahuagin Guerreiro",
+	  "tipo": "Ínfero",
+	  "tamanho": "Médio",
+	  "alinhamento": "Leal e Mau",
+	  "classe_armadura": 12,
+	  "pontos_vida": 22,
+	  "dados_vida": "4d8 + 4",
+	  "deslocamento": {
+		"caminhar": "30 ft.",
+		"nadar": "40 ft."
+	  },
+	  "atributos": {
+		"forca": 13,
+		"destreza": 11,
+		"constituicao": 12,
+		"inteligencia": 12,
+		"sabedoria": 13,
+		"carisma": 9
+	  },
+	  "salvacoes": {
+		"STR": "+1",
+		"DEX": "+0",
+		"CON": "+1",
+		"INT": "+1",
+		"WIS": "+1",
+		"CHA": "-1"
+	  },
+	  "pericias": {
+		"Percepção": "+5"
+	  },
+	  "resistencias": [
+		"ácido",
+		"frio"
+	  ],
+	  "sentidos": [
+		"Visão no escuro 120 ft.",
+		"Percepção passiva 15"
+	  ],
+	  "idiomas": [
+		"Sahuagin"
+	  ],
+	  "desafio": {
+		"cr": "1/2",
+		"xp": 100,
+		"bonus_proficiencia": "+2"
+	  },
+	  "tracos": [
+		{
+		  "nome": "Frenesi de Sangue",
+		  "descricao": "O sahuagin tem vantagem nas jogadas de ataque contra qualquer criatura que não esteja com seus pontos de vida completos."
+		},
+		{
+		  "nome": "Anfíbio Limitado",
+		  "descricao": "O sahuagin pode respirar ar e água, mas precisa se submergir pelo menos uma vez a cada 4 horas ou começa a sufocar fora d'água."
+		},
+		{
+		  "nome": "Telepatia com Tubarões",
+		  "descricao": "O sahuagin pode controlar magicamente tubarões a até 120 pés por meio de telepatia."
+		}
+	  ],
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "O sahuagin realiza dois ataques de Garra."
+		},
+		{
+		  "nome": "Garra",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+3",
+		  "alcance": "5 ft.",
+		  "dano": "4 (1d6 + 1) cortante"
+		}
+	  ],
+	  "acoes_bonus": [
+		{
+		  "nome": "Carga Aquática",
+		  "descricao": "O sahuagin nada até seu deslocamento de nado em linha reta em direção a um inimigo que possa ver."
+		}
+	  ]
 	}
 ];
