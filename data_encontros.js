@@ -713,13 +713,13 @@ const DATA_ENCONTROS = [
 	  }
 	},
 	{
-	  "id": "atq_sahuagin",
-	  "nome": "Surpresa das profundezas",
+	  "id": "enc_sahuagin_ataque",
+	  "nome": "Surpresa das Profundezas",
 	  "tipo": "combate",
 	  "nivel_recomendado": 8,
-	  "dificuldade": "dificil",
+	  "dificuldade": "difícil",
 
-	  "descricao": "O vento não parece mais tocar as velas.\nUm silencio cobre os mares. Não há gaivotas, não há sons\nAté que... Splash. Algo sai da água.\nUm dos contratados grita, leva um momento para entender. Estamos sendo atacados.",
+	  "descricao": "O vento para de tocar as velas.\nUm silêncio pesado cobre o mar. Nenhuma gaivota, nenhum som.\nEntão… splash.\nAlgo rompe a superfície.\nUm dos contratados grita — tarde demais.\nVocês estão sendo atacados.",
 
 	  "contexto": {
 		"local": "Alto Mar",
@@ -728,39 +728,39 @@ const DATA_ENCONTROS = [
 
 	  "inimigos": [
 		{
-		  "id": "sahuagin_comum",
+		  "id": "mob_sahuagin",
 		  "quantidade": 10,
 		  "posicao_inicial": "atacando em ondas"
 		},
 		{
-		  "id": "sahuagin_barao",
+		  "id": "mob_sahuagin_barao",
 		  "quantidade": 1,
-		  "posicao_inicial": "ocultos no mar"
+		  "posicao_inicial": "oculto no mar"
 		},
 		{
-		  "id": "sahuagin_sacerdote",
+		  "id": "mob_sahuagin_sacerdote",
 		  "quantidade": 1,
-		  "posicao_inicial": "atacam quando 4 comuns caem"
+		  "posicao_inicial": "entra no combate quando 4 sahuagin comuns caem"
 		},
 		{
-		  "id": "sahuagin_guerreiro",
+		  "id": "mob_sahuagin_guerreiro",
 		  "quantidade": 2,
-		  "posicao_inicial": "atacam quando dois comuns caem"
+		  "posicao_inicial": "entram no combate quando 2 sahuagin comuns caem"
 		},
 		{
-		  "id": "sea_hag",
+		  "id": "mob_bruxa_marinha_ancia",
 		  "quantidade": 1,
-		  "posicao_inicial": "ocultos no mar, ataca apenas se estiver muito fácil para os jogadores"
+		  "posicao_inicial": "oculta no mar, ataca apenas se o combate estiver fácil para os jogadores"
 		}
 	  ],
 
 	  "terreno": {
-		"descricao": "No calor do dia, a batalha acontece no návio dos jogadores.",
+		"descricao": "A batalha acontece no convés do navio dos jogadores sob o sol do meio-dia.",
 		"dificuldade_movimento": false,
 		"cobertura": [
 		  {
 			"tipo": "nenhuma",
-			"descricao": "Atacam vindo por baixo da água, percepção 20 para nota-los vindo."
+			"descricao": "Os inimigos emergem da água. Percepção CD 20 para notá-los antes do ataque."
 		  }
 		]
 	  }
