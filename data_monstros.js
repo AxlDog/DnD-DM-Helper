@@ -2535,5 +2535,72 @@ const DATA_MONSTROS = [
 		  "descricao": "Nada até seu deslocamento em linha reta em direção a um inimigo visível."
 		}
 	  ]
+	},
+	{
+	  "id": "mob_cegonha_bico_de_sapato",
+	  "nome": "Cegonha-Bico-de-Sapato",
+	  "tipo": "Besta",
+	  "alinhamento": "Neutro",
+	  "ca": 13,
+	  "tipo_ca": "Pele resistente",
+	  "pv": 45,
+	  "dados_vida": "6d10 + 12",
+	  "deslocamento": "6m, voo 12m",
+
+	  "ambientes": ["Pântano", "Floresta"],
+
+	  "atributos": {
+		"for": 16,
+		"des": 12,
+		"con": 14,
+		"int": 3,
+		"sab": 14,
+		"car": 6
+	  },
+
+	  "sentidos": "Percepção passiva 14",
+	  "idiomas": "-",
+	  "cr": 2,
+	  "xp": 450,
+
+	  "habilidades": [
+		{
+		  "nome": "Caçador Imóvel",
+		  "descricao": "Se permanecer imóvel por um turno completo, tem vantagem no próximo ataque."
+		},
+		{
+		  "nome": "Olhar Perturbador",
+		  "descricao": "Criaturas a até 6m que encontrem seu olhar devem passar em um teste de Sabedoria CD 12 ou ficam intimidadas (desvantagem no próximo ataque)."
+		}
+	  ],
+
+	  "acoes": [
+		{
+		  "nome": "Bico Esmagador",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+5",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "2d8 + 3 perfurante",
+		  "efeito": "Se o alvo for Médio ou menor, deve passar em CD 13 FOR ou fica agarrado (escape CD 13)."
+		},
+		{
+		  "nome": "Golpe Relâmpago",
+		  "tipo": "corpo a corpo",
+		  "recarga": "5-6",
+		  "ataque": "+5",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "3d8 perfurante",
+		  "efeito": "Se acertar, o alvo deve passar em CD 13 CON ou fica atordoado até o fim do próximo turno."
+		}
+	  ],
+
+	  "habilidades_especiais": [
+		{
+		  "nome": "Silêncio Predatório",
+		  "descricao": "Tem vantagem em testes de Furtividade em ambientes naturais."
+		}
+	  ]
 	}
 ];
