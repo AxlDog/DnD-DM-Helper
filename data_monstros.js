@@ -9,7 +9,7 @@ const DATA_MONSTROS = [
   "pv": 11,
   "dados_vida": "2d8 + 2",
   "deslocamento": "9m",
-	"ambientes": ["Urbano", "Floresta", "Campos"],
+	"ambientes": ["Bandido"],
   "atributos": {
     "for": 11,
     "des": 12,
@@ -54,7 +54,7 @@ const DATA_MONSTROS = [
 	  "pv": 110,
 	  "dados_vida": "13d8 + 39",
 	  "deslocamento": "9m",
-	  "ambientes": ["Marinho", "Floresta", "Urbano","Campo"],
+	  "ambientes": ["Bandido"],
 
 	  "atributos": {
 		"for": 16,
@@ -137,7 +137,7 @@ const DATA_MONSTROS = [
 	  "pv": 95,
 	  "dados_vida": "10d8 + 40",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano"],
+	  "ambientes": ["Bandido"],
 
 	  "atributos": {
 		"for": 18,
@@ -192,7 +192,7 @@ const DATA_MONSTROS = [
 	  "pv": 189,
 	  "dados_vida": "18d10 + 90",
 	  "deslocamento": "12m",
-	  "ambientes": ["Infernal"],
+	  "ambientes": ["Demonio"],
 
 	  "atributos": {
 		"for": 20,
@@ -261,7 +261,7 @@ const DATA_MONSTROS = [
 	  "pv": 195,
 	  "dados_vida": "17d12 + 85",
 	  "deslocamento": "12m, voo 24m, nado 12m",
-	  "ambientes": ["Floresta"],
+	  "ambientes": ["Dragão"],
 
 	  "atributos": {
 		"for": 23,
@@ -331,7 +331,7 @@ const DATA_MONSTROS = [
 	  "pv": 178,
 	  "dados_vida": "21d8 + 84",
 	  "deslocamento": "9m, voo 18m",
-	  "ambientes": ["Infernal"],
+	  "ambientes": ["Diabo"],
 
 	  "atributos": {
 		"for": 18,
@@ -409,7 +409,7 @@ const DATA_MONSTROS = [
 	  "pv": 310,
 	  "dados_vida": "20d12 + 160",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano", "Marinho"],
+	  "ambientes": ["Bando Barba Branca"],
 
 	  "atributos": {
 		"for": 24,
@@ -479,7 +479,7 @@ const DATA_MONSTROS = [
 	  "pv": 210,
 	  "dados_vida": "18d10 + 108",
 	  "deslocamento": "12m, voo 18m",
-	  "ambientes": ["Marinho", "Urbano"],
+	  "ambientes": ["Bando Barba Branca"],
 
 	  "atributos": {
 		"for": 16,
@@ -549,7 +549,7 @@ const DATA_MONSTROS = [
 		"pv": 48,
 		"dados_vida": "6d8 + 18",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 18, "des": 10, "con": 16, "int": 10, "sab": 12, "car": 11 },
 
@@ -590,7 +590,7 @@ const DATA_MONSTROS = [
 		"pv": 34,
 		"dados_vida": "5d8 + 10",
 		"deslocamento": "12m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 10, "des": 18, "con": 14, "int": 12, "sab": 13, "car": 12 },
 
@@ -631,7 +631,7 @@ const DATA_MONSTROS = [
 		"pv": 45,
 		"dados_vida": "6d8 + 18",
 		"deslocamento": "7,5m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 16, "des": 12, "con": 18, "int": 11, "sab": 10, "car": 10 },
 
@@ -672,7 +672,7 @@ const DATA_MONSTROS = [
 		"pv": 32,
 		"dados_vida": "5d8 + 5",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 12, "des": 16, "con": 12, "int": 14, "sab": 13, "car": 11 },
 
@@ -713,7 +713,7 @@ const DATA_MONSTROS = [
 		"pv": 30,
 		"dados_vida": "5d8",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 10, "des": 14, "con": 12, "int": 12, "sab": 10, "car": 16 },
 
@@ -754,7 +754,7 @@ const DATA_MONSTROS = [
 		"pv": 42,
 		"dados_vida": "6d8 + 12",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 16, "des": 14, "con": 16, "int": 10, "sab": 14, "car": 9 },
 
@@ -795,7 +795,7 @@ const DATA_MONSTROS = [
 		"pv": 36,
 		"dados_vida": "5d8 + 10",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 10, "des": 12, "con": 14, "int": 14, "sab": 16, "car": 12 },
 
@@ -835,7 +835,7 @@ const DATA_MONSTROS = [
 		"pv": 33,
 		"dados_vida": "5d8 + 5",
 		"deslocamento": "7,5m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bando Barba Branca"],
 
 		"atributos": { "for": 10, "des": 16, "con": 12, "int": 13, "sab": 12, "car": 14 },
 
@@ -875,7 +875,7 @@ const DATA_MONSTROS = [
 		  "pv": 165,
 		  "dados_vida": "18d8 + 72",
 		  "deslocamento": "9m",
-		  "ambientes": ["Marinho", "Urbano"],
+		  "ambientes": ["Pirata"],
 
 		  "atributos": {
 			"for": 18,
@@ -946,7 +946,7 @@ const DATA_MONSTROS = [
 		  "pv": 130,
 		  "dados_vida": "15d8 + 60",
 		  "deslocamento": "9m",
-		  "ambientes": ["Marinho", "Urbano"],
+		  "ambientes": ["Pirata"],
 
 		  "atributos": {
 			"for": 18,
@@ -1006,7 +1006,7 @@ const DATA_MONSTROS = [
 		"pv": 40,
 		"dados_vida": "6d8 + 12",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Pirata"],
 
 		"atributos": { "for": 10, "des": 18, "con": 14, "int": 12, "sab": 13, "car": 10 },
 
@@ -1041,7 +1041,7 @@ const DATA_MONSTROS = [
 		"pv": 38,
 		"dados_vida": "6d8 + 10",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Pirata"],
 
 		"atributos": { "for": 10, "des": 16, "con": 14, "int": 11, "sab": 12, "car": 10 },
 
@@ -1076,7 +1076,7 @@ const DATA_MONSTROS = [
 		"pv": 52,
 		"dados_vida": "7d8 + 21",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bandido"],
 		"atributos": { "for": 17, "des": 12, "con": 16, "int": 8, "sab": 10, "car": 9 },
 		"cr": 2,
 		"xp": 450,
@@ -1102,7 +1102,7 @@ const DATA_MONSTROS = [
 		"pv": 52,
 		"dados_vida": "7d8 + 21",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Bandido"],
 		"atributos": { "for": 17, "des": 12, "con": 16, "int": 8, "sab": 10, "car": 9 },
 		"cr": 2,
 		"xp": 450,
@@ -1128,7 +1128,7 @@ const DATA_MONSTROS = [
 		"pv": 30,
 		"dados_vida": "5d8",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Pirata"],
 		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
 		"cr": 1,
 		"xp": 200,
@@ -1154,7 +1154,7 @@ const DATA_MONSTROS = [
 		"pv": 30,
 		"dados_vida": "5d8",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Pirata"],
 		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
 		"cr": 1,
 		"xp": 200,
@@ -1180,7 +1180,7 @@ const DATA_MONSTROS = [
 		"pv": 30,
 		"dados_vida": "5d8",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Pirata"],
 		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
 		"cr": 1,
 		"xp": 200,
@@ -1206,7 +1206,7 @@ const DATA_MONSTROS = [
 		"pv": 30,
 		"dados_vida": "5d8",
 		"deslocamento": "9m",
-		"ambientes": ["Marinho", "Urbano"],
+		"ambientes": ["Pirata"],
 		"atributos": { "for": 12, "des": 14, "con": 12, "int": 10, "sab": 10, "car": 10 },
 		"cr": 1,
 		"xp": 200,
@@ -1231,7 +1231,7 @@ const DATA_MONSTROS = [
 	  "pv": 35,
 	  "dados_vida": "6d8 + 6",
 	  "deslocamento": "9m, natação 9m",
-	  "ambientes": ["Marinho"],
+	  "ambientes": ["Pirata", "Morto vivo"],
 
 	  "atributos": {
 		"for": 14,
@@ -1282,7 +1282,7 @@ const DATA_MONSTROS = [
 	  "pv": 70,
 	  "dados_vida": "10d8 + 20",
 	  "deslocamento": "9m, natação 9m",
-	  "ambientes": ["Marinho"],
+	  "ambientes": ["Pirata", "Morto vivo"],
 
 	  "atributos": {
 		"for": 16,
@@ -1344,7 +1344,7 @@ const DATA_MONSTROS = [
 	  "pv": 140,
 	  "dados_vida": "16d8 + 64",
 	  "deslocamento": "9m, natação 9m",
-	  "ambientes": ["Marinho"],
+	  "ambientes": ["Pirata", "Morto vivo"],
 
 	  "atributos": {
 		"for": 18,
@@ -1408,7 +1408,7 @@ const DATA_MONSTROS = [
 	  "pv": 180,
 	  "dados_vida": "19d10 + 76",
 	  "deslocamento": "0m, voo 18m",
-	  "ambientes": ["Marinho", "Floresta"],
+	  "ambientes": ["Elemental"],
 
 	  "atributos": {
 		"for": 18,
@@ -1452,7 +1452,7 @@ const DATA_MONSTROS = [
 	  "pv": 45,
 	  "dados_vida": "7d8 + 14",
 	  "deslocamento": "voo 18m",
-	  "ambientes": ["Marinho", "Floresta"],
+	  "ambientes": ["Elemental"],
 
 	  "atributos": {
 		"for": 8,
@@ -1489,7 +1489,7 @@ const DATA_MONSTROS = [
 	  "pv": 75,
 	  "dados_vida": "10d8 + 30",
 	  "deslocamento": "6m",
-	  "ambientes": ["Urbano", "Campo", "Floresta", "Morto-vivo"],
+	  "ambientes": ["Morto vivo"],
 
 	  "atributos": {
 		"for": 16,
@@ -1540,7 +1540,7 @@ const DATA_MONSTROS = [
 	  "pv": 45,
 	  "dados_vida": "7d8 + 14",
 	  "deslocamento": "voo 12m",
-	  "ambientes": ["Urbano", "Campo", "Floresta", "Morto-vivo"],
+	  "ambientes": ["Morto vivo"],
 
 	  "atributos": {
 		"for": 6,
@@ -1591,7 +1591,7 @@ const DATA_MONSTROS = [
 	  "pv": 180,
 	  "dados_vida": "19d8 + 95",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano", "Campo", "Floresta", "Morto-vivo"],
+	  "ambientes": ["Morto vivo"],
 
 	  "atributos": {
 		"for": 10,
@@ -1683,7 +1683,7 @@ const DATA_MONSTROS = [
 	  "pv": 135,
 	  "dados_vida": "18d8 + 54",
 	  "deslocamento": "voo 12m",
-	  "ambientes": ["Urbano", "Campo", "Floresta", "Morto-vivo"],
+	  "ambientes": ["Morto vivo"],
 
 	  "atributos": {
 		"for": 8,
@@ -1755,7 +1755,7 @@ const DATA_MONSTROS = [
 	  "pv": 52,
 	  "dados_vida": "8d8 + 16",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano"],
+	  "ambientes": ["Guarda nobre"],
 
 	  "atributos": {
 		"for": 14,
@@ -1818,7 +1818,7 @@ const DATA_MONSTROS = [
 	  "pv": 45,
 	  "dados_vida": "7d8 + 14",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano"],
+	  "ambientes": ["Guarda nobre"],
 
 	  "atributos": {
 		"for": 12,
@@ -1878,7 +1878,7 @@ const DATA_MONSTROS = [
 	  "pv": 88,
 	  "dados_vida": "11d8 + 33",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano"],
+	  "ambientes": ["Guarda nobre"],
 
 	  "atributos": {
 		"for": 12,
@@ -1941,7 +1941,7 @@ const DATA_MONSTROS = [
 	  "pv": 165,
 	  "dados_vida": "18d8 + 72",
 	  "deslocamento": "9m",
-	  "ambientes": ["Urbano"],
+	  "ambientes": ["Nobre"],
 
 	  "atributos": {
 		"for": 10,
@@ -2022,6 +2022,7 @@ const DATA_MONSTROS = [
 		"xp": 1800,
 		"ca": 15,
 		"pv": 95,
+		"ambientes": ["Marinho"],
 		"deslocamento": {
 		  "terra": "9m",
 		  "natacao": "12m"
@@ -2092,12 +2093,13 @@ const DATA_MONSTROS = [
 			"descricao": "Criaturas em 6m fazem teste de FOR CD 14 ou ficam caídas e sofrem 2d8 dano necrótico."
 		  }
 		]
-	  },
-	  {
+	},
+	{
 		"nome": "Sahuagin Guerreiro",
 		"tipo": "Humanoide (Sahuagin)",
 		"tamanho": "Médio",
 		"tendencia": "Leal e Maligno",
+		"ambientes": ["Marinho"],
 		"nd": 5,
 		"xp": 1800,
 		"ca": 17,
@@ -2162,12 +2164,13 @@ const DATA_MONSTROS = [
 			"descricao": "Reduz o dano em 1d10+4."
 		  }
 		]
-	  },
-	  {
+	},
+	{
 		"nome": "Sahuagin Barão",
 		"tipo": "Humanoide (Sahuagin)",
 		"tamanho": "Grande",
 		"tendencia": "Leal e Maligno",
+		"ambientes": ["Marinho"],
 		"nd": 10,
 		"xp": 5900,
 		"ca": 18,
@@ -2243,5 +2246,217 @@ const DATA_MONSTROS = [
 			"descricao": "Criaturas em 6m fazem teste de SAB CD 16 ou ficam amedrontadas por 1 turno."
 		  }
 		]
-	  }
+	},
+	{
+	  "nome": "Bruxa Marinha Anciã",
+	  "tipo": "Fey",
+	  "tamanho": "Médio",
+	  "alinhamento": "Caótico e Mau",
+	  "classe_armadura": 16,
+	  "pontos_vida": 136,
+	  "dados_vida": "16d8 + 64",
+	  "deslocamento": {
+		"caminhar": "30 ft.",
+		"nadar": "40 ft."
+	  },
+	  "atributos": {
+		"forca": 18,
+		"destreza": 14,
+		"constituicao": 18,
+		"inteligencia": 14,
+		"sabedoria": 14,
+		"carisma": 16
+	  },
+	  "salvacoes": {
+		"CON": "+7",
+		"WIS": "+5",
+		"CHA": "+6"
+	  },
+	  "resistencias": [
+		"dano psíquico",
+		"dano necrótico"
+	  ],
+	  "imunidades_condicao": [
+		"amedrontado"
+	  ],
+	  "sentidos": [
+		"Visão no escuro 60 ft.",
+		"Percepção passiva 12"
+	  ],
+	  "idiomas": [
+		"Comum",
+		"Gigante",
+		"Primordial (Aquan)"
+	  ],
+	  "desafio": {
+		"cr": 8,
+		"xp": 3900,
+		"bonus_proficiencia": "+3"
+	  },
+	  "tracos": [
+		{
+		  "nome": "Anfíbia",
+		  "descricao": "A bruxa pode respirar tanto na água quanto no ar."
+		},
+		{
+		  "nome": "Magia de Coven Aprimorada",
+		  "descricao": "Enquanto estiver a até 30 pés de pelo menos duas outras bruxas, a bruxa pode conjurar uma das seguintes magias sem componentes materiais, usando Inteligência como atributo de conjuração (CD 14): Augury, Find Familiar, Identify, Locate Object, Scrying, Unseen Servant, Bestow Curse ou Lightning Bolt. Após conjurar uma magia dessa forma, deve completar um Descanso Longo antes de fazê-lo novamente."
+		},
+		{
+		  "nome": "Aparência Vil Aprimorada",
+		  "descricao": "Qualquer besta ou humanoide que comece o turno a até 30 pés da bruxa e possa vê-la deve realizar um teste de resistência de Sabedoria CD 14. Em falha, fica Amedrontado por 1 minuto. Pode repetir o teste no final de cada turno. Em sucesso, fica imune por 24 horas."
+		},
+		{
+		  "nome": "Presença Abissal",
+		  "descricao": "Criaturas amedrontadas pela bruxa têm desvantagem em testes de resistência contra suas habilidades e magias."
+		}
+	  ],
+	  "acoes": [
+		{
+		  "nome": "Garra",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+7",
+		  "alcance": "5 ft.",
+		  "dano": "15 (2d8 + 4) cortante + 7 (2d6) necrótico"
+		},
+		{
+		  "nome": "Olhar da Morte",
+		  "recarga": "5-6",
+		  "descricao": "Uma criatura amedrontada a até 30 pés deve realizar um teste de resistência de Sabedoria CD 14. Em falha, se tiver 40 pontos de vida ou menos, cai para 0 pontos de vida. Caso contrário, sofre 27 (6d8) de dano psíquico. Em sucesso, sofre metade do dano."
+		},
+		{
+		  "nome": "Aparência Ilusória",
+		  "descricao": "A bruxa conjura Disguise Self usando Constituição como atributo de conjuração (CD 15). A duração é de 24 horas."
+		},
+		{
+		  "nome": "Rajada Abissal",
+		  "recarga": "6",
+		  "descricao": "A bruxa libera uma explosão de energia sombria em um cone de 30 pés. Criaturas na área devem fazer um teste de resistência de Constituição CD 15, sofrendo 36 (8d8) de dano necrótico em falha, ou metade em sucesso."
+		}
+	  ]
+	},
+	{
+	  "nome": "Marid",
+	  "tipo": "Elemental",
+	  "subtipo": "Gênio",
+	  "tamanho": "Grande",
+	  "alinhamento": "Caótico e Neutro",
+	  "classe_armadura": 17,
+	  "pontos_vida": 229,
+	  "dados_vida": "17d10 + 136",
+	  "deslocamento": {
+		"caminhar": "30 ft.",
+		"voar": "60 ft.",
+		"nadar": "90 ft."
+	  },
+	  "atributos": {
+		"forca": 22,
+		"destreza": 12,
+		"constituicao": 26,
+		"inteligencia": 18,
+		"sabedoria": 17,
+		"carisma": 18
+	  },
+	  "salvacoes": {
+		"STR": "+6",
+		"DEX": "+5",
+		"CON": "+8",
+		"CHA": "+8"
+	  },
+	  "resistencias": [
+		"ácido",
+		"frio",
+		"elétrico"
+	  ],
+	  "sentidos": [
+		"Percepção às cegas 30 ft.",
+		"Visão no escuro 120 ft.",
+		"Percepção passiva 13"
+	  ],
+	  "idiomas": [
+		"Primordial (Aquan)"
+	  ],
+	  "desafio": {
+		"cr": 11,
+		"xp": 7200,
+		"bonus_proficiencia": "+4"
+	  },
+	  "tracos": [
+		{
+		  "nome": "Anfíbio",
+		  "descricao": "O marid pode respirar tanto na água quanto no ar."
+		},
+		{
+		  "nome": "Restauração Elemental",
+		  "descricao": "Se morrer fora do Plano Elemental da Água, seu corpo se dissolve em salmoura e ele reaparece em 1d4 dias no Plano Elemental da Água com todos os seus pontos de vida."
+		},
+		{
+		  "nome": "Desejos",
+		  "descricao": "O marid tem 30% de chance de conhecer Wish. Se conhecer, pode conjurar apenas para criaturas não-gênios. Após 3 usos, não pode conjurar novamente por 365 dias."
+		}
+	  ],
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "O marid realiza três ataques de Chicote Aquático."
+		},
+		{
+		  "nome": "Chicote Aquático",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+10",
+		  "alcance": "15 ft.",
+		  "dano": "15 (2d8 + 6) cortante + 9 (2d8) frio"
+		},
+		{
+		  "nome": "Jato de Água",
+		  "tipo": "linha",
+		  "alcance": "60 ft.",
+		  "largura": "10 ft.",
+		  "teste_resistencia": "DEX CD 18",
+		  "dano": "31 (9d6) frio",
+		  "efeito": "Empurra até 20 pés e derruba (Prone) criaturas Grandes ou menores"
+		},
+		{
+		  "nome": "Maré Esmagadora",
+		  "recarga": "5-6",
+		  "descricao": "Uma onda massiva surge em um cone de 30 pés. Criaturas devem fazer teste de Força CD 18. Em falha, sofrem 45 (10d8) de dano de concussão, ficam Caídas e Restrained até o final do próximo turno. Em sucesso, sofrem metade do dano e não ficam presas."
+		}
+	  ],
+	  "magias": {
+		"atributo_conjuracao": "Carisma",
+		"cd_magia": 16,
+		"ataque_magia": "+8",
+		"sem_componentes_materiais": true,
+		"a_vontade": [
+		  "Create or Destroy Water",
+		  "Detect Magic",
+		  "Detect Evil and Good",
+		  "Purify Food and Drink",
+		  "Ray of Frost",
+		  "Shape Water"
+		],
+		"3_por_dia": [
+		  "Hold Person",
+		  "Blindness/Deafness",
+		  "Tidal Wave",
+		  "Lightning Bolt"
+		],
+		"1_por_dia": [
+		  "Control Water",
+		  "Cone of Cold",
+		  "Wall of Water",
+		  "Invisibility",
+		  "Plane Shift",
+		  "Banishment",
+		  "Slow"
+		]
+	  },
+	  "acoes_bonus": [
+		{
+		  "nome": "Véu Nebuloso",
+		  "recarga": "5-6",
+		  "descricao": "O marid conjura Fog Cloud."
+		}
+	  ]
+	}
 ];
