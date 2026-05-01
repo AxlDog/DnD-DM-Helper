@@ -1948,6 +1948,14 @@ function openMonsterDetails(event, monstroId) {
     </div>
   `;
 
+  // Informações extras que monstros complexos possuem
+  const extrasHtml = `
+    ${monstro.resistencias ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>🛡️ Resistências:</strong> ${monstro.resistencias.join(', ')}</p>` : ''}
+    ${monstro.imunidades ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>🚫 Imunidades:</strong> ${monstro.imunidades.join(', ')}</p>` : ''}
+    ${monstro.sentidos ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>👁️ Sentidos:</strong> ${monstro.sentidos}</p>` : ''}
+    ${monstro.idiomas ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>🗣️ Idiomas:</strong> ${monstro.idiomas}</p>` : ''}
+  `;
+
   const categoriasPossiveis = {
     habilidades: "Habilidades",
     habilidades_especiais: "Características Especiais",
@@ -1959,18 +1967,51 @@ function openMonsterDetails(event, monstroId) {
   };
 
   let sessoesDinamicasHtml = '';
+
   for (const [chave, titulo] of Object.entries(categoriasPossiveis)) {
     const lista = monstro[chave];
-    if (lista && Array.isArray(lista) && lista.length > 0) {
-      sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
+    if (!lista) continue;
+
+    sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
+
+    // 1. Tratamento para Listas (Arrays) como Ações e Habilidades
+    if (Array.isArray(lista) && lista.length > 0) {
       sessoesDinamicasHtml += lista.map(item => {
         if (typeof item === 'string') return `<li>${item}</li>`;
+        
         const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
-        let desc = item.descricao || (item.ataque ? `Ataque: ${item.ataque} | Dano: ${item.dano}` : '');
+        let desc = item.descricao || '';
+        
+        // Se não for uma descrição em bloco de texto, monta as propriedades (Ataque, Dano, Efeito, etc)
+        if (!desc) {
+          let detalhes = [];
+          if (item.ataque) detalhes.push(`<em>Ataque:</em> ${item.ataque}`);
+          if (item.alcance) detalhes.push(`<em>Alcance:</em> ${item.alcance}`);
+          if (item.alvo) detalhes.push(`<em>Alvo:</em> ${item.alvo}`);
+          if (item.dano) detalhes.push(`<em>Dano:</em> ${item.dano}`);
+          if (item.efeito) detalhes.push(`<em>Efeito:</em> ${item.efeito}`);
+          desc = detalhes.join(' | ');
+        }
+
         return `<li>${nome}${desc}</li>`;
       }).join('');
-      sessoesDinamicasHtml += `</ul>`;
+    } 
+    // 2. Tratamento para Objetos (Dicionários) como Magias
+    else if (typeof lista === 'object' && !Array.isArray(lista)) {
+      for (const [subchave, subvalor] of Object.entries(lista)) {
+        // Ex: "ataque_magia" vira "Ataque Magia", "3_dia" vira "3/dia"
+        let chaveFormatada = subchave.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (subchave.match(/^\d+_dia$/)) chaveFormatada = subchave.replace('_dia', '/dia');
+
+        if (Array.isArray(subvalor)) {
+          sessoesDinamicasHtml += `<li><strong>${chaveFormatada}:</strong> ${subvalor.join(', ')}</li>`;
+        } else {
+          sessoesDinamicasHtml += `<li><strong>${chaveFormatada}:</strong> ${subvalor}</li>`;
+        }
+      }
     }
+
+    sessoesDinamicasHtml += `</ul>`;
   }
 
   const overlay = document.createElement('div');
@@ -1983,21 +2024,23 @@ function openMonsterDetails(event, monstroId) {
       <header class="quick-monster-header">
         <div>
           <h3>${monstro.nome}</h3>
-          <span class="quick-subtitle">${monstro.tipo} | ND ${monstro.cr}</span>
+          <span class="quick-subtitle">${monstro.tipo} | ND ${monstro.cr} (${monstro.xp || '?'} XP)</span>
         </div>
         <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
       </header>
       
       <div class="quick-monster-body" id="quickMonsterBodyArea">
-        <p><strong>🛡️ CA:</strong> ${monstro.ca}</p>
-        <p><strong>❤️ PV:</strong> ${monstro.pv}</p>
+        <p><strong>🛡️ CA:</strong> ${monstro.ca} <small>(${monstro.tipo_ca || '-'})</small></p>
+        <p><strong>❤️ PV:</strong> ${monstro.pv} <small>(${monstro.dados_vida || '-'})</small></p>
+        <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
+        ${extrasHtml}
         ${attrHtml}
         <div class="quick-divider"></div>
         ${sessoesDinamicasHtml}
         
         <div class="quick-divider" style="margin: 15px 0; border-top: 1px dashed #444;"></div>
         <button class="btn-loja" onclick="abrirAprimoramento('${monstro.id}')" style="width: 100%; padding: 10px; background: #2a113a; color: #e69a28; font-weight: bold; border: 1px solid #5a2e7a; cursor: pointer; border-radius: 4px;">
-          ✨ Aprimorar com Classe (IA)
+          ✨ Aprimorar com Classe (IA Gemini)
         </button>
       </div>
     </div>
