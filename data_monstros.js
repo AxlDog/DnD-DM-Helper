@@ -2014,425 +2014,396 @@ const DATA_MONSTROS = [
 	  ]
 	},
 	{
-		"id": "sahuagin_sacerdote",
-		"nome": "Sahuagin Sacerdote",
-		"tipo": "Humanoide (Sahuagin)",
-		"tamanho": "Médio",
-		"tendencia": "Leal e Maligno",
-		"nd": 5,
-		"xp": 1800,
-		"ca": 15,
-		"pv": 95,
-		"ambientes": ["Marinho"],
-		"deslocamento": {
-		  "terra": "9m",
-		  "natacao": "12m"
-		},
-		"atributos": {
-		  "for": 14,
-		  "des": 12,
-		  "con": 20,
-		  "int": 11,
-		  "sab": 16,
-		  "car": 13
-		},
-		"resistencias": ["frio"],
-		"sentidos": {
-		  "visao_no_escuro": "36m",
-		  "percepcao_passiva": 13
-		},
-		"idiomas": ["Sahuagin", "Abissal"],
-		"tracos": [
-		  {
-			"nome": "Frenesi de Sangue",
-			"descricao": "Tem vantagem em ataques corpo a corpo contra criaturas que não estejam com todos os PV."
-		  },
-		  {
-			"nome": "Anfibio",
-			"descricao": "Pode respirar ar e água."
-		  },
-		  {
-			"nome": "Conjurador",
-			"descricao": "Conjurador de nível 5 (CD 14, +6 para atingir)."
-		  }
-		],
-		"magias": {
-		  "cd": 14,
-		  "ataque_magico": 6,
-		  "truques": ["Thaumaturgy", "Sacred Flame", "Toll the Dead"],
-		  "nivel_1": {
-			"slots": 4,
-			"magias": ["Guiding Bolt", "Command", "Shield of Faith"]
-		  },
-		  "nivel_2": {
-			"slots": 3,
-			"magias": ["Hold Person", "Spiritual Weapon"]
-		  },
-		  "nivel_3": {
-			"slots": 2,
-			"magias": ["Spirit Guardians", "Bestow Curse"]
-		  }
-		},
-		"acoes": [
-		  {
-			"nome": "Multiataque",
-			"descricao": "Realiza dois ataques: mordida e garra."
-		  },
-		  {
-			"nome": "Mordida",
-			"ataque": "+5",
-			"dano": "1d6+2 perfurante"
-		  },
-		  {
-			"nome": "Garra",
-			"ataque": "+5",
-			"dano": "1d8+2 cortante"
-		  },
-		  {
-			"nome": "Chamado das Profundezas",
-			"recarga": "5-6",
-			"descricao": "Criaturas em 6m fazem teste de FOR CD 14 ou ficam caídas e sofrem 2d8 dano necrótico."
-		  }
-		]
-	},
-	{
-		"id": "sahuagin_guerreiro",
-		"nome": "Sahuagin Guerreiro",
-		"tipo": "Humanoide (Sahuagin)",
-		"tamanho": "Médio",
-		"tendencia": "Leal e Maligno",
-		"ambientes": ["Marinho"],
-		"nd": 5,
-		"xp": 1800,
-		"ca": 17,
-		"pv": 110,
-		"deslocamento": {
-		  "terra": "9m",
-		  "natacao": "12m"
-		},
-		"atributos": {
-		  "for": 18,
-		  "des": 14,
-		  "con": 18,
-		  "int": 10,
-		  "sab": 12,
-		  "car": 11
-		},
-		"tracos": [
-		  {
-			"nome": "Frenesi de Sangue",
-			"descricao": "Vantagem contra inimigos feridos."
-		  },
-		  {
-			"nome": "Estilo de Luta",
-			"descricao": "Defesa: +1 na CA."
-		  },
-		  {
-			"nome": "Critico Aprimorado",
-			"descricao": "Acerta crítico com 19-20."
-		  }
-		],
-		"habilidades": [
-		  {
-			"nome": "Segundo Folego",
-			"uso": "1/dia",
-			"descricao": "Recupera 1d10+5 PV."
-		  },
-		  {
-			"nome": "Surto de Acao",
-			"uso": "1/dia",
-			"descricao": "Ganha uma ação adicional no turno."
-		  }
-		],
-		"acoes": [
-		  {
-			"nome": "Multiataque",
-			"descricao": "Realiza três ataques."
-		  },
-		  {
-			"nome": "Tridente",
-			"ataque": "+7",
-			"dano": "1d8+4 perfurante (1d10+4 com duas mãos)"
-		  },
-		  {
-			"nome": "Mordida",
-			"ataque": "+7",
-			"dano": "1d6+4 perfurante"
-		  }
-		],
-		"reacoes": [
-		  {
-			"nome": "Aparar",
-			"descricao": "Reduz o dano em 1d10+4."
-		  }
-		]
-	},
-	{
-		"id": "sahuagin_barao",
-		"nome": "Sahuagin Barão",
-		"tipo": "Humanoide (Sahuagin)",
-		"tamanho": "Grande",
-		"tendencia": "Leal e Maligno",
-		"ambientes": ["Marinho"],
-		"nd": 10,
-		"xp": 5900,
-		"ca": 18,
-		"pv": 210,
-		"deslocamento": {
-		  "terra": "9m",
-		  "natacao": "12m"
-		},
-		"atributos": {
-		  "for": 20,
-		  "des": 16,
-		  "con": 20,
-		  "int": 12,
-		  "sab": 14,
-		  "car": 16
-		},
-		"tracos": [
-		  {
-			"nome": "Frenesi de Sangue",
-			"descricao": "Vantagem contra inimigos feridos."
-		  },
-		  {
-			"nome": "Critico Aprimorado Superior",
-			"descricao": "Crítico com 18-20."
-		  },
-		  {
-			"nome": "Mestre de Armas",
-			"descricao": "Pode sofrer -5 no ataque para causar +10 dano."
-		  }
-		],
-		"habilidades": [
-		  {
-			"nome": "Superioridade em Combate",
-			"dados": "4d10",
-			"cd": 16,
-			"manobras": [
-			  "Ataque Desarmante",
-			  "Ataque Derrubador",
-			  "Ataque Preciso",
-			  "Ripostar"
-			]
-		  },
-		  {
-			"nome": "Indomavel",
-			"uso": "2/dia",
-			"descricao": "Pode refazer testes de resistência."
-		  }
-		],
-		"acoes": [
-		  {
-			"nome": "Multiataque",
-			"descricao": "Realiza quatro ataques."
-		  },
-		  {
-			"nome": "Lanca Coralina",
-			"ataque": "+9",
-			"dano": "1d10+5 perfurante"
-		  },
-		  {
-			"nome": "Mordida",
-			"ataque": "+9",
-			"dano": "1d8+5 perfurante"
-		  },
-		  {
-			"nome": "Comandar a Mare",
-			"recarga": "5-6",
-			"descricao": "Aliados em 9m ganham vantagem em ataques, +10 deslocamento e +5 dano por 1 rodada."
-		  }
-		],
-		"efeitos": [
-		  {
-			"nome": "Presenca Aterradora",
-			"descricao": "Criaturas em 6m fazem teste de SAB CD 16 ou ficam amedrontadas por 1 turno."
-		  }
-		]
-	},
-	{
-		"id": "sea_hag",
-	  "nome": "Bruxa Marinha Anciã",
-	  "tipo": "Fey",
-	  "tamanho": "Médio",
-	  "alinhamento": "Caótico e Mau",
-	  "classe_armadura": 16,
-	  "pontos_vida": 136,
-	  "dados_vida": "16d8 + 64",
-	  "deslocamento": {
-		"caminhar": "30 ft.",
-		"nadar": "40 ft."
-	  },
+	  "id": "mob_sahuagin_sacerdote",
+	  "nome": "Sahuagin Sacerdote",
+	  "tipo": "Humanoide (sahuagin)",
+	  "alinhamento": "Leal maligno",
+	  "ca": 15,
+	  "tipo_ca": "Armadura natural",
+	  "pv": 95,
+	  "dados_vida": "10d8 + 40",
+	  "deslocamento": "9m, nado 12m",
+
+	  "ambientes": ["Marinho"],
+
 	  "atributos": {
-		"forca": 18,
-		"destreza": 14,
-		"constituicao": 18,
-		"inteligencia": 14,
-		"sabedoria": 14,
-		"carisma": 16
+		"for": 14,
+		"des": 12,
+		"con": 20,
+		"int": 11,
+		"sab": 16,
+		"car": 13
 	  },
-	  "salvacoes": {
-		"CON": "+7",
-		"WIS": "+5",
-		"CHA": "+6"
-	  },
-	  "resistencias": [
-		"dano psíquico",
-		"dano necrótico"
+
+	  "resistencias": ["frio"],
+
+	  "sentidos": "visão no escuro 36m, Percepção passiva 13",
+	  "idiomas": "Sahuagin, Abissal",
+	  "cr": 5,
+	  "xp": 1800,
+
+	  "habilidades": [
+		{
+		  "nome": "Frenesi de Sangue",
+		  "descricao": "Tem vantagem em ataques corpo a corpo contra criaturas que não estejam com todos os pontos de vida."
+		},
+		{
+		  "nome": "Anfíbio",
+		  "descricao": "Pode respirar ar e água."
+		},
+		{
+		  "nome": "Conjurador",
+		  "descricao": "Conjurador de nível 5 (CD 14 para resistir às magias, +6 para atingir com ataques mágicos)."
+		}
 	  ],
+
+	  "magias": {
+		"cd": 14,
+		"ataque_magia": "+6",
+		"truques": ["Thaumaturgy", "Sacred Flame", "Toll the Dead"],
+		"1_nivel": ["Guiding Bolt", "Command", "Shield of Faith"],
+		"2_nivel": ["Hold Person", "Spiritual Weapon"],
+		"3_nivel": ["Spirit Guardians", "Bestow Curse"]
+	  },
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza dois ataques: mordida e garra."
+		},
+		{
+		  "nome": "Mordida",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+5",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d6 + 2 perfurante"
+		},
+		{
+		  "nome": "Garra",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+5",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 2 cortante"
+		},
+		{
+		  "nome": "Chamado das Profundezas",
+		  "tipo": "área",
+		  "recarga": "5-6",
+		  "alcance": "6m",
+		  "alvo": "criaturas na área",
+		  "dano": "2d8 necrótico",
+		  "efeito": "CD 14 FOR ou fica caído"
+		}
+	  ]
+	},
+	{
+	  "id": "mob_sahuagin_guerreiro",
+	  "nome": "Sahuagin Guerreiro",
+	  "tipo": "Humanoide (sahuagin)",
+	  "alinhamento": "Leal maligno",
+	  "ca": 17,
+	  "tipo_ca": "Armadura natural + estilo de luta",
+	  "pv": 110,
+	  "dados_vida": "13d8 + 52",
+	  "deslocamento": "9m, nado 12m",
+
+	  "ambientes": ["Marinho"],
+
+	  "atributos": {
+		"for": 18,
+		"des": 14,
+		"con": 18,
+		"int": 10,
+		"sab": 12,
+		"car": 11
+	  },
+
+	  "sentidos": "visão no escuro 36m, Percepção passiva 11",
+	  "idiomas": "Sahuagin",
+	  "cr": 5,
+	  "xp": 1800,
+
+	  "habilidades": [
+		{
+		  "nome": "Frenesi de Sangue",
+		  "descricao": "Tem vantagem em ataques corpo a corpo contra criaturas que não estejam com todos os pontos de vida."
+		},
+		{
+		  "nome": "Estilo de Luta: Defesa",
+		  "descricao": "Recebe +1 na Classe de Armadura."
+		},
+		{
+		  "nome": "Crítico Aprimorado",
+		  "descricao": "Acerta crítico com 19–20."
+		},
+		{
+		  "nome": "Segundo Fôlego",
+		  "descricao": "1x por combate, recupera 1d10 + 5 pontos de vida como ação bônus."
+		},
+		{
+		  "nome": "Surto de Ação",
+		  "descricao": "1x por combate, pode realizar uma ação adicional no turno."
+		}
+	  ],
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza três ataques: dois com tridente e um com mordida."
+		},
+		{
+		  "nome": "Tridente",
+		  "tipo": "corpo a corpo ou à distância",
+		  "ataque": "+7",
+		  "alcance": "1,5m ou 6/18m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 4 perfurante (ou 1d10 + 4 se usado com duas mãos)"
+		},
+		{
+		  "nome": "Mordida",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+7",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d6 + 4 perfurante"
+		}
+	  ],
+
+	  "reacoes": [
+		{
+		  "nome": "Aparar",
+		  "descricao": "Reduz o dano de um ataque corpo a corpo em 1d10 + 4."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_sahuagin_barao",
+	  "nome": "Sahuagin Barão",
+	  "tipo": "Humanoide (sahuagin)",
+	  "alinhamento": "Leal maligno",
+	  "ca": 18,
+	  "tipo_ca": "Armadura natural reforçada",
+	  "pv": 210,
+	  "dados_vida": "20d10 + 100",
+	  "deslocamento": "9m, nado 12m",
+
+	  "ambientes": ["Marinho"],
+
+	  "atributos": {
+		"for": 20,
+		"des": 16,
+		"con": 20,
+		"int": 12,
+		"sab": 14,
+		"car": 16
+	  },
+
+	  "sentidos": "visão no escuro 36m, Percepção passiva 12",
+	  "idiomas": "Sahuagin, Abissal",
+	  "cr": 10,
+	  "xp": 5900,
+
+	  "habilidades": [
+		{
+		  "nome": "Frenesi de Sangue",
+		  "descricao": "Tem vantagem em ataques corpo a corpo contra criaturas que não estejam com todos os pontos de vida."
+		},
+		{
+		  "nome": "Crítico Aprimorado Superior",
+		  "descricao": "Acerta crítico com 18–20."
+		},
+		{
+		  "nome": "Mestre de Armas",
+		  "descricao": "Pode sofrer -5 na jogada de ataque para causar +10 de dano."
+		},
+		{
+		  "nome": "Superioridade em Combate",
+		  "descricao": "Possui 4 dados de superioridade (d10). CD 16. Pode usar manobras como Ataque Desarmante, Derrubador, Preciso e Ripostar."
+		},
+		{
+		  "nome": "Indomável",
+		  "descricao": "2x por combate, pode refazer um teste de resistência que falhou."
+		},
+		{
+		  "nome": "Presença Aterradora",
+		  "descricao": "Inimigos a até 6m devem passar em um teste de Sabedoria CD 16 ou ficam amedrontados por 1 turno."
+		}
+	  ],
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza quatro ataques: três com lança coralina e um com mordida."
+		},
+		{
+		  "nome": "Lança Coralina",
+		  "tipo": "corpo a corpo ou à distância",
+		  "ataque": "+9",
+		  "alcance": "1,5m ou 6/18m",
+		  "alvo": "1 criatura",
+		  "dano": "1d10 + 5 perfurante"
+		},
+		{
+		  "nome": "Mordida",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+9",
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d8 + 5 perfurante"
+		},
+		{
+		  "nome": "Comandar a Maré",
+		  "tipo": "especial",
+		  "recarga": "5-6",
+		  "alcance": "9m",
+		  "alvo": "aliados na área",
+		  "efeito": "Aliados ganham vantagem em ataques, +3m de deslocamento e +5 de dano até o final do próximo turno."
+		}
+	  ]
+	},
+	{
+	  "id": "mob_bruxa_marinha_ancia",
+	  "nome": "Bruxa Marinha Anciã",
+	  "tipo": "Fada (hag)",
+	  "alinhamento": "Caótico maligno",
+	  "ca": 16,
+	  "tipo_ca": "Pele arcana",
+	  "pv": 136,
+	  "dados_vida": "16d8 + 64",
+	  "deslocamento": "9m, nado 12m",
+
+	  "ambientes": ["Marinho"],
+
+	  "atributos": {
+		"for": 18,
+		"des": 14,
+		"con": 18,
+		"int": 14,
+		"sab": 14,
+		"car": 16
+	  },
+
+	  "resistencias": [
+		"psíquico",
+		"necrótico"
+	  ],
+
 	  "imunidades_condicao": [
 		"amedrontado"
 	  ],
-	  "sentidos": [
-		"Visão no escuro 60 ft.",
-		"Percepção passiva 12"
-	  ],
-	  "idiomas": [
-		"Comum",
-		"Gigante",
-		"Primordial (Aquan)"
-	  ],
-	  "desafio": {
-		"cr": 8,
-		"xp": 3900,
-		"bonus_proficiencia": "+3"
-	  },
-	  "tracos": [
+
+	  "sentidos": "visão no escuro 36m, Percepção passiva 12",
+	  "idiomas": "Comum, Gigante, Aquan",
+	  "cr": 8,
+	  "xp": 3900,
+
+	  "habilidades": [
 		{
 		  "nome": "Anfíbia",
-		  "descricao": "A bruxa pode respirar tanto na água quanto no ar."
+		  "descricao": "Pode respirar ar e água."
 		},
 		{
 		  "nome": "Magia de Coven Aprimorada",
-		  "descricao": "Enquanto estiver a até 30 pés de pelo menos duas outras bruxas, a bruxa pode conjurar uma das seguintes magias sem componentes materiais, usando Inteligência como atributo de conjuração (CD 14): Augury, Find Familiar, Identify, Locate Object, Scrying, Unseen Servant, Bestow Curse ou Lightning Bolt. Após conjurar uma magia dessa forma, deve completar um Descanso Longo antes de fazê-lo novamente."
+		  "descricao": "Enquanto estiver a até 9m de pelo menos duas outras bruxas, pode conjurar Augury, Find Familiar, Identify, Locate Object, Scrying, Unseen Servant, Bestow Curse ou Lightning Bolt (CD 14). Após conjurar uma dessas magias, precisa de um descanso longo para usar novamente."
 		},
 		{
 		  "nome": "Aparência Vil Aprimorada",
-		  "descricao": "Qualquer besta ou humanoide que comece o turno a até 30 pés da bruxa e possa vê-la deve realizar um teste de resistência de Sabedoria CD 14. Em falha, fica Amedrontado por 1 minuto. Pode repetir o teste no final de cada turno. Em sucesso, fica imune por 24 horas."
+		  "descricao": "Criaturas a até 9m que a vejam devem passar em um teste de Sabedoria CD 14 ou ficam amedrontadas por 1 minuto. Podem repetir o teste ao final de cada turno. Em sucesso, ficam imunes por 24h."
 		},
 		{
 		  "nome": "Presença Abissal",
 		  "descricao": "Criaturas amedrontadas pela bruxa têm desvantagem em testes de resistência contra suas habilidades e magias."
 		}
 	  ],
+
 	  "acoes": [
 		{
 		  "nome": "Garra",
 		  "tipo": "corpo a corpo",
 		  "ataque": "+7",
-		  "alcance": "5 ft.",
-		  "dano": "15 (2d8 + 4) cortante + 7 (2d6) necrótico"
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "2d8 + 4 cortante + 2d6 necrótico"
 		},
 		{
 		  "nome": "Olhar da Morte",
+		  "tipo": "especial",
 		  "recarga": "5-6",
-		  "descricao": "Uma criatura amedrontada a até 30 pés deve realizar um teste de resistência de Sabedoria CD 14. Em falha, se tiver 40 pontos de vida ou menos, cai para 0 pontos de vida. Caso contrário, sofre 27 (6d8) de dano psíquico. Em sucesso, sofre metade do dano."
+		  "alcance": "9m",
+		  "alvo": "1 criatura amedrontada",
+		  "dano": "6d8 psíquico",
+		  "efeito": "CD 14 SAB; se falhar e tiver 40 PV ou menos, cai a 0 PV. Em sucesso, sofre metade do dano."
 		},
 		{
 		  "nome": "Aparência Ilusória",
-		  "descricao": "A bruxa conjura Disguise Self usando Constituição como atributo de conjuração (CD 15). A duração é de 24 horas."
+		  "tipo": "especial",
+		  "descricao": "Conjura Disguise Self (CD 15) com duração de 24 horas."
 		},
 		{
 		  "nome": "Rajada Abissal",
+		  "tipo": "área",
 		  "recarga": "6",
-		  "descricao": "A bruxa libera uma explosão de energia sombria em um cone de 30 pés. Criaturas na área devem fazer um teste de resistência de Constituição CD 15, sofrendo 36 (8d8) de dano necrótico em falha, ou metade em sucesso."
+		  "alcance": "cone de 9m",
+		  "alvo": "criaturas na área",
+		  "dano": "8d8 necrótico",
+		  "efeito": "CD 15 CON para metade do dano."
 		}
 	  ]
 	},
 	{
-		"id": "marid",
+	  "id": "mob_marid",
 	  "nome": "Marid",
-	  "tipo": "Elemental",
-	  "subtipo": "Gênio",
-	  "tamanho": "Grande",
-	  "alinhamento": "Caótico e Neutro",
-	  "classe_armadura": 17,
-	  "pontos_vida": 229,
+	  "tipo": "Elemental (gênio)",
+	  "alinhamento": "Caótico neutro",
+	  "ca": 17,
+	  "tipo_ca": "Forma elemental",
+	  "pv": 229,
 	  "dados_vida": "17d10 + 136",
-	  "deslocamento": {
-		"caminhar": "30 ft.",
-		"voar": "60 ft.",
-		"nadar": "90 ft."
-	  },
+	  "deslocamento": "9m, voo 18m, nado 27m",
+
+	  "ambientes": ["Marinho"],
+
 	  "atributos": {
-		"forca": 22,
-		"destreza": 12,
-		"constituicao": 26,
-		"inteligencia": 18,
-		"sabedoria": 17,
-		"carisma": 18
+		"for": 22,
+		"des": 12,
+		"con": 26,
+		"int": 18,
+		"sab": 17,
+		"car": 18
 	  },
-	  "salvacoes": {
-		"STR": "+6",
-		"DEX": "+5",
-		"CON": "+8",
-		"CHA": "+8"
-	  },
+
 	  "resistencias": [
 		"ácido",
 		"frio",
 		"elétrico"
 	  ],
-	  "sentidos": [
-		"Percepção às cegas 30 ft.",
-		"Visão no escuro 120 ft.",
-		"Percepção passiva 13"
-	  ],
-	  "idiomas": [
-		"Primordial (Aquan)"
-	  ],
-	  "desafio": {
-		"cr": 11,
-		"xp": 7200,
-		"bonus_proficiencia": "+4"
-	  },
-	  "tracos": [
+
+	  "sentidos": "percepção às cegas 9m, visão no escuro 36m, Percepção passiva 13",
+	  "idiomas": "Aquan",
+	  "cr": 11,
+	  "xp": 7200,
+
+	  "habilidades": [
 		{
 		  "nome": "Anfíbio",
-		  "descricao": "O marid pode respirar tanto na água quanto no ar."
+		  "descricao": "Pode respirar ar e água."
 		},
 		{
 		  "nome": "Restauração Elemental",
-		  "descricao": "Se morrer fora do Plano Elemental da Água, seu corpo se dissolve em salmoura e ele reaparece em 1d4 dias no Plano Elemental da Água com todos os seus pontos de vida."
+		  "descricao": "Se morrer fora do Plano Elemental da Água, seu corpo se dissolve e ele reaparece em 1d4 dias no plano de origem com todos os pontos de vida."
 		},
 		{
-		  "nome": "Desejos",
-		  "descricao": "O marid tem 30% de chance de conhecer Wish. Se conhecer, pode conjurar apenas para criaturas não-gênios. Após 3 usos, não pode conjurar novamente por 365 dias."
+		  "nome": "Desejo Instável",
+		  "descricao": "Existe 30% de chance de conhecer Wish. Se possuir, pode conjurar apenas para criaturas não-gênios. Após 3 usos, não pode conjurar novamente por 1 ano."
 		}
 	  ],
-	  "acoes": [
-		{
-		  "nome": "Multiataque",
-		  "descricao": "O marid realiza três ataques de Chicote Aquático."
-		},
-		{
-		  "nome": "Chicote Aquático",
-		  "tipo": "corpo a corpo",
-		  "ataque": "+10",
-		  "alcance": "15 ft.",
-		  "dano": "15 (2d8 + 6) cortante + 9 (2d8) frio"
-		},
-		{
-		  "nome": "Jato de Água",
-		  "tipo": "linha",
-		  "alcance": "60 ft.",
-		  "largura": "10 ft.",
-		  "teste_resistencia": "DEX CD 18",
-		  "dano": "31 (9d6) frio",
-		  "efeito": "Empurra até 20 pés e derruba (Prone) criaturas Grandes ou menores"
-		},
-		{
-		  "nome": "Maré Esmagadora",
-		  "recarga": "5-6",
-		  "descricao": "Uma onda massiva surge em um cone de 30 pés. Criaturas devem fazer teste de Força CD 18. Em falha, sofrem 45 (10d8) de dano de concussão, ficam Caídas e Restrained até o final do próximo turno. Em sucesso, sofrem metade do dano e não ficam presas."
-		}
-	  ],
+
 	  "magias": {
-		"atributo_conjuracao": "Carisma",
-		"cd_magia": 16,
+		"cd": 16,
 		"ataque_magia": "+8",
-		"sem_componentes_materiais": true,
-		"a_vontade": [
+		"truques": [
 		  "Create or Destroy Water",
 		  "Detect Magic",
 		  "Detect Evil and Good",
@@ -2440,13 +2411,13 @@ const DATA_MONSTROS = [
 		  "Ray of Frost",
 		  "Shape Water"
 		],
-		"3_por_dia": [
+		"3_dia": [
 		  "Hold Person",
 		  "Blindness/Deafness",
 		  "Tidal Wave",
 		  "Lightning Bolt"
 		],
-		"1_por_dia": [
+		"1_dia": [
 		  "Control Water",
 		  "Cone of Cold",
 		  "Wall of Water",
@@ -2456,93 +2427,112 @@ const DATA_MONSTROS = [
 		  "Slow"
 		]
 	  },
-	  "acoes_bonus": [
+
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "Realiza três ataques de Chicote Aquático."
+		},
+		{
+		  "nome": "Chicote Aquático",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+10",
+		  "alcance": "4,5m",
+		  "alvo": "1 criatura",
+		  "dano": "2d8 + 6 cortante + 2d8 frio"
+		},
+		{
+		  "nome": "Jato de Água",
+		  "tipo": "linha",
+		  "alcance": "18m",
+		  "alvo": "criaturas na linha (3m de largura)",
+		  "dano": "9d6 frio",
+		  "efeito": "CD 18 DES; empurra 6m e derruba criaturas Grandes ou menores"
+		},
+		{
+		  "nome": "Maré Esmagadora",
+		  "tipo": "área",
+		  "recarga": "5-6",
+		  "alcance": "cone de 9m",
+		  "alvo": "criaturas na área",
+		  "dano": "10d8 contundente",
+		  "efeito": "CD 18 FOR; falha: fica caído e restrito até o fim do próximo turno. Sucesso: metade do dano e não fica restrito."
+		}
+	  ],
+
+	  "habilidades_especiais": [
 		{
 		  "nome": "Véu Nebuloso",
-		  "recarga": "5-6",
-		  "descricao": "O marid conjura Fog Cloud."
+		  "descricao": "Recarga 5-6. Conjura Fog Cloud."
 		}
 	  ]
 	},
 	{
-		"id": "sahuagin_comum",
+	  "id": "mob_sahuagin",
 	  "nome": "Sahuagin",
-	  "tipo": "Ínfero",
-	  "tamanho": "Médio",
-	  "alinhamento": "Leal e Mau",
-	  "classe_armadura": 12,
-	  "pontos_vida": 22,
+	  "tipo": "Humanoide (sahuagin)",
+	  "alinhamento": "Leal maligno",
+	  "ca": 12,
+	  "tipo_ca": "Armadura natural",
+	  "pv": 22,
 	  "dados_vida": "4d8 + 4",
-	  "deslocamento": {
-		"caminhar": "30 ft.",
-		"nadar": "40 ft."
-	  },
+	  "deslocamento": "9m, nado 12m",
+
+	  "ambientes": ["Marinho"],
+
 	  "atributos": {
-		"forca": 13,
-		"destreza": 11,
-		"constituicao": 12,
-		"inteligencia": 12,
-		"sabedoria": 13,
-		"carisma": 9
+		"for": 13,
+		"des": 11,
+		"con": 12,
+		"int": 12,
+		"sab": 13,
+		"car": 9
 	  },
-	  "salvacoes": {
-		"STR": "+1",
-		"DEX": "+0",
-		"CON": "+1",
-		"INT": "+1",
-		"WIS": "+1",
-		"CHA": "-1"
-	  },
-	  "pericias": {
-		"Percepção": "+5"
-	  },
+
 	  "resistencias": [
 		"ácido",
 		"frio"
 	  ],
-	  "sentidos": [
-		"Visão no escuro 120 ft.",
-		"Percepção passiva 15"
-	  ],
-	  "idiomas": [
-		"Sahuagin"
-	  ],
-	  "desafio": {
-		"cr": "1/2",
-		"xp": 100,
-		"bonus_proficiencia": "+2"
-	  },
-	  "tracos": [
+
+	  "sentidos": "visão no escuro 36m, Percepção passiva 15",
+	  "idiomas": "Sahuagin",
+	  "cr": "1/2",
+	  "xp": 100,
+
+	  "habilidades": [
 		{
 		  "nome": "Frenesi de Sangue",
-		  "descricao": "O sahuagin tem vantagem nas jogadas de ataque contra qualquer criatura que não esteja com seus pontos de vida completos."
+		  "descricao": "Tem vantagem em ataques contra criaturas que não estejam com todos os pontos de vida."
 		},
 		{
 		  "nome": "Anfíbio Limitado",
-		  "descricao": "O sahuagin pode respirar ar e água, mas precisa se submergir pelo menos uma vez a cada 4 horas ou começa a sufocar fora d'água."
+		  "descricao": "Pode respirar ar e água, mas precisa se submergir ao menos uma vez a cada 4 horas ou começa a sufocar."
 		},
 		{
 		  "nome": "Telepatia com Tubarões",
-		  "descricao": "O sahuagin pode controlar magicamente tubarões a até 120 pés por meio de telepatia."
+		  "descricao": "Pode se comunicar e influenciar tubarões a até 36m de distância."
 		}
 	  ],
+
 	  "acoes": [
 		{
 		  "nome": "Multiataque",
-		  "descricao": "O sahuagin realiza dois ataques de Garra."
+		  "descricao": "Realiza dois ataques de garra."
 		},
 		{
 		  "nome": "Garra",
 		  "tipo": "corpo a corpo",
 		  "ataque": "+3",
-		  "alcance": "5 ft.",
-		  "dano": "4 (1d6 + 1) cortante"
+		  "alcance": "1,5m",
+		  "alvo": "1 criatura",
+		  "dano": "1d6 + 1 cortante"
 		}
 	  ],
-	  "acoes_bonus": [
+
+	  "habilidades_especiais": [
 		{
 		  "nome": "Carga Aquática",
-		  "descricao": "O sahuagin nada até seu deslocamento de nado em linha reta em direção a um inimigo que possa ver."
+		  "descricao": "Nada até seu deslocamento em linha reta em direção a um inimigo visível."
 		}
 	  ]
 	}
