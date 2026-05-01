@@ -2014,6 +2014,7 @@ const DATA_MONSTROS = [
 	  ]
 	},
 	{
+		"id": "sahuagin_sacerdote",
 		"nome": "Sahuagin Sacerdote",
 		"tipo": "Humanoide (Sahuagin)",
 		"tamanho": "Médio",
@@ -2095,6 +2096,7 @@ const DATA_MONSTROS = [
 		]
 	},
 	{
+		"id": "sahuagin_guerreiro",
 		"nome": "Sahuagin Guerreiro",
 		"tipo": "Humanoide (Sahuagin)",
 		"tamanho": "Médio",
@@ -2166,6 +2168,7 @@ const DATA_MONSTROS = [
 		]
 	},
 	{
+		"id": "sahuagin_barao",
 		"nome": "Sahuagin Barão",
 		"tipo": "Humanoide (Sahuagin)",
 		"tamanho": "Grande",
@@ -2248,6 +2251,7 @@ const DATA_MONSTROS = [
 		]
 	},
 	{
+		"id": "sea_hag",
 	  "nome": "Bruxa Marinha Anciã",
 	  "tipo": "Fey",
 	  "tamanho": "Médio",
@@ -2336,6 +2340,7 @@ const DATA_MONSTROS = [
 	  ]
 	},
 	{
+		"id": "marid",
 	  "nome": "Marid",
 	  "tipo": "Elemental",
 	  "subtipo": "Gênio",
@@ -2460,7 +2465,8 @@ const DATA_MONSTROS = [
 	  ]
 	},
 	{
-	  "nome": "Sahuagin Guerreiro",
+		"id": "sahuagin_comum",
+	  "nome": "Sahuagin",
 	  "tipo": "Ínfero",
 	  "tamanho": "Médio",
 	  "alinhamento": "Leal e Mau",
