@@ -192,6 +192,53 @@ const DATA_LOCAIS = {
 			  "intuicao": 13
 			},
 			"segredo": "Um contrato recente autoriza transporte sigiloso para criptas antigas, assinado por um intermediário de identidade falsa."
+		},
+		{
+			"id": "poi_quadro_dos_sete_ventos",
+			"tipo": "ponto_interesse",
+			"bairro": "bairro_circulo_lua",
+			"nome": "Quadro dos Sete Ventos",
+			"categoria_local": "praca",
+			"descricao": "Um grande mural de madeira negra protegido por vidro encantado. Avisos, recompensas, pedidos de investigação e mensagens codificadas aparecem e desaparecem ao longo do dia.",
+			"tags": [
+			  "missoes",
+			  "rumores",
+			  "aventura"
+			],
+			"informacoes_encontradas": [
+			  "Pedidos recentes de patrulha em criptas antigas e túneis sob a cidade.",
+			  "Desaparecimento de um mensageiro que levava relatórios vindos da Cidade dos Mortos.",
+			  "Movimentações incomuns de grupos religiosos em horários noturnos."
+			],
+			"testes": {
+			  "investigacao": 12,
+			  "percepcao": 13,
+			  "intuicao": 12
+			},
+			"segredo": "Alguns avisos aparentemente banais usam códigos lunares que apenas membros do clã sabem interpretar."
+		},
+		{
+			"id": "poi_observatorio_do_arco_prateado",
+			"tipo": "ponto_interesse",
+			"bairro": "bairro_circulo_lua",
+			"nome": "Observatório do Arco Prateado",
+			"categoria_local": "observatorio",
+			"descricao": "Uma torre circular de pedra clara com lunetas arcanas, mapas celestes e mesas cobertas de anotações de campo. Dali, vigias observam a estrada sul e acompanham sinais vindos de fora da cidade.",
+			"tags": [
+			  "observacao",
+			  "exploracao",
+			  "arcana"
+			],
+			"informacoes_encontradas": [
+			  "Relatórios de viajantes vindos do interior de Faerûn.",
+			  "Padrões de entrada e saída de visitantes incomuns.",
+			  "Registros de pequenas anomalias arcanas em diferentes pontos da cidade."
+			],
+			"testes": {
+			  "arcana": 13,
+			  "investigacao": 14
+			},
+			"segredo": "Os registros recentes mostram atividade coordenada em locais distantes entre si, como se algo estivesse mapeando a cidade por dentro."
 		}
 	],
 	"eventos": [
@@ -444,6 +491,58 @@ const DATA_LOCAIS = {
 			  "percepcao": 13
 			},
 			"segredo": "Durante a distorção, um fragmento de coordenadas arcanas revela uma passagem oculta usada por agentes do Conclave dos Descendentes."
+		},
+		{
+			"id": "evento_partida_dos_luminares",
+			"tipo": "evento",
+			"bairro": "bairro_circulo_lua",
+			"nome": "Partida dos Luminares",
+			"categoria_local": "portao",
+			"descricao": "Ao amanhecer, grupos de exploradores, estudiosos e aventureiros se reúnem no portão sul para receber tarefas, mapas e instruções antes de partirem.",
+			"frequencia": "Diário",
+			"participantes": [
+			  "Aventureiros",
+			  "Exploradores",
+			  "Escribas do Círculo",
+			  "Mensageiros"
+			],
+			"informacoes_encontradas": [
+			  "Missões em ruínas próximas e estradas comerciais.",
+			  "Pedidos de observação discreta em bairros específicos.",
+			  "Relatos fragmentados de atividades subterrâneas."
+			],
+			"testes": {
+			  "persuasao": 12,
+			  "investigacao": 12,
+			  "intuicao": 13
+			},
+			"segredo": "Algumas missões oficiais escondem objetivos secundários ligados à investigação do Conclave da Noite Velada."
+		},
+		{
+			"id": "evento_reuniao_da_lua_velada",
+			"tipo": "evento",
+			"bairro": "bairro_circulo_lua",
+			"nome": "Reunião da Lua Velada",
+			"categoria_local": "arquivo",
+			"descricao": "Em noites de lua nova, investigadores veteranos e observadores de campo compartilham descobertas recentes em uma sala reservada sob o observatório.",
+			"frequencia": "Mensal",
+			"participantes": [
+			  "Investigadores",
+			  "Observadores",
+			  "Escribas",
+			  "Agentes de campo"
+			],
+			"informacoes_encontradas": [
+			  "Relatórios sobre movimentação silenciosa na Cidade dos Mortos.",
+			  "Notas sobre símbolos associados a Shar.",
+			  "Registros de encontros entre intermediários não identificados."
+			],
+			"testes": {
+			  "investigacao": 14,
+			  "religiao": 13,
+			  "intuicao": 14
+			},
+			"segredo": "Um mapa parcial sugere que agentes do Conclave da Noite Velada utilizam rotas de acesso por criptas esquecidas e corredores abaixo da cidade."
 		}
 	],
 	"npcs": [
@@ -658,6 +757,55 @@ const DATA_LOCAIS = {
 			  "percepcao": 13
 			},
 			"segredo": "Durante a distorção, um fragmento de coordenadas arcanas revela uma passagem oculta usada por agentes do Conclave dos Descendentes."
+		},
+		{
+			"id": "npc_miraen_thalos",
+			"tipo": "npc",
+			"bairro": "bairro_circulo_lua",
+			"nome": "Miraen Thalos",
+			"raca": "Humana",
+			"funcao": "Mestra dos avisos",
+			"descricao": "Mulher de olhar perspicaz e cabelos castanhos presos em nó simples, vestindo manto cinza-azulado com broches de prata em forma de meia-lua.",
+			"tags": [
+			  "informacao",
+			  "avisos",
+			  "contatos"
+			],
+			"informacoes": [
+			  "Organiza contratos e pedidos públicos de investigação.",
+			  "Reconhece padrões em rumores espalhados pela cidade.",
+			  "Mantém contato frequente com mensageiros e exploradores."
+			],
+			"interacao": {
+			  "persuasao": 13,
+			  "intuicao": 14
+			},
+			"segredo": "Sabe que três investigadores desapareceram enquanto seguiam pistas ligadas ao Conclave da Noite Velada."
+		},
+		{
+			"id": "npc_caelen_oris",
+			"tipo": "npc",
+			"bairro": "bairro_circulo_lua",
+			"nome": "Caelen Oris",
+			"raca": "Elfo",
+			"funcao": "Investigador de campo",
+			"descricao": "Elfo magro de cabelos escuros curtos, vestindo capa de viagem verde-acinzentada sobre gibão leve de couro e botas marcadas pela estrada.",
+			"tags": [
+			  "investigacao",
+			  "campo",
+			  "segredos"
+			],
+			"informacoes": [
+			  "Retornou recentemente de uma missão na Cidade dos Mortos.",
+			  "Observou encontros discretos entre acólitos e mensageiros noturnos.",
+			  "Carrega anotações incompletas sobre símbolos e trajetos subterrâneos."
+			],
+			"interacao": {
+			  "investigacao": 14,
+			  "persuasao": 12,
+			  "intuicao": 13
+			},
+			"segredo": "Acredita que o Conclave da Noite Velada não opera sozinho e que alguém no conselho ajuda a encobrir suas movimentações."
 		}
 	]
 };
