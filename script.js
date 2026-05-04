@@ -584,39 +584,165 @@ function loadLocais() {
   setActiveMenu(5);
   setView("locais");
 
-  document.getElementById("content").innerHTML = `
-    <h2>🏰 Pontos de Interesse</h2>
-    <div class="card-grid" id="locaisGrid"></div>
-  `;
+  const content = document.getElementById("content");
+  if (!content) return;
 
-  // Chamamos a função de renderizar passando nossa constante local
-  renderLocais(DATA_LOCAIS);
+  // Proteção caso o banco de dados não esteja carregado
+  if (typeof DATA_LOCAIS === 'undefined' || !DATA_LOCAIS.pontos_interesse) {
+    content.innerHTML = `
+      <div class="header-section">
+        <h2>🏰 Locais e Bairros</h2>
+        <p class="placeholder">Banco de dados de locais não encontrado.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Extrair todos os bairros únicos das três categorias (POIs, Eventos, NPCs)
+  const bairrosSet = new Set();
+  if (DATA_LOCAIS.pontos_interesse) DATA_LOCAIS.pontos_interesse.forEach(p => p.bairro_id && bairrosSet.add(p.bairro_id));
+  if (DATA_LOCAIS.eventos) DATA_LOCAIS.eventos.forEach(e => e.bairro_id && bairrosSet.add(e.bairro_id));
+  if (DATA_LOCAIS.npcs) DATA_LOCAIS.npcs.forEach(n => n.bairro_id && bairrosSet.add(n.bairro_id));
+
+  const bairros = Array.from(bairrosSet);
+
+  // Criar as opções do menu suspenso formatando o texto (ex: bairro_biblioteca -> Bairro Biblioteca)
+  let options = `<option value="">-- Selecione uma Região --</option>`;
+  bairros.forEach(b => {
+    const nomeFormatado = b.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    options += `<option value="${b}">${nomeFormatado}</option>`;
+  });
+
+  content.innerHTML = `
+    <div class="header-section">
+      <h2>🏰 Locais e Bairros</h2>
+      <p>Selecione um distrito ou bairro para visualizar os pontos de interesse, moradores e eventos ativos.</p>
+    </div>
+    
+    <div class="filter-bar" style="margin-bottom: 20px; display: flex; gap: 10px;">
+      <select id="bairroSelect" onchange="renderBairroView(this.value)" style="flex: 1; max-width: 400px; padding: 10px; background: #222; border: 1px solid #E69A28; color: #fff; border-radius: 4px; font-size: 1.1em;">
+        ${options}
+      </select>
+    </div>
+
+    <div id="bairroContentArea">
+      <div class="card-grid" id="locaisGrid">
+        <p class="placeholder" style="grid-column: 1 / -1;">Selecione uma região acima para investigar.</p>
+      </div>
+    </div>
+  `;
 }
 
-function renderLocais(dados) {
-  const grid = document.getElementById("locaisGrid");
-  if (!grid) return;
+function renderBairroView(bairroId) {
+  const area = document.getElementById("bairroContentArea");
+  if (!area) return;
 
-  grid.innerHTML = ""; // Limpa o grid
+  if (!bairroId) {
+    area.innerHTML = '<div class="card-grid"><p class="placeholder" style="grid-column: 1 / -1;">Selecione uma região acima para investigar.</p></div>';
+    return;
+  }
 
-  dados.forEach((local) => {
-    const card = document.createElement("div");
-    card.className = "card local-card";
+  area.innerHTML = ""; // Limpa a área para renderizar o novo conteúdo
 
-    // Mostramos apenas o essencial no card
-    card.innerHTML = `
-      <div class="card-header">
-        <span class="badge">Nível ${local.nivel || "?"}</span>
-        <h3>${local.nome || "Sem Nome"}</h3>
-      </div>
-      <p><strong>Tipo:</strong> ${local.tipo || "Não definido"}</p>
-    `;
+  // Filtrar os dados pelo bairro selecionado
+  const pois = DATA_LOCAIS.pontos_interesse ? DATA_LOCAIS.pontos_interesse.filter(p => p.bairro_id === bairroId) : [];
+  const eventos = DATA_LOCAIS.eventos ? DATA_LOCAIS.eventos.filter(e => e.bairro_id === bairroId) : [];
+  const npcs = DATA_LOCAIS.npcs ? DATA_LOCAIS.npcs.filter(n => n.bairro_id === bairroId) : [];
 
-    // Ao clicar, abre o modal enviando o objeto completo
-    card.onclick = () => openGenericModal(local, "Localização");
-    
-    grid.appendChild(card);
-  });
+  // 1. Renderizar PONTOS DE INTERESSE
+  if (pois.length > 0) {
+    const tituloPoi = document.createElement("h3");
+    tituloPoi.style.cssText = "color: #E69A28; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px;";
+    tituloPoi.innerText = "📍 Pontos de Interesse";
+    area.appendChild(tituloPoi);
+
+    const gridPoi = document.createElement("div");
+    gridPoi.className = "card-grid";
+    gridPoi.style.marginBottom = "30px";
+
+    pois.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "card local-card";
+      card.style.cursor = "pointer";
+      
+      let tagsHtml = p.tags ? `<div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;">${p.tags.map(t => `<span style="background: #333; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; color: #E69A28;">#${t}</span>`).join('')}</div>` : '';
+
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="badge" style="background: #444; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em;">${p.tipo.toUpperCase()}</span>
+          <h3 style="margin: 5px 0;">${p.nome}</h3>
+        </div>
+        <p style="font-size: 0.9em; color: #aaa;">${p.descricao}</p>
+        ${tagsHtml}
+      `;
+      card.onclick = () => openGenericModal(p, "Ponto de Interesse");
+      gridPoi.appendChild(card);
+    });
+    area.appendChild(gridPoi);
+  }
+
+  // 2. Renderizar EVENTOS
+  if (eventos.length > 0) {
+    const tituloEvt = document.createElement("h3");
+    tituloEvt.style.cssText = "color: #E69A28; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px;";
+    tituloEvt.innerText = "🎭 Eventos e Rumores";
+    area.appendChild(tituloEvt);
+
+    const gridEvt = document.createElement("div");
+    gridEvt.className = "card-grid";
+    gridEvt.style.marginBottom = "30px";
+
+    eventos.forEach(e => {
+      const card = document.createElement("div");
+      card.className = "card encounter-card";
+      card.style.cursor = "pointer";
+      card.style.borderLeft = "3px solid #9c27b0";
+
+      card.innerHTML = `
+        <div class="card-header">
+          <h3 style="margin: 0;">${e.nome}</h3>
+          <span style="font-size: 0.8em; color: #aaa; display: block; margin-top: 2px;">Frequência: ${e.frequencia}</span>
+        </div>
+        <p style="font-size: 0.9em; color: #aaa; margin-top: 10px;">${e.descricao}</p>
+      `;
+      card.onclick = () => openGenericModal(e, "Evento Local");
+      gridEvt.appendChild(card);
+    });
+    area.appendChild(gridEvt);
+  }
+
+  // 3. Renderizar NPCS
+  if (npcs.length > 0) {
+    const tituloNpc = document.createElement("h3");
+    tituloNpc.style.cssText = "color: #E69A28; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px;";
+    tituloNpc.innerText = "👤 Habitantes Locais";
+    area.appendChild(tituloNpc);
+
+    const gridNpc = document.createElement("div");
+    gridNpc.className = "card-grid";
+    gridNpc.style.marginBottom = "30px";
+
+    npcs.forEach(n => {
+      const card = document.createElement("div");
+      card.className = "card npc-card";
+      card.style.cursor = "pointer";
+      card.style.borderLeft = "3px solid #2196f3";
+
+      card.innerHTML = `
+        <h3 class="npc-name" style="margin: 0; color: #E69A28;">${n.nome}</h3>
+        <p class="npc-meta" style="margin: 5px 0;"><strong>${n.raca}</strong> • ${n.funcao}</p>
+        <p style="font-size: 0.85em; color: #aaa;">${n.descricao}</p>
+      `;
+      card.onclick = () => openGenericModal(n, "Ficha do Habitante");
+      gridNpc.appendChild(card);
+    });
+    area.appendChild(gridNpc);
+  }
+
+  // Feedback caso o bairro não tenha nenhum dado listado
+  if (area.innerHTML === '') {
+    area.innerHTML = '<p class="placeholder">Nenhuma atividade registrada para esta região.</p>';
+  }
 }
 
 
