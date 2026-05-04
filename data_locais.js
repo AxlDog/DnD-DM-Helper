@@ -144,6 +144,54 @@ const DATA_LOCAIS = {
 			  "arcana": 13
 			},
 			"segredo": "Parte dos registros foi selada por ordem superior após mencionar símbolos ligados a Shar e a um círculo de conspiradores ainda sem nome oficial."
+		},
+		{
+			"id": "poi_portico_das_passagens",
+			"tipo": "ponto_interesse",
+			"bairro": "bairro_veu_astral",
+			"nome": "Pórtico das Passagens",
+			"categoria_local": "portal",
+			"descricao": "Uma galeria de arcos rúnicos conectada a plataformas de embarque, depósitos e escritórios de despacho. Mercadores, mensageiros e magos de trânsito circulam constantemente pelo local.",
+			"tags": [
+			  "portal",
+			  "transito",
+			  "comercio"
+			],
+			"informacoes_encontradas": [
+			  "Rotas comerciais internas e externas da cidade.",
+			  "Chegadas recentes de carregamentos vindos de Baldur's Gate e Neverwinter.",
+			  "Movimentação incomum de caixas lacradas durante a madrugada."
+			],
+			"testes": {
+			  "investigacao": 13,
+			  "percepcao": 12,
+			  "arcana": 12
+			},
+			"segredo": "Algumas cargas usam selos legítimos, mas percorrem trajetos que não aparecem nos registros públicos."
+		},
+		{
+			"id": "poi_casa_dos_contratos_velados",
+			"tipo": "ponto_interesse",
+			"bairro": "bairro_veu_astral",
+			"nome": "Casa dos Contratos Velados",
+			"categoria_local": "casa mercantil",
+			"descricao": "Um edifício elegante de pedra clara e vitrais escuros onde acordos comerciais, direitos de passagem e garantias de transporte são negociados em salas privadas.",
+			"tags": [
+			  "contratos",
+			  "mercadores",
+			  "negociacao"
+			],
+			"informacoes_encontradas": [
+			  "Algumas casas nobres possuem participação indireta nas rotas do Véu Astral.",
+			  "Certos contratos garantem prioridade de trânsito em tempos de emergência.",
+			  "Há cláusulas incomuns ligadas a depósitos subterrâneos."
+			],
+			"testes": {
+			  "persuasao": 13,
+			  "investigacao": 14,
+			  "intuicao": 13
+			},
+			"segredo": "Um contrato recente autoriza transporte sigiloso para criptas antigas, assinado por um intermediário de identidade falsa."
 		}
 	],
 	"eventos": [
@@ -345,6 +393,57 @@ const DATA_LOCAIS = {
 			  "investigacao": 15
 			},
 			"segredo": "Um guarda condenado tentou avisar que viu agentes usando insígnias falsas da guarda enquanto transportavam caixas para criptas antigas."
+		},
+		{
+			"id": "evento_feira_das_rotas",
+			"tipo": "evento",
+			"bairro": "bairro_veu_astral",
+			"nome": "Feira das Rotas",
+			"categoria_local": "mercado",
+			"descricao": "Uma vez por tenday, capitães de caravanas, mestres de navio, cambistas e magos do Véu Astral se reúnem para negociar novas rotas, seguros e direitos de passagem.",
+			"frequencia": "A cada dez dias",
+			"participantes": [
+			  "Mercadores",
+			  "Capitães de caravanas",
+			  "Magos de transporte",
+			  "Representantes de casas comerciais"
+			],
+			"informacoes_encontradas": [
+			  "Mudanças recentes nas rotas terrestres e marítimas.",
+			  "Mercadorias valiosas aguardadas nos próximos dias.",
+			  "Boatos sobre um aumento de escoltas discretas em trajetos específicos."
+			],
+			"testes": {
+			  "persuasao": 12,
+			  "intuicao": 13,
+			  "investigacao": 12
+			},
+			"segredo": "Um mercador embriagado comenta que certas cargas nunca chegam aos armazéns declarados, desaparecendo sob a cidade."
+		},
+		{
+			"id": "evento_nevoa_de_transito",
+			"tipo": "evento",
+			"bairro": "bairro_veu_astral",
+			"nome": "Névoa de Trânsito",
+			"categoria_local": "portal",
+			"descricao": "Em noites raras, uma interferência astral cobre o Pórtico das Passagens com névoa azulada e distorce por alguns minutos a malha de teleporte local.",
+			"frequencia": "Ocasional",
+			"participantes": [
+			  "Magos do Véu Astral",
+			  "Guardas mercantis",
+			  "Despachantes"
+			],
+			"informacoes_encontradas": [
+			  "Portais registram destinos não catalogados.",
+			  "Uma rota breve parece apontar para câmaras subterrâneas antigas.",
+			  "Mensageiros evitam comentar o ocorrido em voz alta."
+			],
+			"testes": {
+			  "arcana": 14,
+			  "investigacao": 15,
+			  "percepcao": 13
+			},
+			"segredo": "Durante a distorção, um fragmento de coordenadas arcanas revela uma passagem oculta usada por agentes do Conclave dos Descendentes."
 		}
 	],
 	"npcs": [
