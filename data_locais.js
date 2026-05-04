@@ -321,5 +321,96 @@ const DATA_LOCAIS = [
       "furtividade": 12
     },
     "segredo": "Durante certas noites, sombras parecem se mover entre as árvores mesmo quando não há vento."
-  }
+  },
+  {
+	  "bairro_ecos": {
+		"id": "bairro_ecos",
+		"nome": "North Ward dos Ecos",
+		"escola": "Os Ecos",
+		"tipo": "bairro",
+		"descricao": "A ala norte de Waterdeep pulsa com ruas cheias, mercados lotados e residências empilhadas em becos vivos. É o distrito mais populoso da cidade e também onde a influência dos Ecos se espalha com maior naturalidade. A escola aceita estudantes de origens diversas, formando magos, escribas, investigadores e agentes comunitários.",
+		"influenza": "popular",
+		"informacoes_encontradas": [
+		  "Rumores de toda a cidade chegam primeiro ao North Ward.",
+		  "Os Ecos mantêm redes de estudantes, mensageiros e observadores entre tavernas, mercados e guildas.",
+		  "A opinião popular sobre o conselho arcano costuma nascer neste distrito.",
+		  "Nos últimos meses, alguns membros dos Ecos desapareceram após investigarem o Conclave da Noite Velada.",
+		  "Os líderes dos Ecos acreditam que o Conclave da Noite Velada e o Conclave dos Descendentes podem estar ligados."
+		]
+	  },
+	  "pontos_de_interesse": [
+		{
+		  "id": "patio_das_vozes",
+		  "nome": "Pátio das Vozes",
+		  "tipo": "praça",
+		  "descricao": "Praça pública onde estudantes, oradores e cronistas discutem acontecimentos recentes diante da população.",
+		  "informacoes": [
+			"É aqui que a opinião pública do North Ward costuma tomar forma.",
+			"Discursos contra membros do conselho podem rapidamente se espalhar por toda Waterdeep.",
+			"Agentes dos Ecos observam discretamente quem tenta manipular rumores."
+		  ]
+		},
+		{
+		  "id": "casa_dos_ecos_profundos",
+		  "nome": "Casa dos Ecos Profundos",
+		  "tipo": "academia",
+		  "descricao": "Principal sede dos Ecos. Um edifício amplo com corredores repletos de estudantes, arquivos e salas de observação arcana.",
+		  "informacoes": [
+			"A escola registra movimentações sociais, mágicas e políticas em toda a cidade.",
+			"Parte dos registros recentes aponta padrões estranhos ligados ao Conclave da Noite Velada.",
+			"Alguns relatórios foram removidos dos arquivos antes de chegarem aos mestres."
+		  ]
+		},
+		{
+		  "id": "mercado_dos_murmurios",
+		  "nome": "Mercado dos Murmúrios",
+		  "tipo": "mercado",
+		  "descricao": "Mercado popular onde notícias, boatos e pequenos segredos circulam quase tão rápido quanto moedas.",
+		  "informacoes": [
+			"Mercadores juram ter visto figuras encapuzadas comprando reagentes funerários em grande quantidade.",
+			"Mensageiros desaparecidos costumavam cruzar esta região antes de sumirem."
+		  ]
+		},
+		{
+		  "id": "arquivo_dos_desaparecidos",
+		  "nome": "Arquivo dos Desaparecidos",
+		  "tipo": "arquivo",
+		  "descricao": "Pequena ala reservada da escola onde são reunidos relatórios de pessoas, agentes e estudantes que desapareceram.",
+		  "informacoes": [
+			"Ao menos cinco investigadores dos Ecos sumiram nos últimos meses.",
+			"Todos investigavam conexões financeiras e religiosas ligadas ao Conclave da Noite Velada.",
+			"Um símbolo recorrente aparece em vários registros: uma lua negra fragmentada."
+		  ]
+		},
+		{
+		  "id": "estalagem_ultima_palavra",
+		  "nome": "Estalagem Última Palavra",
+		  "tipo": "taverna",
+		  "descricao": "Taverna frequentada por estudantes, escribas, mensageiros e informantes ocasionais.",
+		  "informacoes": [
+			"Informações úteis costumam aparecer entre discussões acadêmicas e apostas.",
+			"Rumores sugerem que membros do Conclave dos Descendentes usam intermediários locais para observar os Ecos."
+		  ]
+		}
+	  ],
+	  "eventos": [
+		{
+		  "id": "ecos_rastro_dos_descendentes",
+		  "nome": "Rastro dos Descendentes",
+		  "tipo": "investigacao",
+		  "descricao": "Um estudante pede ajuda aos aventureiros após o desaparecimento de sua mentora, que investigava o Conclave da Noite Velada.",
+		  "gatilho": "Os personagens visitam a Casa dos Ecos Profundos ou o Arquivo dos Desaparecidos.",
+		  "descobertas": [
+			"Os relatórios indicam encontros secretos entre membros do Conclave da Noite Velada e figuras públicas aparentemente sem ligação entre si.",
+			"Pagamentos cifrados aparecem em registros de comerciantes, sacerdotes e funcionários menores.",
+			"Uma nota incompleta menciona o nome 'Conclave dos Descendentes'."
+		  ],
+		  "teste": {
+			"tipo": "Investigacao",
+			"cd": 15
+		  },
+		  "recompensa": "Acesso restrito a arquivos internos e favor político dos Ecos."
+		}
+	  ]
+	}
 ];
