@@ -128,5 +128,198 @@ const DATA_LOCAIS = [
       "intuicao": 12
     },
     "segredo": "Um encadernador discreto mantém acesso a catálogos que não aparecem nos registros públicos da biblioteca."
+  },
+  {
+    "id": "evento_procissao_ultima_luz",
+    "bairro": "bairro_conclave",
+    "nome": "Procissão da Última Luz",
+    "tipo": "evento",
+    "descricao": "Ao cair da noite, sacerdotes e aprendizes percorrem a Cidade dos Mortos conduzindo lanternas pálidas entre os mausoléus. Nomes dos falecidos são recitados em voz baixa enquanto famílias deixam oferendas simples diante dos túmulos.",
+    "frequencia": "Semanal",
+    "participantes": [
+      "Sacerdotes do Conclave",
+      "Familiares dos mortos",
+      "Acólitos",
+      "Visitantes silenciosos"
+    ],
+    "informacoes_encontradas": [
+      "Mortes recentes na cidade",
+      "Movimentação de famílias nobres",
+      "Rumores vindos de outros bairros",
+      "Presença discreta de observadores do conselho"
+    ],
+    "testes": {
+      "religiao": 12,
+      "intuicao": 13,
+      "percepcao": 12
+    },
+    "segredo": "Nem todos os nomes pronunciados pertencem aos mortos. Alguns são usados como mensagens codificadas entre membros ocultos do clã."
+  },
+  {
+    "id": "evento_vigilia_veus",
+    "bairro": "bairro_conclave",
+    "nome": "Vigília dos Véus",
+    "tipo": "evento",
+    "descricao": "Durante noites de lua nova, o distrito entra em contemplação silenciosa. Velas azul-escuras são acesas nos pátios internos enquanto estudiosos debatem a relação entre memória, perda e o tecido da Trama.",
+    "frequencia": "Lua nova",
+    "participantes": [
+      "Estudiosos do Conclave",
+      "Monges visitantes",
+      "Sacerdotes estrangeiros"
+    ],
+    "informacoes_encontradas": [
+      "Relatos de fenômenos espirituais",
+      "Rumores vindos de outras regiões de Faerûn",
+      "Debates teológicos sobre magia e divindade"
+    ],
+    "testes": {
+      "religiao": 14,
+      "historia": 13,
+      "arcanismo": 14
+    },
+    "segredo": "Nas câmaras internas, alguns dos estudantes mais promissores são observados por mestres que procuram sinais de afinidade com Shar."
+  },
+  {
+    "id": "evento_julgamento_silencioso",
+    "bairro": "bairro_conclave",
+    "nome": "Julgamento Silencioso",
+    "tipo": "evento_secreto",
+    "descricao": "Cerimônia reservada em que estudantes avançados enfrentam provas de fé, memória e vontade. Apenas membros autorizados conhecem a verdadeira natureza do ritual.",
+    "frequencia": "Irregular",
+    "participantes": [
+      "Mestres do círculo interno",
+      "Estudantes selecionados"
+    ],
+    "informacoes_encontradas": [
+      "Desaparecimento temporário de aprendizes",
+      "Mudanças repentinas de comportamento",
+      "Ascensão silenciosa de novos agentes do clã"
+    ],
+    "testes": {
+      "investigacao": 16,
+      "intuicao": 15,
+      "furtividade": 15
+    },
+    "segredo": "Os aprovados são secretamente apresentados aos mistérios de Shar e tornam-se servidores ocultos da deusa."
+  },
+  {
+    "id": "poi_sala_ritos_finais",
+    "bairro": "bairro_conclave",
+    "nome": "Salão dos Ritos Finais",
+    "tipo": "templo",
+    "localizacao": "Cidade dos Mortos",
+    "descricao": "Um edifício de pedra branca e vitrais escurecidos onde os mortos são preparados antes do descanso. O ar carrega cheiro de incenso, cera e ervas preservativas.",
+    "encontravel": [
+      "Sacerdotes",
+      "Preparadores funerários",
+      "Famílias enlutadas"
+    ],
+    "informacoes_encontradas": [
+      "Registros de mortes recentes",
+      "Nomes de famílias influentes",
+      "Rumores sobre incidentes incomuns"
+    ],
+    "testes": {
+      "religiao": 11,
+      "investigacao": 13,
+      "persuasao": 12
+    },
+    "segredo": "Alguns corpos de interesse arcano são discretamente desviados antes de serem oficialmente sepultados."
+  },
+  {
+    "id": "poi_claustro_trama",
+    "bairro": "bairro_conclave",
+    "nome": "Claustro da Trama",
+    "tipo": "academia",
+    "localizacao": "Distrito interno do Conclave",
+    "descricao": "Pátios fechados, corredores silenciosos e salas de estudo onde magia arcana e liturgia são ensinadas lado a lado.",
+    "encontravel": [
+      "Aprendizes",
+      "Mestres",
+      "Visitantes religiosos"
+    ],
+    "informacoes_encontradas": [
+      "Estudos sobre fusão entre fé e magia",
+      "Textos litúrgicos de várias regiões de Faerûn",
+      "Debates filosóficos sobre divindade e Trama"
+    ],
+    "testes": {
+      "arcanismo": 13,
+      "religiao": 14,
+      "historia": 12
+    },
+    "segredo": "Alguns manuscritos possuem páginas falsas. As versões completas ficam em arquivos reservados ao círculo interno."
+  },
+  {
+    "id": "poi_cripta_setimo_veu",
+    "bairro": "bairro_conclave",
+    "nome": "Cripta do Sétimo Véu",
+    "tipo": "cripta",
+    "localizacao": "Subsolo da Cidade dos Mortos",
+    "descricao": "Uma cripta antiga, mais velha que boa parte do distrito. O local é frio, abafado e marcado por inscrições apagadas pelo tempo.",
+    "encontravel": [
+      "Guardas silenciosos",
+      "Acólitos veteranos",
+      "Visitantes raros autorizados"
+    ],
+    "informacoes_encontradas": [
+      "Sepulturas de antigos mestres",
+      "Relíquias funerárias",
+      "Inscrições arcanas de eras passadas"
+    ],
+    "testes": {
+      "percepcao": 14,
+      "investigacao": 15,
+      "religiao": 15
+    },
+    "segredo": "Uma porta de pedra oculta conduz a um santuário subterrâneo dedicado secretamente a Shar."
+  },
+  {
+    "id": "poi_arquivo_peregrinos",
+    "bairro": "bairro_conclave",
+    "nome": "Arquivo dos Peregrinos",
+    "tipo": "arquivo",
+    "localizacao": "Ala norte do distrito",
+    "descricao": "Prateleiras de pergaminhos e códices guardam relatos, cartas e registros trazidos por sacerdotes e viajantes de diversas partes de Faerûn.",
+    "encontravel": [
+      "Escribas",
+      "Mensageiros religiosos",
+      "Pesquisadores"
+    ],
+    "informacoes_encontradas": [
+      "Rumores regionais",
+      "Movimentação de cultos e ordens",
+      "Relatos de crises espirituais e fenômenos divinos"
+    ],
+    "testes": {
+      "investigacao": 13,
+      "historia": 13,
+      "persuasao": 11
+    },
+    "segredo": "O arquivo mantém uma coleção separada de correspondências codificadas que circulam apenas entre os iniciados do círculo oculto."
+  },
+  {
+    "id": "poi_jardim_memoria",
+    "bairro": "bairro_conclave",
+    "nome": "Jardim da Memória",
+    "tipo": "praca_sagrada",
+    "localizacao": "Centro da Cidade dos Mortos",
+    "descricao": "Caminhos de pedra cercam árvores antigas e pequenos espelhos d’água. O lugar é usado para oração silenciosa, meditação e despedidas discretas.",
+    "encontravel": [
+      "Visitantes",
+      "Acólitos",
+      "Monges contemplativos"
+    ],
+    "informacoes_encontradas": [
+      "Conversas privadas",
+      "Rumores sobre desaparecimentos",
+      "Observação de visitantes incomuns"
+    ],
+    "testes": {
+      "percepcao": 12,
+      "intuicao": 13,
+      "furtividade": 12
+    },
+    "segredo": "Durante certas noites, sombras parecem se mover entre as árvores mesmo quando não há vento."
   }
 ];
