@@ -74,8 +74,8 @@ const DATA_LOCAIS = {
 			  "investigacao": 12
 			},
 			"segredo": "Um pequeno grupo de estudantes reuniu evidências de que mensagens cifradas circulam entre membros infiltrados do Conclave dos Descendentes."
-		  },
-		  {
+		},
+		{
 			"id": "poi_arquivo_dos_primeiros_nom es",
 			"tipo": "ponto_interesse",
 			"bairro": "bairro_ecos",
@@ -97,7 +97,54 @@ const DATA_LOCAIS = {
 			  "historia": 13
 			},
 			"segredo": "Parte do acervo foi adulterada. Alguém removeu deliberadamente menções a um antigo mestre que mais tarde fundou uma célula secreta do Conclave dos Descendentes."
-		  }
+		},
+		{
+			"id": "poi_patio_das_lancas",
+			"tipo": "ponto_interesse",
+			"bairro": "bairro_soldados_bronze",
+			"nome": "Pátio das Lanças",
+			"categoria_local": "quartel",
+			"descricao": "Um amplo pátio de pedra marcado por círculos de treino, suportes de armas e estandartes de campanhas passadas. Durante o dia, recrutas treinam sob a supervisão rigorosa de veteranos.",
+			"tags": [
+			  "treinamento",
+			  "guarda",
+			  "soldados"
+			],
+			"informacoes_encontradas": [
+			  "Novos recrutas estão sendo preparados em número incomum.",
+			  "Capitães discutem reforço de patrulhas em North Ward e Cidade dos Mortos.",
+			  "Relatórios recentes mencionam movimentações subterrâneas perto das muralhas antigas."
+			],
+			"testes": {
+			  "atletismo": 12,
+			  "percepcao": 13,
+			  "intuicao": 12
+			},
+			"segredo": "Alguns veteranos acreditam que a mobilização atual não responde apenas a ameaças externas, mas a um conflito interno ainda não revelado."
+		},
+		{
+			"id": "poi_sala_das_vigias",
+			"tipo": "ponto_interesse",
+			"bairro": "bairro_soldados_bronze",
+			"nome": "Sala das Vigias",
+			"categoria_local": "torre",
+			"descricao": "Uma torre central onde mapas vivos, runas de alerta e registros de patrulha são atualizados diariamente por escribas militares e magos de observação.",
+			"tags": [
+			  "vigilancia",
+			  "mapas",
+			  "inteligencia"
+			],
+			"informacoes_encontradas": [
+			  "Mapas apontam áreas de atividade incomum em túneis antigos sob a cidade.",
+			  "Patrulhas desapareceram brevemente perto de criptas abandonadas.",
+			  "Oficiais registraram sinais mágicos anômalos vindos da ala norte."
+			],
+			"testes": {
+			  "investigacao": 14,
+			  "arcana": 13
+			},
+			"segredo": "Parte dos registros foi selada por ordem superior após mencionar símbolos ligados a Shar e a um círculo de conspiradores ainda sem nome oficial."
+		}
 	],
 	"eventos": [
 		{
@@ -247,6 +294,57 @@ const DATA_LOCAIS = {
 			  "religiao": 14
 			},
 			"segredo": "O mapa aponta para um mausoléu abandonado que funciona como uma entrada secundária para uma base do Conclave dos Descendentes."
+		},
+		{
+			"id": "evento_toque_do_bronze",
+			"tipo": "evento",
+			"bairro": "bairro_soldados_bronze",
+			"nome": "Toque do Bronze",
+			"categoria_local": "quartel",
+			"descricao": "Sempre que a cidade percebe sinais de perigo, sinos graves ecoam de Castle Ward. Guardas, mensageiros e magos de campo se reúnem rapidamente para distribuir ordens e estabelecer posições.",
+			"frequencia": "Condicional",
+			"participantes": [
+			  "Capitães da guarda",
+			  "Magos militares",
+			  "Mensageiros",
+			  "Patrulheiros"
+			],
+			"informacoes_encontradas": [
+			  "Protocolos de defesa para crises urbanas.",
+			  "Reforços enviados a pontos sensíveis da cidade.",
+			  "Rumores de que algo se move sob as fundações de Waterdeep."
+			],
+			"testes": {
+			  "percepcao": 12,
+			  "intuicao": 14,
+			  "persuasao": 13
+			},
+			"segredo": "Em meio à mobilização, um oficial veterano menciona que a última vez que esse protocolo foi ativado coincidiu com desaparecimentos ligados a uma sociedade arcana clandestina."
+		},
+		{
+			"id": "evento_julgamento_da_guarda",
+			"tipo": "evento",
+			"bairro": "bairro_soldados_bronze",
+			"nome": "Julgamento da Guarda",
+			"categoria_local": "fortaleza",
+			"descricao": "Oficiais, conselheiros e testemunhas se reúnem para julgar falhas graves de patrulha, deserção ou suspeitas de corrupção interna.",
+			"frequencia": "Ocasional",
+			"participantes": [
+			  "Oficiais superiores",
+			  "Guardas",
+			  "Escribas",
+			  "Representantes do conselho"
+			],
+			"informacoes_encontradas": [
+			  "Alguns patrulheiros desapareceram durante rondas subterrâneas.",
+			  "Há registros contraditórios sobre ordens vindas de fora da cadeia militar.",
+			  "Uma investigação discreta foi aberta sobre infiltração política."
+			],
+			"testes": {
+			  "intuicao": 14,
+			  "investigacao": 15
+			},
+			"segredo": "Um guarda condenado tentou avisar que viu agentes usando insígnias falsas da guarda enquanto transportavam caixas para criptas antigas."
 		}
 	],
 	"npcs": [
@@ -361,6 +459,55 @@ const DATA_LOCAIS = {
 			  "intuicao": 14
 			},
 			"segredo": "Descobriu que parte do Conclave e parte dos Ecos pertencem à mesma estrutura oculta: o Conclave dos Descendentes."
+		},
+		{
+			"id": "npc_braen_halvar",
+			"tipo": "npc",
+			"bairro": "bairro_soldados_bronze",
+			"nome": "Braen Halvar",
+			"raca": "Humano",
+			"funcao": "Capitão da guarda",
+			"descricao": "Homem robusto de barba curta e postura rígida, vestindo armadura de placas bronzeadas com capa vermelha escura e manoplas marcadas pelo uso.",
+			"tags": [
+			  "capitao",
+			  "guarda",
+			  "autoridade"
+			],
+			"informacoes": [
+			  "Coordena patrulhas em Castle Ward.",
+			  "Desconfia de movimentações fora do padrão entre alguns oficiais.",
+			  "Mantém relatórios sigilosos sobre túneis antigos."
+			],
+			"interacao": {
+			  "persuasao": 14,
+			  "intuicao": 12
+			},
+			"segredo": "Acredita que a ameaça atual não é apenas criminal e procura aliados discretos fora da cadeia de comando."
+		},
+		{
+			"id": "npc_seris_valen",
+			"tipo": "npc",
+			"bairro": "bairro_soldados_bronze",
+			"nome": "Seris Valen",
+			"raca": "Elfa",
+			"funcao": "Magistra de vigilância arcana",
+			"descricao": "Elfa de cabelos escuros presos em trança curta, vestindo túnica militar azul profunda sob peitoral de bronze gravado com runas de observação.",
+			"tags": [
+			  "arcana",
+			  "vigilancia",
+			  "investigacao"
+			],
+			"informacoes": [
+			  "Analisa anomalias mágicas nos mapas de vigilância.",
+			  "Notou padrões de atividade subterrânea em regiões distantes entre si.",
+			  "Mantém comunicação reservada com estudiosos de outros clãs."
+			],
+			"interacao": {
+			  "arcana": 14,
+			  "investigacao": 14,
+			  "persuasao": 13
+			},
+			"segredo": "Suspeita que as ocorrências recentes formam um desenho geométrico ritual sob a cidade, mas ainda não conseguiu provar."
 		}
 	]
 };
