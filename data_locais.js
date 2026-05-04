@@ -1,7 +1,6 @@
 
 const DATA_LOCAIS = [
-  {
-	  "pontos_interesse": [
+	"pontos_interesse": [
 		{
 		  "id": "biblioteca_grande_atrio",
 		  "bairro_id": "bairro_biblioteca",
@@ -53,8 +52,8 @@ const DATA_LOCAIS = [
 			"Algumas conversas importantes acontecem ali após o fechamento da biblioteca."
 		  ]
 		}
-	  ],
-	  "eventos": [
+	],
+	"eventos": [
 		{
 		  "id": "evento_assembleia_dos_estudiosos",
 		  "bairro_id": "bairro_biblioteca",
@@ -116,8 +115,8 @@ const DATA_LOCAIS = [
 		  },
 		  "segredo": "Entre os manuscritos, alguns trechos foram removidos com precisão cirúrgica ao longo dos anos."
 		}
-	  ],
-	  "npcs": [
+	],
+	"npcs": [
 		{
 		  "id": "npc_eloran_thess",
 		  "bairro_id": "bairro_biblioteca",
@@ -160,6 +159,5 @@ const DATA_LOCAIS = [
 			"Às vezes troca informações por acesso a documentos raros."
 		  ]
 		}
-	  ]
-	}
+	]
 ];
