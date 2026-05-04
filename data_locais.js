@@ -607,6 +607,57 @@ const DATA_LOCAIS = {
 			  "persuasao": 13
 			},
 			"segredo": "Suspeita que as ocorrências recentes formam um desenho geométrico ritual sob a cidade, mas ainda não conseguiu provar."
+		},
+		{
+			"id": "evento_feira_das_rotas",
+			"tipo": "evento",
+			"bairro": "bairro_veu_astral",
+			"nome": "Feira das Rotas",
+			"categoria_local": "mercado",
+			"descricao": "Uma vez por tenday, capitães de caravanas, mestres de navio, cambistas e magos do Véu Astral se reúnem para negociar novas rotas, seguros e direitos de passagem.",
+			"frequencia": "A cada dez dias",
+			"participantes": [
+			  "Mercadores",
+			  "Capitães de caravanas",
+			  "Magos de transporte",
+			  "Representantes de casas comerciais"
+			],
+			"informacoes_encontradas": [
+			  "Mudanças recentes nas rotas terrestres e marítimas.",
+			  "Mercadorias valiosas aguardadas nos próximos dias.",
+			  "Boatos sobre um aumento de escoltas discretas em trajetos específicos."
+			],
+			"testes": {
+			  "persuasao": 12,
+			  "intuicao": 13,
+			  "investigacao": 12
+			},
+			"segredo": "Um mercador embriagado comenta que certas cargas nunca chegam aos armazéns declarados, desaparecendo sob a cidade."
+		},
+		{
+			"id": "evento_nevoa_de_transito",
+			"tipo": "evento",
+			"bairro": "bairro_veu_astral",
+			"nome": "Névoa de Trânsito",
+			"categoria_local": "portal",
+			"descricao": "Em noites raras, uma interferência astral cobre o Pórtico das Passagens com névoa azulada e distorce por alguns minutos a malha de teleporte local.",
+			"frequencia": "Ocasional",
+			"participantes": [
+			  "Magos do Véu Astral",
+			  "Guardas mercantis",
+			  "Despachantes"
+			],
+			"informacoes_encontradas": [
+			  "Portais registram destinos não catalogados.",
+			  "Uma rota breve parece apontar para câmaras subterrâneas antigas.",
+			  "Mensageiros evitam comentar o ocorrido em voz alta."
+			],
+			"testes": {
+			  "arcana": 14,
+			  "investigacao": 15,
+			  "percepcao": 13
+			},
+			"segredo": "Durante a distorção, um fragmento de coordenadas arcanas revela uma passagem oculta usada por agentes do Conclave dos Descendentes."
 		}
 	]
 };
