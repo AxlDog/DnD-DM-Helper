@@ -113,7 +113,7 @@ const DATA_LOJA = {
         ]
       }
   ]},
-
+  
   Gear: {
   categorias: [
     {
@@ -133,5 +133,118 @@ const DATA_LOJA = {
 		{ nome: "Lembas", peso: "2 lb", custo: "2 GP", raridade: "Raro" }
       ]
     }
-  ]}
+  ]},
+  SpellScrolls: {
+	  categorias: [
+		{
+		  categoria: "Cantrip",
+		  itens: [
+			{ nome: "Pergaminho de Truque", peso: "-", custo: "15 GP", raridade: "Comum" }
+		  ]
+		},
+		{
+		  categoria: "Nível 1",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 1º Nível", peso: "-", custo: "50 GP", raridade: "Comum" }
+		  ]
+		},
+		{
+		  categoria: "Nível 2",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 2º Nível", peso: "-", custo: "150 GP", raridade: "Incomum" }
+		  ]
+		},
+		{
+		  categoria: "Nível 3",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 3º Nível", peso: "-", custo: "300 GP", raridade: "Incomum" }
+		  ]
+		},
+		{
+		  categoria: "Nível 4",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 4º Nível", peso: "-", custo: "1000 GP", raridade: "Raro" }
+		  ]
+		},
+		{
+		  categoria: "Nível 5",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 5º Nível", peso: "-", custo: "1500 GP", raridade: "Raro" }
+		  ]
+		},
+		{
+		  categoria: "Nível 6",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 6º Nível", peso: "-", custo: "10000 GP", raridade: "Muito Raro" }
+		  ]
+		},
+		{
+		  categoria: "Nível 7",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 7º Nível", peso: "-", custo: "12500 GP", raridade: "Muito Raro" }
+		  ]
+		},
+		{
+		  categoria: "Nível 8",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 8º Nível", peso: "-", custo: "15000 GP", raridade: "Lendário" }
+		  ]
+		},
+		{
+		  categoria: "Nível 9",
+		  itens: [
+			{ nome: "Pergaminho de Magia de 9º Nível", peso: "-", custo: "50000 GP", raridade: "Lendário" }
+		  ]
+		}
+	  ]
+	},
+	WaterdeepArcano: {
+	  categorias: [
+		{
+		  categoria: "Poções",
+		  itens: [
+			{ nome: "Poção de Cura", peso: "0.5 lb", custo: "50 GP", raridade: "Comum" },
+			{ nome: "Poção de Cura Maior", peso: "0.5 lb", custo: "150 GP", raridade: "Incomum" },
+			{ nome: "Poção de Cura Superior", peso: "0.5 lb", custo: "450 GP", raridade: "Raro" },
+			{ nome: "Poção de Cura Suprema", peso: "0.5 lb", custo: "1350 GP", raridade: "Muito Raro" },
+			{ nome: "Poção de Escalada", peso: "0.5 lb", custo: "180 GP", raridade: "Incomum" },
+			{ nome: "Poção de Respiração Aquática", peso: "0.5 lb", custo: "220 GP", raridade: "Incomum" },
+			{ nome: "Poção de Invisibilidade", peso: "0.5 lb", custo: "900 GP", raridade: "Muito Raro" },
+			{ nome: "Poção de Velocidade", peso: "0.5 lb", custo: "1000 GP", raridade: "Muito Raro" }
+		  ]
+		},
+		{
+		  categoria: "Componentes Mágicos",
+		  itens: [
+			{ nome: "Pó de Prata (por 10 GP)", peso: "-", custo: "10 GP", raridade: "Comum" },
+			{ nome: "Incenso Ritual", peso: "-", custo: "5 GP", raridade: "Comum" },
+			{ nome: "Pérola polida para Identificar", peso: "-", custo: "100 GP", raridade: "Comum" },
+			{ nome: "Diamante pequeno", peso: "-", custo: "300 GP", raridade: "Incomum" },
+			{ nome: "Diamante refinado", peso: "-", custo: "500 GP", raridade: "Raro" },
+			{ nome: "Diamante consagrado", peso: "-", custo: "1000 GP", raridade: "Raro" },
+			{ nome: "Cristal focal arcano", peso: "1 lb", custo: "50 GP", raridade: "Comum" },
+			{ nome: "Essência elemental selada", peso: "0.5 lb", custo: "250 GP", raridade: "Raro" },
+			{ nome: "Tinta arcana para grimório", peso: "-", custo: "10 GP", raridade: "Comum" },
+			{ nome: "Pergaminho alquímico em branco", peso: "-", custo: "25 GP", raridade: "Comum" }
+		  ]
+		},
+		{
+		  categoria: "Serviços Arcanos",
+		  itens: [
+			{ nome: "Identificar item mágico", peso: "-", custo: "20 GP", raridade: "Comum" },
+			{ nome: "Lançar magia de 1º nível", peso: "-", custo: "25 GP", raridade: "Comum" },
+			{ nome: "Lançar magia de 2º nível", peso: "-", custo: "60 GP", raridade: "Incomum" },
+			{ nome: "Lançar magia de 3º nível", peso: "-", custo: "120 GP", raridade: "Incomum" },
+			{ nome: "Lançar magia de 4º nível", peso: "-", custo: "250 GP", raridade: "Raro" },
+			{ nome: "Lançar magia de 5º nível", peso: "-", custo: "500 GP", raridade: "Raro" },
+			{ nome: "Remover maldição", peso: "-", custo: "150 GP", raridade: "Incomum" },
+			{ nome: "Restauração menor", peso: "-", custo: "75 GP", raridade: "Comum" },
+			{ nome: "Restauração maior", peso: "-", custo: "450 GP", raridade: "Raro" },
+			{ nome: "Teleporte urbano dentro de Waterdeep", peso: "-", custo: "80 GP", raridade: "Incomum" },
+			{ nome: "Consulta oracular ou adivinhação", peso: "-", custo: "200 GP", raridade: "Raro" },
+			{ nome: "Vincular familiar ou espírito menor", peso: "-", custo: "120 GP", raridade: "Incomum" }
+		  ]
+		}
+	  ]
+	}
 };
