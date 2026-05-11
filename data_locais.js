@@ -2,7 +2,6 @@ const DATA_LOCAIS = {
 	"pontos_interesse": [
 		{
 			"id": "biblioteca_grande_atrio",
-			"bairro_id": "bairro_id_biblioteca",
 			"nome": "Grande Átrio da Biblioteca",
 			"tipo": "biblioteca",
 			"descricao": "Uma vasta nave circular de pedra clara, com galerias suspensas e escadarias curvas que conduzem a salões de leitura e arquivos centrais.",
@@ -19,7 +18,6 @@ const DATA_LOCAIS = {
 		},
 		{
 			"id": "biblioteca_sala_dos_catalogos",
-			"bairro_id": "bairro_id_biblioteca",
 			"nome": "Sala dos Catálogos",
 			"tipo": "arquivo",
 			"descricao": "Uma sala silenciosa repleta de armários de madeira escura, gavetas numeradas e registros encantados que respondem a palavras-chave.",
@@ -36,7 +34,6 @@ const DATA_LOCAIS = {
 		},
 		{
 			"id": "biblioteca_jardim_das_lamparas",
-			"bairro_id": "bairro_id_biblioteca",
 			"nome": "Jardim das Lâmpadas",
 			"tipo": "jardim",
 			"descricao": "Um pequeno pátio interno cercado por colunatas, onde lâmpadas encantadas permanecem acesas durante toda a noite.",
@@ -54,7 +51,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_patio_das_vozes",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_ecos",
 			"nome": "Pátio das Vozes",
 			"categoria_local": "campus",
 			"descricao": "Um grande pátio central onde estudantes debatem filosofia arcana, política e notícias da cidade. Pequenos círculos de discussão se formam a qualquer hora do dia.",
@@ -78,7 +74,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_arquivo_dos_primeiros_nom es",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_ecos",
 			"nome": "Arquivo dos Primeiros Nomes",
 			"categoria_local": "arquivo",
 			"descricao": "Salas de pedra repletas de registros de admissão, genealogias e tratados acadêmicos antigos. Muitos dos primeiros fundadores dos Ecos estão documentados aqui.",
@@ -101,7 +96,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_patio_das_lancas",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_soldados_bronze",
 			"nome": "Pátio das Lanças",
 			"categoria_local": "quartel",
 			"descricao": "Um amplo pátio de pedra marcado por círculos de treino, suportes de armas e estandartes de campanhas passadas. Durante o dia, recrutas treinam sob a supervisão rigorosa de veteranos.",
@@ -125,7 +119,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_sala_das_vigias",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_soldados_bronze",
 			"nome": "Sala das Vigias",
 			"categoria_local": "torre",
 			"descricao": "Uma torre central onde mapas vivos, runas de alerta e registros de patrulha são atualizados diariamente por escribas militares e magos de observação.",
@@ -148,7 +141,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_portico_das_passagens",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_veu_astral",
 			"nome": "Pórtico das Passagens",
 			"categoria_local": "portal",
 			"descricao": "Uma galeria de arcos rúnicos conectada a plataformas de embarque, depósitos e escritórios de despacho. Mercadores, mensageiros e magos de trânsito circulam constantemente pelo local.",
@@ -172,7 +164,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_casa_dos_contratos_velados",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_veu_astral",
 			"nome": "Casa dos Contratos Velados",
 			"categoria_local": "casa mercantil",
 			"descricao": "Um edifício elegante de pedra clara e vitrais escuros onde acordos comerciais, direitos de passagem e garantias de transporte são negociados em salas privadas.",
@@ -196,7 +187,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_quadro_dos_sete_ventos",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_circulo_lua",
 			"nome": "Quadro dos Sete Ventos",
 			"categoria_local": "praca",
 			"descricao": "Um grande mural de madeira negra protegido por vidro encantado. Avisos, recompensas, pedidos de investigação e mensagens codificadas aparecem e desaparecem ao longo do dia.",
@@ -220,7 +210,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "poi_observatorio_do_arco_prateado",
 			"tipo": "ponto_interesse",
-			"bairro_id": "bairro_id_circulo_lua",
 			"nome": "Observatório do Arco Prateado",
 			"categoria_local": "observatorio",
 			"descricao": "Uma torre circular de pedra clara com lunetas arcanas, mapas celestes e mesas cobertas de anotações de campo. Dali, vigias observam a estrada sul e acompanham sinais vindos de fora da cidade.",
@@ -244,7 +233,6 @@ const DATA_LOCAIS = {
 	"eventos": [
 		{
 			"id": "evento_assembleia_dos_estudiosos",
-			"bairro_id": "bairro_id_biblioteca",
 			"local_id": "biblioteca_grande_atrio",
 			"nome": "Assembleia dos Estudiosos",
 			"tipo": "evento",
@@ -275,7 +263,6 @@ const DATA_LOCAIS = {
 		},
 		{
 			"id": "evento_noite_dos_manuscritos",
-			"bairro_id": "bairro_id_biblioteca",
 			"local_id": "biblioteca_sala_dos_catalogos",
 			"nome": "Noite dos Manuscritos",
 			"tipo": "evento",
@@ -305,7 +292,6 @@ const DATA_LOCAIS = {
 		},
 		{
 			"id": "evento_sussurros_do_catalogo",
-			"bairro_id": "bairro_id_biblioteca",
 			"local_id": "biblioteca_sala_dos_catalogos",
 			"nome": "Sussurros do Catálogo",
 			"tipo": "evento",
@@ -342,7 +328,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_forum_das_cadeiras_abertas",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_ecos",
 			"nome": "Fórum das Cadeiras Abertas",
 			"categoria_local": "auditorio",
 			"descricao": "Semanalmente professores e estudantes se reúnem em um auditório aberto para discutir decisões do conselho mágico e apresentar críticas públicas.",
@@ -368,7 +353,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_sombras_no_arquivo",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_ecos",
 			"nome": "Sombras no Arquivo",
 			"categoria_local": "arquivo",
 			"descricao": "Em uma noite silenciosa, guardiões percebem movimentação entre as estantes seladas do Arquivo dos Primeiros Nomes.",
@@ -393,7 +377,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_toque_do_bronze",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_soldados_bronze",
 			"nome": "Toque do Bronze",
 			"categoria_local": "quartel",
 			"descricao": "Sempre que a cidade percebe sinais de perigo, sinos graves ecoam de Castle Ward. Guardas, mensageiros e magos de campo se reúnem rapidamente para distribuir ordens e estabelecer posições.",
@@ -419,7 +402,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_julgamento_da_guarda",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_soldados_bronze",
 			"nome": "Julgamento da Guarda",
 			"categoria_local": "fortaleza",
 			"descricao": "Oficiais, conselheiros e testemunhas se reúnem para julgar falhas graves de patrulha, deserção ou suspeitas de corrupção interna.",
@@ -444,7 +426,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_feira_das_rotas",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_veu_astral",
 			"nome": "Feira das Rotas",
 			"categoria_local": "mercado",
 			"descricao": "Uma vez por tenday, capitães de caravanas, mestres de navio, cambistas e magos do Véu Astral se reúnem para negociar novas rotas, seguros e direitos de passagem.",
@@ -470,7 +451,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_nevoa_de_transito",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_veu_astral",
 			"nome": "Névoa de Trânsito",
 			"categoria_local": "portal",
 			"descricao": "Em noites raras, uma interferência astral cobre o Pórtico das Passagens com névoa azulada e distorce por alguns minutos a malha de teleporte local.",
@@ -495,7 +475,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_partida_dos_luminares",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_circulo_lua",
 			"nome": "Partida dos Luminares",
 			"categoria_local": "portao",
 			"descricao": "Ao amanhecer, grupos de exploradores, estudiosos e aventureiros se reúnem no portão sul para receber tarefas, mapas e instruções antes de partirem.",
@@ -521,7 +500,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_reuniao_da_lua_velada",
 			"tipo": "evento",
-			"bairro_id": "bairro_id_circulo_lua",
 			"nome": "Reunião da Lua Velada",
 			"categoria_local": "arquivo",
 			"descricao": "Em noites de lua nova, investigadores veteranos e observadores de campo compartilham descobertas recentes em uma sala reservada sob o observatório.",
@@ -548,7 +526,6 @@ const DATA_LOCAIS = {
 	"npcs": [
 		{
 			"id": "npc_eloran_thess",
-			"bairro_id": "bairro_id_biblioteca",
 			"local_id": "biblioteca_sala_dos_catalogos",
 			"nome": "Eloran Thess",
 			"tipo": "npc",
@@ -569,7 +546,6 @@ const DATA_LOCAIS = {
 		},
 		{
 			"id": "npc_maelis_varn",
-			"bairro_id": "bairro_id_biblioteca",
 			"local_id": "biblioteca_jardim_das_lamparas",
 			"nome": "Maelis Varn",
 			"tipo": "npc",
@@ -590,7 +566,6 @@ const DATA_LOCAIS = {
 		},
 		{
 			"id": "npc_selvar_ioren",
-			"bairro_id": "bairro_biblioteca",
 			"local_id": "biblioteca_grande_atrio",
 			"nome": "Selvar Ioren",
 			"tipo": "npc",
@@ -612,7 +587,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "npc_elyra_voss",
 			"tipo": "npc",
-			"bairro_id": "bairro_ecos",
 			"nome": "Elyra Voss",
 			"raca": "Humana",
 			"funcao": "Arquivista dos Ecos",
@@ -636,7 +610,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "npc_taeron_fell",
 			"tipo": "npc",
-			"bairro_id": "bairro_ecos",
 			"nome": "Taeron Fell",
 			"raca": "Tiefling",
 			"funcao": "Professor de história arcana",
@@ -661,7 +634,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "npc_braen_halvar",
 			"tipo": "npc",
-			"bairro_id": "bairro_soldados_bronze",
 			"nome": "Braen Halvar",
 			"raca": "Humano",
 			"funcao": "Capitão da guarda",
@@ -685,7 +657,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "npc_seris_valen",
 			"tipo": "npc",
-			"bairro_id": "bairro_soldados_bronze",
 			"nome": "Seris Valen",
 			"raca": "Elfa",
 			"funcao": "Magistra de vigilância arcana",
@@ -710,7 +681,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_feira_das_rotas",
 			"tipo": "evento",
-			"bairro_id": "bairro_veu_astral",
 			"nome": "Feira das Rotas",
 			"categoria_local": "mercado",
 			"descricao": "Uma vez por tenday, capitães de caravanas, mestres de navio, cambistas e magos do Véu Astral se reúnem para negociar novas rotas, seguros e direitos de passagem.",
@@ -736,7 +706,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "evento_nevoa_de_transito",
 			"tipo": "evento",
-			"bairro_id": "bairro_veu_astral",
 			"nome": "Névoa de Trânsito",
 			"categoria_local": "portal",
 			"descricao": "Em noites raras, uma interferência astral cobre o Pórtico das Passagens com névoa azulada e distorce por alguns minutos a malha de teleporte local.",
@@ -761,7 +730,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "npc_miraen_thalos",
 			"tipo": "npc",
-			"bairro_id": "bairro_circulo_lua",
 			"nome": "Miraen Thalos",
 			"raca": "Humana",
 			"funcao": "Mestra dos avisos",
@@ -785,7 +753,6 @@ const DATA_LOCAIS = {
 		{
 			"id": "npc_caelen_oris",
 			"tipo": "npc",
-			"bairro_id": "bairro_id_circulo_lua",
 			"nome": "Caelen Oris",
 			"raca": "Elfo",
 			"funcao": "Investigador de campo",
