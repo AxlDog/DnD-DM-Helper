@@ -657,9 +657,9 @@ function renderBairroView(bairroId) {
   area.innerHTML = ""; // Limpa a área para renderizar o novo conteúdo
 
   // Filtrar os dados pelo bairro selecionado
-  const pois = DATA_LOCAIS.pontos_interesse ? DATA_LOCAIS.pontos_interesse.filter(p => p.bairro_id === bairroId) : [];
-  const eventos = DATA_LOCAIS.eventos ? DATA_LOCAIS.eventos.filter(e => e.bairro_id === bairroId) : [];
-  const npcs = DATA_LOCAIS.npcs ? DATA_LOCAIS.npcs.filter(n => n.bairro_id === bairroId) : [];
+  const pois = DATA_LOCAIS.pontos_interesse ? DATA_LOCAIS.pontos_interesse.filter(p => p.local_id === bairroId) : [];
+  const eventos = DATA_LOCAIS.eventos ? DATA_LOCAIS.eventos.filter(e => e.local_id === bairroId) : [];
+  const npcs = DATA_LOCAIS.npcs ? DATA_LOCAIS.npcs.filter(n => n.local_id === bairroId) : [];
 
   // 1. Renderizar PONTOS DE INTERESSE
   if (pois.length > 0) {
