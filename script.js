@@ -247,6 +247,17 @@ function loadNPCCreator() {
             </optgroup>
           </select>
         </div>
+		
+		<div class="form-group">
+          <label>🛠️ Genero</label>
+          <select id="genderSelect" class="input-rpg">
+            <option value="">🎲 Aleatório</option>
+            <optgroup label="Genero">
+              <option value="Feminino">Feminino</option>
+              <option value="Masculino">Masculino</option>
+            </optgroup>
+          </select>
+        </div>
       </div>
 
       <div class="actions-row mt-4">
@@ -297,12 +308,13 @@ function criarNPC() {
 async function handleGerarNPC() {
   const raca = document.getElementById('racaSelect').value;
   const classe = document.getElementById('classeSelect').value;
+  const genero = document.getElementById('genderSelect').value;
   
   // Feedback visual de carregamento
   const preview = document.getElementById("npcPreview");
   preview.innerHTML = `<div class="loading-container">🪄 Tecendo a alma do NPC...</div>`;
   
-  await gerarNPC(raca, classe);
+  await gerarNPC(raca, classe, genero);
 }
 
 // Função auxiliar para coletar os dados do formulário acima
@@ -369,9 +381,9 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
   }
 }
 
-async function gerarNPC(racaSelecionada = "", classeSelecionada = "") {
+async function gerarNPC(racaSelecionada = "", classeSelecionada = "", genderSelecionado = "") {
   const sorteio = Math.floor(Math.random() * 100);
-  const sexo = (sorteio % 2 === 0) ? "Masculino" : "Feminino";
+  const sexo = genderSelecionado || "Masculino";
   const raca = racaSelecionada || "Humano";
   const classe = classeSelecionada || "Camponês";
 
