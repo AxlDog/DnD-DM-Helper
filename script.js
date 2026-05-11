@@ -817,54 +817,6 @@ function openGenericModal(objeto, tituloPadrao) {
     `;
   });
 
-  // --- SEÇÃO DE EDIÇÃO (Apenas para NPCs) ---
-  // Identificamos se é NPC pela presença de 'raca' e ausência de atributos de itens
-  let editSectionHtml = "";
-  if (dataCompleta.raca && !dataCompleta.dano) {
-    // Codificamos o metadata para não quebrar o HTML com aspas
-    const metadataString = encodeURIComponent(JSON.stringify(objeto.metadata || {}));
-
-    editSectionHtml = `
-      <div class="npc-edit-box">
-        <h4>📝 Adicionar Anotação Técnica</h4>
-        <div class="edit-inputs">
-          <input type="text" id="editKey" placeholder="Título da Nota (ex: Itens, Fraqueza...)">
-          <textarea id="editValue" placeholder="Conteúdo da anotação..."></textarea>
-          <button class="btn-update-npc" 
-                  onclick="prepararEdicaoNPC('${objeto.id}', '${metadataString}')">
-            💾 Salvar Alteração
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  body.innerHTML = `
-    <div class="local-modal-container">
-      <header class="local-modal-header">
-        <h2>${tituloPrincipal}</h2>
-      </header>
-      <div class="local-modal-scroll">
-        <div class="local-modal-grid" id="modalFields">
-          ${colunasHtml}
-        </div>
-        ${editSectionHtml} 
-      </div>
-      <div id="modalFooter" class="modal-footer"></div>
-    </div>
-  `;
-
-  const footer = document.getElementById("modalFooter");
-  footer.innerHTML = ""; 
-
-  if (dataCompleta.dano || dataCompleta.classeArmadura) {
-    footer.innerHTML = `
-      <button class="btn-forja" onclick='ativarEdicaoItem(${JSON.stringify(dataCompleta)})'>
-        ⚒️ Abrir na Forja
-      </button>
-    `;
-  }
-
   modal.classList.remove("hidden");
 }
 
