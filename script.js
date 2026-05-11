@@ -845,9 +845,9 @@ function openGenericModal(objeto, tituloPadrao) {
 
     // O formatarValor(valor) fará a mágica de extrair e exibir qualquer sub-item!
     colunasHtml += `
-      <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1);" class="${chaveLower === 'segredo' ? 'secret-info' : ''}">
+      <div class="${chaveLower === 'segredo' ? 'secret-info' : ''}">
         <strong style="color: #E69A28; font-size: 1.1em;">${label}:</strong>
-        <div style="margin-top: 5px; color: #ddd; font-size: 0.95em;">${formatarValor(valor)}</div>
+        <div style="margin-top: 5px; color: #541a7f; font-size: 0.95em;">${formatarValor(valor)}</div>
       </div>
     `;
   });
@@ -855,8 +855,8 @@ function openGenericModal(objeto, tituloPadrao) {
   // Renderização e reconstrução visual do modal no HTML
   body.innerHTML = `
     <div class="local-modal-container" style="padding: 20px;">
-      <header class="local-modal-header" style="border-bottom: 2px solid #E69A28; padding-bottom: 10px; margin-bottom: 20px;">
-        <h2 style="color: #E69A28; margin: 0;">${tituloPrincipal}</h2>
+      <header class="local-modal-header" style="border-bottom: 2px solid #6c1fa5; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2 style="color: #6c1fa5; margin: 0;">${tituloPrincipal}</h2>
         ${dataCompleta.tipo ? `<span class="badge" style="background: #444; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; display: inline-block; margin-top: 10px;">${dataCompleta.tipo.toUpperCase()}</span>` : ''}
       </header>
       
