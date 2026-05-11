@@ -1053,8 +1053,8 @@ function renderFaccoes(faccoes) {
 
     // Mantemos o card minimalista como você pediu
     card.innerHTML = `
-      <h3>${item.faccao || "Facção sem nome"}</h3>
-      <p><strong>Liderança:</strong> ${item.comandantes || "Desconhecida"}</p>
+      <h3>${item.nome || "Facção sem nome"}</h3>
+      <p><strong>Liderança:</strong> ${item.comandante.nome || "Desconhecida"}</p>
     `;
 
     // AGORA USANDO O MODAL GENÉRICO
