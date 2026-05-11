@@ -2806,5 +2806,923 @@ const DATA_MONSTROS = [
         "descricao": "Uma criatura a até 12m deve realizar teste de Carisma CD 16. Em falha, efeitos de invisibilidade, disfarce mágico e nomes velados são revelados até o fim do próximo turno."
       }
     ]
+  },
+  {
+    "id": "mob_guardaflor",
+    "nome": "Guardaflor",
+    "tipo": "Feerico",
+    "alinhamento": "Caotico neutro",
+    "ca": 15,
+    "tipo_ca": "Armadura de couro feerica",
+    "pv": 54,
+    "dados_vida": "9d8 + 18",
+    "deslocamento": "10,5m",
+
+    "ambientes": ["Feywild", "Primavera"],
+
+    "atributos": {
+      "for": 12,
+      "des": 17,
+      "con": 14,
+      "int": 11,
+      "sab": 15,
+      "car": 13
+    },
+
+    "resistencias": [
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 15",
+    "idiomas": "Comum, Silvestre",
+    "cr": "3",
+    "xp": 700,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Ranger (Fey Wanderer)"
+      },
+      {
+        "nome": "Passo Verdejante",
+        "descricao": "Terreno difícil causado por vegetação não reduz seu deslocamento."
+      },
+      {
+        "nome": "Raizes Impulsivas",
+        "descricao": "Quando acerta um ataque, pode mover o alvo até 3m se houver solo natural."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com espada curva floral."
+      },
+      {
+        "nome": "Espada Curva Floral",
+        "tipo": "corpo a corpo",
+        "ataque": "+5",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 3 cortante + 1d4 psiquico"
+      },
+      {
+        "nome": "Arco Vivo",
+        "tipo": "distancia",
+        "ataque": "+5",
+        "alcance": "24m/96m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 3 perfurante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Rastro das Flores",
+        "descricao": "Como ação bônus, teleporta até 4,5m para um espaço com vegetação natural."
+      }
+    ]
+  },
+
+  {
+    "id": "mob_tecela_caminhos",
+    "nome": "Tecela de Caminhos",
+    "tipo": "Feerico",
+    "alinhamento": "Neutro",
+    "ca": 16,
+    "tipo_ca": "Vestes feericas",
+    "pv": 82,
+    "dados_vida": "11d8 + 33",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Primavera"],
+
+    "atributos": {
+      "for": 10,
+      "des": 14,
+      "con": 16,
+      "int": 13,
+      "sab": 18,
+      "car": 15
+    },
+
+    "resistencias": [
+      "encantado",
+      "psiquico"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 16",
+    "idiomas": "Comum, Silvestre, Druídico",
+    "cr": "5",
+    "xp": 1800,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Druid (Circle of Dreams)"
+      },
+      {
+        "nome": "Trilha Viva",
+        "descricao": "Aliados a até 6m ignoram terreno difícil causado por plantas."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Cajado das Veredas",
+        "tipo": "corpo a corpo",
+        "ataque": "+6",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 2 contundente + 1d6 psiquico"
+      },
+      {
+        "nome": "Vinhedo Sonhante",
+        "descricao": "Criaturas em um raio de 4,5m fazem teste de Força CD 14. Em falha, ficam contidas até o fim do próximo turno."
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Passagem Feerica",
+        "descricao": "Como ação bônus, move um aliado que possa ver até 6m para um espaço desocupado visível."
+      },
+      {
+        "nome": "Benção do Broto",
+        "descricao": "Recupera 2d8 + 4 pontos de vida de um aliado a até 9m."
+      }
+    ]
+  },
+  {
+    "id": "mob_arauto_primeiros_nomes",
+    "nome": "Arauto dos Primeiros Nomes",
+    "tipo": "Feerico",
+    "alinhamento": "Caotico neutro",
+    "ca": 17,
+    "tipo_ca": "Manto feerico",
+    "pv": 128,
+    "dados_vida": "15d8 + 60",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Primavera"],
+
+    "atributos": {
+      "for": 11,
+      "des": 16,
+      "con": 18,
+      "int": 15,
+      "sab": 16,
+      "car": 20
+    },
+
+    "resistencias": [
+      "psiquico",
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 24m, Percepção passiva 17",
+    "idiomas": "Comum, Silvestre, Élfico",
+    "cr": "8",
+    "xp": 3900,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Bard (College of Glamour) / Warlock (Archfey)"
+      },
+      {
+        "nome": "Nome Velado",
+        "descricao": "Criaturas que falham em resistência contra suas magias têm desvantagem em testes de Carisma até o fim do próximo turno."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com lâmina do broto."
+      },
+      {
+        "nome": "Lamina do Broto",
+        "tipo": "corpo a corpo",
+        "ataque": "+7",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "2d6 + 4 cortante + 1d8 psiquico"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Roubo do Nome",
+        "descricao": "Uma criatura a até 12m realiza teste de Carisma CD 16. Em falha, não pode usar reações e tem desvantagem em testes sociais até o final do próximo turno."
+      },
+      {
+        "nome": "Bosque Mutavel",
+        "descricao": "Uma vez por descanso curto, cria área de 6m de raio por 1 minuto. A área torna-se terreno difícil para inimigos e concede meia cobertura a aliados."
+      }
+    ]
+  },{
+    "id": "mob_lanceiro_solar",
+    "nome": "Lanceiro Solar",
+    "tipo": "Feerico",
+    "alinhamento": "Leal neutro",
+    "ca": 16,
+    "tipo_ca": "Cota de escamas douradas",
+    "pv": 57,
+    "dados_vida": "9d8 + 18",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Verao"],
+
+    "atributos": {
+      "for": 16,
+      "des": 14,
+      "con": 14,
+      "int": 10,
+      "sab": 12,
+      "car": 14
+    },
+
+    "resistencias": [
+      "fogo"
+    ],
+
+    "sentidos": "Percepção passiva 13",
+    "idiomas": "Comum, Silvestre",
+    "cr": "3",
+    "xp": 700,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Fighter (Battle Master)"
+      },
+      {
+        "nome": "Presenca de Arena",
+        "descricao": "Quando possui ao menos um aliado a até 6m, recebe +1 nas jogadas de ataque."
+      },
+      {
+        "nome": "Investida Ardente",
+        "descricao": "Se mover ao menos 4,5m em linha reta antes de acertar um ataque, causa 1d6 de dano de fogo adicional."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com lança solar."
+      },
+      {
+        "nome": "Lanca Solar",
+        "tipo": "corpo a corpo",
+        "ataque": "+5",
+        "alcance": "3m",
+        "alvo": "1 criatura",
+        "dano": "1d10 + 3 perfurante + 1d4 fogo"
+      },
+      {
+        "nome": "Arremesso Solar",
+        "tipo": "distancia",
+        "ataque": "+5",
+        "alcance": "6m/18m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 3 perfurante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Resposta Ofensiva",
+        "descricao": "Como reação, quando uma criatura a até 3m tenta se afastar, realiza um ataque corpo a corpo."
+      }
+    ]
+  },
+
+  {
+    "id": "mob_portador_coroa_ardente",
+    "nome": "Portador da Coroa Ardente",
+    "tipo": "Feerico",
+    "alinhamento": "Leal neutro",
+    "ca": 18,
+    "tipo_ca": "Armadura cerimonial do verão",
+    "pv": 94,
+    "dados_vida": "11d8 + 44",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Verao"],
+
+    "atributos": {
+      "for": 18,
+      "des": 12,
+      "con": 18,
+      "int": 11,
+      "sab": 14,
+      "car": 17
+    },
+
+    "resistencias": [
+      "fogo",
+      "encantado"
+    ],
+
+    "sentidos": "Percepção passiva 14",
+    "idiomas": "Comum, Silvestre, Celestial",
+    "cr": "5",
+    "xp": 1800,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Paladin (Oath of Glory)"
+      },
+      {
+        "nome": "Aura de Coragem",
+        "descricao": "Aliados a até 3m têm vantagem contra medo."
+      },
+      {
+        "nome": "Fulgor da Honra",
+        "descricao": "Quando reduz uma criatura a 0 pontos de vida, ganha 8 pontos de vida temporários."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com espada do meio-dia."
+      },
+      {
+        "nome": "Espada do Meio-Dia",
+        "tipo": "corpo a corpo",
+        "ataque": "+7",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d10 + 4 cortante + 1d6 fogo"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Desafio Cerimonial",
+        "descricao": "Uma criatura a até 9m realiza teste de Sabedoria CD 14. Em falha, tem desvantagem em ataques contra criaturas diferentes do Portador até o fim do próximo turno."
+      },
+      {
+        "nome": "Chama da Gloria",
+        "descricao": "Como ação bônus, um aliado a até 6m recebe +2 no próximo ataque antes do início do próximo turno."
+      }
+    ]
+  },
+  {
+    "id": "mob_general_meio_dia",
+    "nome": "General do Meio-Dia",
+    "tipo": "Feerico",
+    "alinhamento": "Leal neutro",
+    "ca": 19,
+    "tipo_ca": "Armadura solar encantada",
+    "pv": 142,
+    "dados_vida": "16d8 + 64",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Verao"],
+
+    "atributos": {
+      "for": 20,
+      "des": 14,
+      "con": 18,
+      "int": 13,
+      "sab": 15,
+      "car": 18
+    },
+
+    "resistencias": [
+      "fogo",
+      "radiante",
+      "encantado"
+    ],
+
+    "sentidos": "Percepção passiva 16",
+    "idiomas": "Comum, Silvestre, Celestial",
+    "cr": "8",
+    "xp": 3900,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Fighter (Battle Master) / Paladin (Oath of Glory) / Sorcerer (Divine Soul)"
+      },
+      {
+        "nome": "Presenca Dominante",
+        "descricao": "Criaturas hostis a até 3m sofrem -1 em testes de resistência contra suas habilidades."
+      },
+      {
+        "nome": "Marca de Honra",
+        "descricao": "Quando acerta uma criatura, pode marcá-la até o fim do próximo turno. A criatura marcada sofre 1d6 radiante adicional se atacar um alvo diferente do General."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com grande lâmina solar."
+      },
+      {
+        "nome": "Grande Lamina Solar",
+        "tipo": "corpo a corpo",
+        "ataque": "+8",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "2d6 + 5 cortante + 1d8 fogo"
+      },
+      {
+        "nome": "Raio Cerimonial",
+        "tipo": "distancia",
+        "ataque": "+7",
+        "alcance": "18m",
+        "alvo": "1 criatura",
+        "dano": "3d8 radiante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Duelo do Sol Alto",
+        "descricao": "Uma criatura a até 12m realiza teste de Sabedoria CD 16. Em falha, nao pode usar reacoes e deve encerrar seu movimento mais proxima do General ate o fim do proximo turno."
+      },
+      {
+        "nome": "Campo do Meio-Dia",
+        "descricao": "Uma vez por descanso curto, cria uma area de 6m de raio por 1 minuto. Inimigos na area sofrem 1d6 fogo ao iniciarem o turno e aliados recebem vantagem contra medo."
+      }
+    ]
+  },{
+    "id": "mob_vigia_ambar",
+    "nome": "Vigia do Ambar",
+    "tipo": "Feerico",
+    "alinhamento": "Neutro maligno",
+    "ca": 15,
+    "tipo_ca": "Couro fossilizado",
+    "pv": 56,
+    "dados_vida": "9d8 + 18",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Outono"],
+
+    "atributos": {
+      "for": 12,
+      "des": 17,
+      "con": 14,
+      "int": 13,
+      "sab": 14,
+      "car": 14
+    },
+
+    "resistencias": [
+      "psiquico"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 14",
+    "idiomas": "Comum, Silvestre",
+    "cr": "3",
+    "xp": 700,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Rogue (Phantom)"
+      },
+      {
+        "nome": "Farejo de Memoria",
+        "descricao": "Tem vantagem em testes de Sabedoria (Percepcao) para rastrear criaturas feridas, enfeiticadas ou emocionalmente abaladas."
+      },
+      {
+        "nome": "Dreno de Eco",
+        "descricao": "Uma vez por turno, quando causa dano furtivo, recupera 1d4 pontos de vida."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com adaga de ambar."
+      },
+      {
+        "nome": "Adaga de Ambar",
+        "tipo": "corpo a corpo",
+        "ataque": "+5",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d6 + 3 perfurante + 1d4 psiquico"
+      },
+      {
+        "nome": "Lamina de Eco",
+        "tipo": "distancia",
+        "ataque": "+5",
+        "alcance": "12m/36m",
+        "alvo": "1 criatura",
+        "dano": "1d6 + 3 perfurante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Sombra do Passado",
+        "descricao": "Como ação bônus, torna-se obscurecido até o início do próximo turno enquanto permanecer em meia cobertura ou escuridão."
+      }
+    ]
+  },
+
+  {
+    "id": "mob_coletor_ecos",
+    "nome": "Coletor de Ecos",
+    "tipo": "Feerico",
+    "alinhamento": "Neutro maligno",
+    "ca": 16,
+    "tipo_ca": "Vestes de folhas secas encantadas",
+    "pv": 88,
+    "dados_vida": "11d8 + 33",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Outono"],
+
+    "atributos": {
+      "for": 10,
+      "des": 14,
+      "con": 16,
+      "int": 15,
+      "sab": 14,
+      "car": 18
+    },
+
+    "resistencias": [
+      "psiquico",
+      "necrotico"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 14",
+    "idiomas": "Comum, Silvestre, Infernal",
+    "cr": "5",
+    "xp": 1800,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Warlock (Archfey)"
+      },
+      {
+        "nome": "Colheita Emocional",
+        "descricao": "Quando uma criatura falha em um teste de resistencia contra suas habilidades, o Coletor recebe 5 pontos de vida temporarios."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Raio de Eco",
+        "tipo": "distancia",
+        "ataque": "+7",
+        "alcance": "18m",
+        "alvo": "1 criatura",
+        "dano": "2d10 psiquico"
+      },
+      {
+        "nome": "Toque da Ultima Folha",
+        "tipo": "corpo a corpo",
+        "ataque": "+6",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 3 necrotico + 1d6 psiquico"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Selar Memoria",
+        "descricao": "Uma criatura a até 9m realiza teste de Sabedoria CD 14. Em falha, não pode usar reações até o final do próximo turno."
+      },
+      {
+        "nome": "Reflexo do Passado",
+        "descricao": "Cria um eco ilusório em espaço desocupado a até 6m. O próximo ataque contra o Coletor tem desvantagem."
+      }
+    ]
+  },
+  {
+    "id": "mob_senescal_ultima_colheita",
+    "nome": "Senescal da Ultima Colheita",
+    "tipo": "Feerico",
+    "alinhamento": "Neutro maligno",
+    "ca": 17,
+    "tipo_ca": "Armadura de ambar vivo",
+    "pv": 136,
+    "dados_vida": "16d8 + 64",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Outono"],
+
+    "atributos": {
+      "for": 12,
+      "des": 18,
+      "con": 18,
+      "int": 16,
+      "sab": 15,
+      "car": 20
+    },
+
+    "resistencias": [
+      "psiquico",
+      "necrotico",
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 24m, Percepção passiva 16",
+    "idiomas": "Comum, Silvestre, Infernal",
+    "cr": "8",
+    "xp": 3900,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Warlock (Archfey) / Rogue (Phantom) / Sorcerer (Shadow Magic)"
+      },
+      {
+        "nome": "Nobreza Imovel",
+        "descricao": "Criaturas que iniciam o turno a até 3m do Senescal sofrem -1 em testes de resistencia contra efeitos psiquicos."
+      },
+      {
+        "nome": "Banquete de Ecos",
+        "descricao": "Quando uma criatura a até 9m cai a 0 pontos de vida, o Senescal recupera 2d8 pontos de vida."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com espada fossilizada."
+      },
+      {
+        "nome": "Espada Fossilizada",
+        "tipo": "corpo a corpo",
+        "ataque": "+8",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "2d6 + 4 cortante + 1d8 necrotico"
+      },
+      {
+        "nome": "Rajada de Memoria",
+        "tipo": "distancia",
+        "ataque": "+7",
+        "alcance": "18m",
+        "alvo": "1 criatura",
+        "dano": "3d8 psiquico"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Roubo de Memoria",
+        "descricao": "Uma criatura a até 12m realiza teste de Sabedoria CD 16. Em falha, tem desvantagem em jogadas de ataque e testes de habilidade até o final do próximo turno."
+      },
+      {
+        "nome": "Corte dos Juramentos Mortos",
+        "descricao": "Uma vez por descanso curto, invoca ecos espectrais em área de 6m de raio por 1 minuto. Criaturas hostis que iniciam o turno na área sofrem 1d6 psiquico."
+      }
+    ]
+  },{
+    "id": "mob_vigilia_geada",
+    "nome": "Vigilia da Geada",
+    "tipo": "Feerico (lycan)",
+    "alinhamento": "Leal neutro",
+    "ca": 16,
+    "tipo_ca": "Couro reforçado e disciplina feerica",
+    "pv": 59,
+    "dados_vida": "9d8 + 18",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Inverno"],
+
+    "atributos": {
+      "for": 14,
+      "des": 17,
+      "con": 14,
+      "int": 11,
+      "sab": 15,
+      "car": 12
+    },
+
+    "resistencias": [
+      "frio"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 15",
+    "idiomas": "Comum, Silvestre",
+    "cr": "3",
+    "xp": 700,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Ranger (Gloom Stalker)"
+      },
+      {
+        "nome": "Instinto de Matilha",
+        "descricao": "Tem vantagem em ataques contra criaturas adjacentes a um aliado."
+      },
+      {
+        "nome": "Resistencia da Lua Fria",
+        "descricao": "Tem vantagem em testes contra medo."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com espada curta ou garras."
+      },
+      {
+        "nome": "Espada Curta",
+        "tipo": "corpo a corpo",
+        "ataque": "+5",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d6 + 3 perfurante"
+      },
+      {
+        "nome": "Garras",
+        "tipo": "corpo a corpo",
+        "ataque": "+5",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 3 cortante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Transformacao Controlada",
+        "descricao": "Como ação bônus, entra em forma parcial por 1 minuto. Seu deslocamento aumenta em 3m e seus ataques de garra causam 1d4 de frio adicional."
+      },
+      {
+        "nome": "Transformacao Descontrolada",
+        "descricao": "Quando cai abaixo da metade dos pontos de vida, realiza teste de Sabedoria CD 12 no início do turno. Em falha, entra em frenesi até o final do próximo turno. Enquanto em frenesi, tem vantagem em ataques corpo a corpo, mas deve se mover em direção à criatura mais próxima e não pode usar reações."
+      }
+    ]
+  },
+
+  {
+    "id": "mob_guardiao_lua_fria",
+    "nome": "Guardiao da Lua Fria",
+    "tipo": "Feerico (lycan)",
+    "alinhamento": "Leal neutro",
+    "ca": 17,
+    "tipo_ca": "Armadura de placas leves invernais",
+    "pv": 96,
+    "dados_vida": "11d8 + 44",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Inverno"],
+
+    "atributos": {
+      "for": 18,
+      "des": 14,
+      "con": 18,
+      "int": 11,
+      "sab": 15,
+      "car": 13
+    },
+
+    "resistencias": [
+      "frio"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 15",
+    "idiomas": "Comum, Silvestre",
+    "cr": "5",
+    "xp": 1800,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Fighter (Rune Knight) / Barbarian (Path of the Beast)"
+      },
+      {
+        "nome": "Contencao Protetora",
+        "descricao": "Como reação, quando um aliado a até 1,5m sofre dano, o Guardiao reduz o dano em 1d8 + 3."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com machado lunar ou garras."
+      },
+      {
+        "nome": "Machado Lunar",
+        "tipo": "corpo a corpo",
+        "ataque": "+7",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d10 + 4 cortante"
+      },
+      {
+        "nome": "Garras Invernais",
+        "tipo": "corpo a corpo",
+        "ataque": "+7",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 4 cortante + 1d4 frio"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Transformacao Controlada",
+        "descricao": "Como ação bônus, assume forma parcial por 1 minuto. Ganha 10 pontos de vida temporários, deslocamento adicional de 3m e vantagem em testes de Força."
+      },
+      {
+        "nome": "Transformacao Descontrolada",
+        "descricao": "Quando cai abaixo da metade dos pontos de vida, realiza teste de Sabedoria CD 14 no início do turno. Em falha, entra em frenesi por 1 minuto. Enquanto em frenesi, causa 1d6 de dano adicional corpo a corpo, mas deve atacar a criatura mais próxima se puder."
+      }
+    ]
+  },
+  {
+    "id": "mob_mestre_vigilia_invernal",
+    "nome": "Mestre da Vigilia Invernal",
+    "tipo": "Feerico (lycan)",
+    "alinhamento": "Leal neutro",
+    "ca": 18,
+    "tipo_ca": "Armadura ritual da neve negra",
+    "pv": 145,
+    "dados_vida": "16d8 + 64",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Inverno"],
+
+    "atributos": {
+      "for": 20,
+      "des": 16,
+      "con": 18,
+      "int": 13,
+      "sab": 17,
+      "car": 15
+    },
+
+    "resistencias": [
+      "frio",
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 24m, Percepção passiva 17",
+    "idiomas": "Comum, Silvestre",
+    "cr": "8",
+    "xp": 3900,
+
+    "habilidades": [
+      {
+        "nome": "Classe",
+        "descricao": "Ranger (Gloom Stalker) / Fighter (Eldritch Knight) / Blood Hunter (Order of the Lycan)"
+      },
+      {
+        "nome": "Presenca da Lua Imovel",
+        "descricao": "Criaturas hostis a até 3m têm desvantagem em testes contra medo e não podem receber vantagem de ataques em grupo."
+      },
+      {
+        "nome": "Disciplina Absoluta",
+        "descricao": "Tem vantagem em testes de resistência de Sabedoria."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com lamina invernal ou garras."
+      },
+      {
+        "nome": "Lamina Invernal",
+        "tipo": "corpo a corpo",
+        "ataque": "+8",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "2d6 + 5 cortante + 1d6 frio"
+      },
+      {
+        "nome": "Garras da Lua Negra",
+        "tipo": "corpo a corpo",
+        "ataque": "+8",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "2d8 + 5 cortante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Transformacao Controlada",
+        "descricao": "Como ação bônus, assume forma lupina disciplinada por 1 minuto. Seu deslocamento aumenta em 4,5m, recebe resistência a dano cortante não mágico e seus ataques de garra causam 1d8 de frio adicional."
+      },
+      {
+        "nome": "Transformacao Descontrolada",
+        "descricao": "Quando cai abaixo de 45 pontos de vida, realiza teste de Sabedoria CD 16 no início do turno. Em falha, entra em forma bestial até o final do próximo turno. Enquanto nessa forma, realiza um ataque adicional de garra em cada Multiataque, causa 1d8 adicional de dano e deve se mover em direção ao inimigo mais próximo. Aliados a até 3m também devem realizar teste de Sabedoria CD 13 ou ficam amedrontados até o fim do próximo turno."
+      },
+      {
+        "nome": "Vigilia Congelante",
+        "descricao": "Uma vez por descanso curto, cria uma aura de 6m por 1 minuto. Inimigos que iniciam o turno na área têm deslocamento reduzido em 3m e sofrem 1d6 de frio."
+      }
+    ]
   }
 ];
