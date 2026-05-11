@@ -612,9 +612,9 @@ function loadLocais() {
 
   // Extrair todos os bairros únicos das três categorias (POIs, Eventos, NPCs)
   const bairrosSet = new Set();
-  if (DATA_LOCAIS.pontos_interesse) DATA_LOCAIS.pontos_interesse.forEach(p => p.bairro_id && bairrosSet.add(p.id));
-  if (DATA_LOCAIS.eventos) DATA_LOCAIS.eventos.forEach(e => e.bairro_id && bairrosSet.add(e.id));
-  if (DATA_LOCAIS.npcs) DATA_LOCAIS.npcs.forEach(n => n.bairro_id && bairrosSet.add(n.id));
+  if (DATA_LOCAIS.pontos_interesse) DATA_LOCAIS.pontos_interesse.forEach(p => p.id && bairrosSet.add(p.id));
+  if (DATA_LOCAIS.eventos) DATA_LOCAIS.eventos.forEach(e => e.id && bairrosSet.add(e.id));
+  if (DATA_LOCAIS.npcs) DATA_LOCAIS.npcs.forEach(n => n.id && bairrosSet.add(n.id));
 
   const bairros = Array.from(bairrosSet);
 
