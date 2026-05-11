@@ -3153,5 +3153,285 @@ const DATA_MONSTROS = [
         ]
       },
       "descricao": "Os comandantes da Corte Invernal parecem carregar o próprio silêncio da neve eterna."
+    },
+	{
+      "id": "dryad_feerica_guardia",
+      "nome": "Dryad Feérica Guardiã",
+      "tipo": "Fey",
+      "tamanho": "Médio",
+      "alinhamento": "Neutro",
+      "cr": 5,
+      "ac": 16,
+      "hp": 97,
+      "deslocamento": "30 ft.",
+      "atributos": {
+        "for": 10,
+        "des": 16,
+        "con": 16,
+        "int": 14,
+        "sab": 15,
+        "car": 18
+      },
+      "resistencias": [
+        "Contundente, Cortante e Perfurante de ataques não mágicos"
+      ],
+      "imunidades_condicao": [
+        "Enfeitiçado"
+      ],
+      "habilidades": [
+        {
+          "nome": "Passo Arbóreo",
+          "descricao": "A dryad pode usar uma árvore viva para se teleportar até outra árvore a até 60 pés."
+        },
+        {
+          "nome": "Aura Calmante",
+          "descricao": "Criaturas hostis que iniciarem o turno a até 10 pés devem passar em CD 15 de Sabedoria ou terão desvantagem no primeiro ataque realizado no turno."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Multiataque",
+          "descricao": "A dryad realiza dois ataques com Chicote de Vinhas."
+        },
+        {
+          "nome": "Chicote de Vinhas",
+          "ataque": "+7",
+          "alcance": "15 ft.",
+          "dano": "2d6+4 contundente + 2d6 venenoso"
+        },
+        {
+          "nome": "Explosão Floral (Recarga 5-6)",
+          "descricao": "Criaturas em um raio de 20 pés realizam CD 15 de Constituição. Falha: 4d8 venenoso e condição Envenenado até o próximo turno. Sucesso: metade do dano."
+        },
+        {
+          "nome": "Enfeitiçar",
+          "descricao": "Uma criatura humanoide a até 30 pés deve realizar CD 15 de Sabedoria ou ficará Enfeitiçada por 1 hora."
+        }
+      ],
+      "magias": {
+        "atributo": "Carisma",
+        "cd": 15,
+        "ataque_magico": 7,
+        "nivel_conjurador": 8,
+        "magias_preparadas": {
+          "À vontade": [
+            "Druidcraft",
+            "Entangle"
+          ],
+          "3/dia": [
+            "Spike Growth",
+            "Moonbeam",
+            "Lesser Restoration"
+          ],
+          "1/dia": [
+            "Plant Growth",
+            "Wall of Thorns"
+          ]
+        }
+      },
+      "descricao": "Guardiãs feéricas de antigas clareiras vivas, ligadas emocionalmente às árvores ancestrais da Feywild."
+    },
+    {
+      "id": "treant_guardiao_ancestral",
+      "nome": "Treant Guardião Ancestral",
+      "tipo": "Planta",
+      "tamanho": "Enorme",
+      "alinhamento": "Neutro Bom",
+      "cr": 9,
+      "ac": 17,
+      "hp": 170,
+      "deslocamento": "30 ft.",
+      "atributos": {
+        "for": 24,
+        "des": 8,
+        "con": 22,
+        "int": 12,
+        "sab": 16,
+        "car": 14
+      },
+      "resistencias": [
+        "Contundente e Perfurante não mágicos"
+      ],
+      "habilidades": [
+        {
+          "nome": "Cerco Vivo",
+          "descricao": "Criaturas Grandes ou menores atingidas pelos ataques do Treant devem realizar CD 17 de Força ou ficam Agarradas."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Multiataque",
+          "descricao": "O treant realiza dois ataques com Galho Esmagador."
+        },
+        {
+          "nome": "Galho Esmagador",
+          "ataque": "+10",
+          "alcance": "15 ft.",
+          "dano": "3d8+7 contundente"
+        },
+        {
+          "nome": "Arremessar Rocha",
+          "ataque": "+10",
+          "alcance": "60/180 ft.",
+          "dano": "4d10+7 contundente"
+        },
+        {
+          "nome": "Raízes Ascendentes (Recarga 5-6)",
+          "descricao": "Raízes explodem em um raio de 20 pés. Criaturas realizam CD 17 de Destreza. Falha: 5d8 contundente e ficam Restrained."
+        }
+      ],
+      "descricao": "Treants antigos que despertaram após séculos protegendo regiões sagradas da Primavera."
+    },
+    {
+      "id": "vine_blight_corrompido",
+      "nome": "Vine Blight Corrompido",
+      "tipo": "Planta",
+      "tamanho": "Médio",
+      "alinhamento": "Neutro Mau",
+      "cr": 3,
+      "ac": 15,
+      "hp": 68,
+      "deslocamento": "25 ft.",
+      "atributos": {
+        "for": 18,
+        "des": 10,
+        "con": 18,
+        "int": 6,
+        "sab": 10,
+        "car": 5
+      },
+      "resistencias": [
+        "Elétrico",
+        "Perfurante"
+      ],
+      "acoes": [
+        {
+          "nome": "Constrição de Vinhas",
+          "ataque": "+6",
+          "alcance": "15 ft.",
+          "dano": "2d8+4 contundente"
+        },
+        {
+          "nome": "Nuvem de Esporos",
+          "descricao": "Criaturas em cone de 15 pés realizam CD 14 de Constituição. Falha: 3d8 venenoso e velocidade reduzida pela metade."
+        }
+      ],
+      "descricao": "Blights inchados por energia feérica corrompida, cobertos de fungos negros pulsantes."
+    },
+    {
+      "id": "needle_blight_predador",
+      "nome": "Needle Blight Predador",
+      "tipo": "Planta",
+      "tamanho": "Médio",
+      "alinhamento": "Neutro Mau",
+      "cr": 2,
+      "ac": 14,
+      "hp": 52,
+      "deslocamento": "30 ft.",
+      "atributos": {
+        "for": 14,
+        "des": 16,
+        "con": 14,
+        "int": 5,
+        "sab": 10,
+        "car": 3
+      },
+      "acoes": [
+        {
+          "nome": "Rajada de Espinhos",
+          "ataque": "+6",
+          "alcance": "60 ft.",
+          "dano": "2d8+3 perfurante"
+        },
+        {
+          "nome": "Salva Espinhosa (Recarga 5-6)",
+          "descricao": "Criaturas em linha de 30 pés realizam CD 14 de Destreza. Falha: 4d6 perfurante."
+        }
+      ],
+      "descricao": "Criaturas vegetais rápidas e agressivas que caçam em grupos entre árvores mortas."
+    },
+    {
+      "id": "shambling_mound_abissal",
+      "nome": "Shambling Mound Abissal",
+      "tipo": "Planta",
+      "tamanho": "Enorme",
+      "alinhamento": "Caótico Mau",
+      "cr": 12,
+      "ac": 18,
+      "hp": 248,
+      "deslocamento": "30 ft., escalar 20 ft.",
+      "atributos": {
+        "for": 24,
+        "des": 8,
+        "con": 24,
+        "int": 7,
+        "sab": 12,
+        "car": 6
+      },
+      "resistencias": [
+        "Frio",
+        "Elétrico",
+        "Necrótico"
+      ],
+      "imunidades_condicao": [
+        "Caído",
+        "Enfeitiçado"
+      ],
+      "habilidades": [
+        {
+          "nome": "Corpo Absorvente",
+          "descricao": "Sempre que sofre dano elétrico, recupera quantidade igual de HP."
+        },
+        {
+          "nome": "Aura Putrefata",
+          "descricao": "Criaturas a até 10 pés sofrem 1d8 necrótico no início do turno."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Multiataque",
+          "descricao": "Realiza dois ataques de Pancada Corrompida."
+        },
+        {
+          "nome": "Pancada Corrompida",
+          "ataque": "+11",
+          "alcance": "10 ft.",
+          "dano": "3d10+7 contundente + 2d8 necrótico"
+        },
+        {
+          "nome": "Engolir",
+          "descricao": "Criatura agarrada realiza CD 18 de Destreza ou é absorvida parcialmente pela massa vegetal."
+        },
+        {
+          "nome": "Explosão de Esporos Abissais (Recarga 5-6)",
+          "descricao": "Raio de 30 pés. Criaturas realizam CD 18 de Constituição. Falha: 8d8 venenoso + condição Envenenado por 1 minuto."
+        },
+        {
+          "nome": "Tempestade de Vinhas",
+          "descricao": "Raio de 20 pés. Criaturas realizam CD 18 de Força. Falha: 6d8 contundente e ficam Restrained."
+        }
+      ],
+      "magias": {
+        "atributo": "Sabedoria",
+        "cd": 17,
+        "ataque_magico": 9,
+        "nivel_conjurador": 10,
+        "magias_preparadas": {
+          "À vontade": [
+            "Entangle",
+            "Poison Spray"
+          ],
+          "3/dia": [
+            "Plant Growth",
+            "Erupting Earth",
+            "Blight"
+          ],
+          "1/dia": [
+            "Cloudkill",
+            "Insect Plague"
+          ]
+        }
+      },
+      "descricao": "Uma montanha viva de raízes, fungos e carne vegetal podre corrompida por forças extraplanares esquecidas."
     }
 ];
