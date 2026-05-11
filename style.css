@@ -618,7 +618,7 @@ main h2 {
 /* Card de preview com layout horizontal */
 .npc-preview-card {
   width: 450px;
-  height: 210px;
+  height: 250px;
   display: flex;
   padding: 10px;
   box-sizing: border-box;
