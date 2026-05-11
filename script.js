@@ -76,7 +76,7 @@ function loadInitialView() {
 function loadDashboard() {
   setActiveMenu(0);
   setView("dashboard");
-  document.getElementById("content").innerHTML = `<h2>📌 Arco Ash</h2> <p>Jogadores encontraram Frieren, uma poderosa maga, e ajudaram a derrotar demonios que haviam colocado uma recompensa em sua cabeça.</p>`;
+  document.getElementById("content").innerHTML = `<h2>📌 Arco Final</h2> <p>Jogadores seguem em busca de vingança e de seus entes queridos.</p>`;
 }
 
 function loadTimeline() {
