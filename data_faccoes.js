@@ -12,6 +12,12 @@ const DATA_FACCOES = [
         "populacao": "media",
         "conselho": "alta"
       },
+	  "comandante": {
+        "nome": "Arthen Vaelor",
+        "titulo": "Arquimago das Sete Runas",
+        "publico": true,
+        "descricao": "Humano de idade avançada, vestindo mantos azul-escuros bordados com fios dourados. Conhecido por sua precisão intelectual e pela habilidade de conduzir debates do conselho com calma cirúrgica."
+      },
       "vantagem_politica": "Possui o voto de minerva em casos de empate no conselho mágico.",
       "objetivos": [
         "Preservar a liderança tecnológica e mágica da cidade",
@@ -37,6 +43,12 @@ const DATA_FACCOES = [
       "tipo": "clã arcano",
       "bairro_id": "bairro_ecos",
       "status": "ativo",
+	  "comandante": {
+        "nome": "Vael Tharion",
+        "titulo": "Mestre dos Ecos Profundos",
+        "publico": true,
+        "descricao": "Humano de cabelos escuros e traços austeros, vestindo túnica negra com discretos bordados prateados. Necromante erudito, mantém influência ampla entre estudantes e estudiosos."
+      },
       "descricao": "A maior escola em número de estudantes. Popular entre a população comum, mantém forte presença em North Ward e influência social ampla.",
       "influencia": {
         "nobreza": "media",
@@ -68,6 +80,12 @@ const DATA_FACCOES = [
       "tipo": "clã militar arcano",
       "bairro_id": "bairro_soldados_bronze",
       "status": "ativo",
+	  "comandante": {
+        "nome": "Daram Voss",
+        "titulo": "Marechal de Bronze",
+        "publico": true,
+        "descricao": "Anão robusto de barba curta presa em anéis de cobre, trajando armadura de bronze gravada com runas militares. Veterano respeitado, lidera a guarda da cidade e a defesa arcana de Waterdeep."
+      },
       "descricao": "Clã militarizado responsável pela defesa de Waterdeep. Controla a guarda da cidade e mantém presença constante em Castle Ward.",
       "influencia": {
         "nobreza": "media",
@@ -98,6 +116,12 @@ const DATA_FACCOES = [
       "tipo": "clã arcano mercantil",
       "bairro_id": "bairro_veu_astral",
       "status": "ativo",
+	  "comandante": {
+        "nome": "Ilyra Sorn",
+        "titulo": "Mestra das Passagens",
+        "publico": true,
+        "descricao": "Elfa de postura elegante, cabelos prateados presos em trança longa, vestindo mantos violetas e adornos de cristal. Reconhecida por sua habilidade em negociações e redes de transporte arcano."
+      },
       "descricao": "Especialistas em transporte mágico, portais e logística arcana. O clã mais rico de Waterdeep e principal parceiro das casas mercantis.",
       "influencia": {
         "nobreza": "alta",
@@ -127,6 +151,12 @@ const DATA_FACCOES = [
       "tipo": "clã arcano investigativo",
       "bairro_id": "bairro_circulo_lua",
       "status": "ativo",
+	  "comandante": {
+        "nome": "Lyris Vaen",
+        "titulo": "Guardiã do Quadro dos Sete Ventos",
+        "publico": true,
+        "descricao": "Tiefling de olhar atento e movimentos silenciosos, usando capa cinza-azulada sobre roupas leves de viagem. Coordena agentes de campo, informantes e expedições discretas."
+      },
       "descricao": "Responsáveis pela inteligência da cidade, exploração e coleta de informações. Mantêm observatórios, arquivos de campo e o quadro de avisos de Waterdeep.",
       "influencia": {
         "nobreza": "media",
@@ -156,6 +186,18 @@ const DATA_FACCOES = [
       "tipo": "clã arcano religioso",
       "bairro_id": "bairro_conclave",
       "status": "ativo",
+	  "comandante": {
+        "nome": "Sered Malovar",
+        "titulo": "Voz do Véu Sagrado",
+        "publico": false,
+        "descricao": "Humano de traços severos, sempre envolto em mantos negros e cinzentos. Paladino de Shar que conduz o verdadeiro núcleo oculto do Conclave longe dos olhos do conselho."
+      },
+	  "representante_publico": {
+        "nome": "Elaris Thenn",
+        "titulo": "Magíster Litúrgico",
+        "publico": true,
+        "descricao": "Elfo de cabelos claros e fala serena, conhecido por representar oficialmente o clã em cerimônias, assembleias e debates públicos."
+      },
       "descricao": "Clã dedicado à fusão entre magia da Trama e tradições religiosas. Instalado na Cidade dos Mortos, mantém influência discreta em várias regiões de Faerûn.",
       "influencia": {
         "nobreza": "baixa",
@@ -215,6 +257,19 @@ const DATA_FACCOES = [
         "populacao": "oculta",
         "conselho": "oculta"
       },
+	  "comandante": {
+        "nome": "Maeron Dhal",
+        "titulo": "Primeiro Eco",
+        "publico": false,
+        "descricao": "Humano de voz baixa e expressão impenetrável, trajando mantos negros sem insígnias. Pouquíssimos conhecem sua identidade, e menos ainda compreendem a extensão de sua rede."
+      },
+      "membros_conhecidos": [
+        "Vael Tharion",
+        "Sered Malovar",
+        "Daram Voss",
+        "Lyris Vaen",
+        "Maeron Dhal"
+      ],
       "vantagem_politica": "Atua por infiltração, manipulação de registros e informação fragmentada.",
       "objetivos": [
         "Expandir influência silenciosa sobre o conselho",
