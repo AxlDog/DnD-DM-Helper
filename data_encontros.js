@@ -1,222 +1,4 @@
 const DATA_ENCONTROS = [
-  {
-  "id": "enc_band_acampamento",
-  "nome": "Fortificação dos Salteadores",
-  "tipo": "combate",
-  "nivel_recomendado": 6,
-  "dificuldade": "dificil_alto",
-
-  "descricao": "Uma fortificação improvisada protege um acampamento de bandidos. O local está ativo e preparado para combate.",
-
-  "contexto": {
-    "local": "Estrada para Baldur's Gate",
-    "hora": "dia"
-  },
-
-  "inimigos": [
-    {
-      "id": "mob_capitao_salteador",
-      "quantidade": 1,
-      "posicao_inicial": "tenda central"
-    },
-    {
-      "id": "mob_subcapitao_bruto",
-      "quantidade": 1,
-      "posicao_inicial": "linha de frente"
-    },
-    {
-      "id": "mob_bandido_plus1",
-      "quantidade": 6,
-      "posicao_inicial": "espalhados pelo acampamento"
-    }
-  ],
-
-  "terreno": {
-    "descricao": "Acampamento cercado por estacas e com espaço limitado entre tendas.",
-    "dificuldade_movimento": true,
-    "cobertura": [
-      {
-        "tipo": "meia",
-        "descricao": "Barricadas de madeira"
-      },
-      {
-        "tipo": "meia",
-        "descricao": "Tendas"
-      }
-    ]
-  },
-
-  "elementos_interativos": [
-    {
-      "nome": "Fogueira Central",
-      "tipo": "ambiente",
-      "descricao": "Fogo ativo no centro do acampamento",
-      "interacoes": [
-        "Empurrar inimigos causa 1d6 de dano de fogo",
-        "Pode espalhar fogo em área próxima"
-      ]
-    },
-    {
-      "nome": "Barricadas de Estacas",
-      "tipo": "objeto",
-      "descricao": "Estacas apontadas para fora",
-      "interacoes": [
-        "Atravessar causa 1d6 de dano perfurante",
-        "Pode ser destruída (CA 12, 15 PV)"
-      ]
-    },
-    {
-      "nome": "Barril de Água",
-      "tipo": "recurso",
-      "descricao": "Reservatório improvisado",
-      "interacoes": [
-        "Apagar fogo",
-        "Derrubar cria terreno escorregadio"
-      ]
-    }
-  ],
-
-  "armadilhas": [
-    {
-      "nome": "Armadilha de Corda",
-      "descricao": "Corda tensionada derruba o alvo",
-      "cd_percepcao": 13,
-      "cd_desarme": 12,
-      "efeito": "Criatura fica caída (prone)"
-    }
-  ],
-
-  "objetivos": [
-    {
-      "tipo": "derrotar",
-      "descricao": "Eliminar o líder dos bandidos e libertar a elfa prisioneira",
-    }
-  ],
-
-  "recompensas": {
-    "xp": 6300,
-    "itens": [
-      "Lança de Choque",
-      "Armas +1",
-      "Armaduras +1"
-    ],
-    "ouro": {
-      "PO": 366,
-      "PP": 872,
-      "PC": 1348
-    }
-  },
-
-  "taticas_inimigos": [
-    "Subcapitão avança primeiro",
-    "Capitão usa magia antes de entrar no combate",
-    "Bandidos cercam alvos frágeis"
-  ],
-
-  "condicoes_especiais": [
-    "Se o capitão morrer, bandidos se dispersam"
-  ]
-  },
-  {
-	  "id": "enc_losango_convergencia_infernal",
-	  "nome": "Luta para ajudar Frieren",
-	  "tipo": "combate",
-	  "nivel_recomendado": 15,
-	  "dificuldade": "mortal_extremo",
-
-	  "descricao": "Alguns demônios estão caçando uma poderosa maga élfa, os jogadores se propuzeram a ajudá-la em troca de informações.",
-
-	  "contexto": {
-		"local": "Túneis subterrâneos sob Elturel",
-		"hora": "noite"
-	  },
-
-	  "inimigos": [
-		{
-		  "id": "mob_erinyes_terror",
-		  "quantidade": 1,
-		  "posicao_inicial": "chega junto de um dos bandidos"
-		},
-		{
-		  "id": "mob_adult_black_dragon",
-		  "quantidade": 1,
-		  "posicao_inicial": "chega dos céus quando chamado"
-		},
-		{
-		  "id": "mob_glabrezu_spell_eater",
-		  "quantidade": 1,
-		  "posicao_inicial": "chega junto dos bandidos"
-		}
-	  ],
-
-	  "terreno": {
-		"descricao": "Planicie em frente ao pequeno forte dos bandidos de Baldurs Gate.",
-		"dificuldade_movimento": true,
-		"cobertura": [
-		  {
-			"tipo": "estacas",
-			"descricao": "estacas de madeira cercam o forte"
-		  }
-		]
-	  },
-
-	  "elementos_interativos": [
-		{
-		  "nome": "Poças Ácidas",
-		  "tipo": "ambiente",
-		  "descricao": "Água corrompida pelo dragão",
-		  "interacoes": [
-			"Entrar causa 2d6 dano ácido",
-			"Pode ser empurrado para dentro"
-		  ]
-		},
-	  ],
-
-	  "armadilhas": [
-		{
-		  "nome": "Chuva Acida",
-		  "descricao": "Após o dragão soltar seu bafo acido para os céus, os jogadores em toda a área recebem dano",
-		  "cd_percepcao": 16,
-		  "efeito": "2d6 dano acido em área"
-		}
-	  ],
-
-	  "objetivos": [
-		{
-		  "tipo": "aguentar",
-		  "descricao": "durar tempo o suficiente para Frieren chegar"
-		}
-	  ],
-
-	  "recompensas": {
-		"xp": 49800,
-		"itens": [
-		  "Fear Feaster’s Mask",
-		  "Terrorizer (Greatsword)",
-		  "Escudo Devorador de Magia",
-		  "Tesouro dracônico corrompido"
-		],
-		"ouro": {
-		  "PO": 789,
-		  "PP": 953,
-		  "PC": 1236
-		}
-	  },
-
-	  "taticas_inimigos": [
-		"Erinyes inicia com medo em múltiplos alvos para escalar poder",
-		"Glabrezu foca conjuradores e absorve magias importantes",
-		"Dragão usa sopro ácido para dividir o grupo e controlar área",
-		"Inimigos priorizam alvos isolados ou amedrontados"
-	  ],
-
-	  "condicoes_especiais": [
-		"Após 5 rodadas, o ritual intensifica causando efeitos mágicos aleatórios",
-		"Se a Erinyes morrer, efeitos de medo cessam",
-		"Se o dragão cair, partes da caverna começam a desabar",
-		"Se o círculo for destruído, todos os inimigos sofrem penalidades temporárias"
-	  ]
-	},
 	{
 	  "id": "enc_assalto_vento_cinzento",
 	  "nome": "Assalto ao Vento Cinzento",
@@ -380,101 +162,6 @@ const DATA_ENCONTROS = [
 		"Se o capitão cair, a tripulação pode tentar se render",
 		"Criaturas no mar precisam gastar movimento extra para subir",
 		"Combate prolongado pode atrair guardas do cais"
-	  ]
-	},
-	{
-	  "nome": "Caçadores de Destroços Amaldiçoados",
-	  "tipo": "combate",
-	  "dificuldade": "medio",
-	  "descricao": "Fragmentos de madeira e barris quebrados balançam lentamente sobre a água escura. Alguns corpos flutuam entre os destroços… imóveis demais.\nO mar está silencioso, pesado.\nEntão, um dos corpos vira a cabeça na direção do barco.\nMãos pálidas surgem da água… e começam a subir pelo casco.",
-	  "detecao": {
-		"passiva": 13,
-		"ativa": "Percepção CD 13 ou Intuição CD 12",
-		"sucesso": "Os corpos flutuando parecem intactos demais... e alguns se movem levemente contra a maré",
-		"falha": "Os piratas emergem diretamente ao lado do barco"
-	  },
-
-	  "inimigos": [
-		"1x Saqueador Amaldiçoado (Capitão menor, PV 70, espada +1)",
-		"4x Piratas Amaldiçoados (PV 35 cada)"
-	  ],
-
-	  "habilidades_especiais": [
-		{
-		  "nome": "Maldição do Tesouro Afundado",
-		  "descricao": "Quando um pirata amaldiçoado morre, seu corpo se desfaz em água escura e sal. Ele não concede XP adicional e retorna ao navio principal após 1d4 horas."
-		}
-	  ],
-
-	  "taticas": [
-		"Piratas tentam puxar jogadores para o mar",
-		"Atacam em grupo e não recuam",
-		"Ignoram autopreservação"
-	  ],
-
-	  "recompensas": [
-		"Espada longa +1 corroída",
-		"Fragmentos de ouro amaldiçoado (pista do encontro maior)"
-	  ],
-
-	  "gancho": "Os piratas murmuram sobre 'o coração do navio' e 'o capitão que nunca morre'"
-	},
-	{
-	  "nome": "Corsários do Abismo Amaldiçoados",
-	  "tipo": "combate",
-	  "dificuldade": "alto",
-	  "descricao": "No horizonte, um navio surge… sem vento.\nSuas velas rasgadas não se movem, mas ele se aproxima mesmo assim.\nA madeira do casco é escura, quase negra — como se tivesse sido queimada e esquecida no fundo do mar.\nQuando ele encosta ao lado, figuras silenciosas já estão olhando para vocês… olhos vazios, esperando.",
-
-	  "detecao": {
-		"passiva": 15,
-		"ativa": "Percepção CD 15 ou Sobrevivência CD 14",
-		"sucesso": "Um navio negro surge sem vento, velas rasgadas mas firmes",
-		"falha": "O navio já está ao lado, como se sempre estivesse lá"
-	  },
-
-	  "inimigos": [
-		{
-		  "id": "mob_capitao_amaldicoado",
-		  "quantidade": 1
-		},
-		{
-		  "id": "mob_saqueador_amaldicoado",
-		  "quantidade": 3
-		},
-		{
-		  "id": "mob_pirata_amaldicoado",
-		  "quantidade": 5
-		}
-	  ],
-
-	  "habilidades_especiais": [
-		{
-		  "nome": "Maldição do Tesouro Afundado",
-		  "descricao": "Ao morrer, os piratas se dissolvem em água escura e retornam ao navio após algumas horas. Enquanto o capitão existir, a tripulação sempre retorna."
-		},
-		{
-		  "nome": "Coração Amaldiçoado",
-		  "descricao": "O capitão não pode ser destruído permanentemente enquanto o tesouro amaldiçoado não for encontrado."
-		}
-	  ],
-
-	  "acoes_capitao": [
-		{
-		  "nome": "Pistola do Abismo",
-		  "descricao": "Ataque à distância +9, alcance 18m, 2d10 + 4 perfurante + 2d6 necrótico. Em acerto crítico, o alvo deve passar em CON CD 15 ou ficar enfraquecido (desvantagem em ataques) por 1 turno."
-		}
-	  ],
-
-	  "taticas": [
-		"Capitão foca alvos perigosos com a pistola",
-		"Tripulação avança sem medo da morte",
-		"Arqueiros pressionam retaguarda"
-	  ],
-
-	  "recompensas": [
-		"Armadura +1 corroída",
-		"Mapa parcial do tesouro amaldiçoado",
-		"300 PO (alguns amaldiçoados)"
 	  ]
 	},
 	{
@@ -713,56 +400,104 @@ const DATA_ENCONTROS = [
 	  }
 	},
 	{
-	  "id": "enc_sahuagin_ataque",
-	  "nome": "Surpresa das Profundezas",
-	  "tipo": "combate",
-	  "nivel_recomendado": 8,
-	  "dificuldade": "difícil",
-
-	  "descricao": "O vento para de tocar as velas.\nUm silêncio pesado cobre o mar. Nenhuma gaivota, nenhum som.\nEntão… splash.\nAlgo rompe a superfície.\nUm dos contratados grita — tarde demais.\nVocês estão sendo atacados.",
-
-	  "contexto": {
-		"local": "Alto Mar",
-		"hora": "dia"
-	  },
-
-	  "inimigos": [
-		{
-		  "id": "mob_sahuagin",
-		  "quantidade": 10,
-		  "posicao_inicial": "atacando em ondas"
-		},
-		{
-		  "id": "mob_sahuagin_barao",
-		  "quantidade": 1,
-		  "posicao_inicial": "oculto no mar"
-		},
-		{
-		  "id": "mob_sahuagin_sacerdote",
-		  "quantidade": 1,
-		  "posicao_inicial": "entra no combate quando 4 sahuagin comuns caem"
-		},
-		{
-		  "id": "mob_sahuagin_guerreiro",
-		  "quantidade": 2,
-		  "posicao_inicial": "entram no combate quando 2 sahuagin comuns caem"
-		},
-		{
-		  "id": "mob_bruxa_marinha_ancia",
-		  "quantidade": 1,
-		  "posicao_inicial": "oculta no mar, ataca apenas se o combate estiver fácil para os jogadores"
-		}
-	  ],
-
-	  "terreno": {
-		"descricao": "A batalha acontece no convés do navio dos jogadores sob o sol do meio-dia.",
-		"dificuldade_movimento": false,
-		"cobertura": [
-		  {
-			"tipo": "nenhuma",
-			"descricao": "Os inimigos emergem da água. Percepção CD 20 para notá-los antes do ataque."
-		  }
-		]
-	  }
-	}
+      "id": "encontro_coracao_da_clareira_antiga",
+      "nome": "Coração da Clareira Antiga",
+      "bioma": "Feywild - Primavera",
+      "dificuldade": "Difícil",
+      "descricao": "Os personagens atravessam uma clareira luminosa onde árvores gigantes se curvam lentamente ao vento mesmo sem brisa. Vozes suaves ecoam entre flores brilhantes enquanto raízes começam a se mover sob o solo.",
+      "ambiente": {
+        "terreno": [
+          "Raízes expostas contam como terreno difícil",
+          "Árvores antigas fornecem meia cobertura",
+          "Flores feéricas liberam pólen luminoso"
+        ],
+        "efeitos": [
+          {
+            "nome": "Pólen Encantado",
+            "descricao": "Criaturas que iniciarem o turno em áreas floridas devem realizar CD 14 de Sabedoria ou terão desvantagem no próximo ataque até o início do próximo turno."
+          }
+        ]
+      },
+      "monstros": [
+        {
+          "id": "dryad_feerica_guardia",
+          "nome": "Dryad Feérica Guardiã",
+          "quantidade": "3",
+          "cr": 5,
+          "funcao": "Controladora"
+        },
+        {
+          "id": "treant_guardiao_ancestral",
+          "nome": "Treant Guardião Ancestral",
+          "quantidade": "2",
+          "cr": 9,
+          "funcao": "Tanque"
+        }
+      ],
+      "taticas": [
+        "As dryads tentam separar intrusos usando magias de encantamento e raízes.",
+        "Treants permanecem imóveis inicialmente, confundindo-se com árvores comuns.",
+        "As dryads focam conjuradores e arqueiros primeiro."
+      ],
+      "recompensas": [
+        "Seiva feérica rara",
+        "Madeira viva encantada",
+        "Fragmentos de âmbar mágico"
+      ],
+      "segredo": "Uma das árvores da clareira contém um portal adormecido conectado às Terras de Entremeio."
+    },
+    {
+      "id": "encontro_pantano_da_fome_verde",
+      "nome": "Pantano da Fome Verde",
+      "bioma": "Feywild - Outono Corrompido",
+      "dificuldade": "Mortal",
+      "descricao": "O chão pulsa como carne úmida sob folhas apodrecidas. Vinhas negras escorrem de árvores mortas enquanto massas vegetais se movem lentamente sob águas escuras.",
+      "ambiente": {
+        "terreno": [
+          "Lama profunda reduz deslocamento pela metade",
+          "Água escura obscurece criaturas Pequenas ou Médias parcialmente submersas",
+          "Raízes pulsantes dificultam fuga"
+        ],
+        "efeitos": [
+          {
+            "nome": "Esporos da Decadência",
+            "descricao": "Ao sofrer dano corpo a corpo de um blight ou shambling mound, a criatura deve realizar CD 15 de Constituição ou sofre 1d6 dano necrótico adicional."
+          }
+        ]
+      },
+      "monstros": [
+        {
+          "id": "vine_blight_corrompido",
+          "nome": "Vine Blight Corrompido",
+          "quantidade": "8",
+          "cr": 3,
+          "funcao": "Controle"
+        },
+        {
+          "id": "needle_blight_predador",
+          "nome": "Needle Blight Predador",
+          "quantidade": "10",
+          "cr": 2,
+          "funcao": "Atirador"
+        },
+        {
+          "id": "shambling_mound_abissal",
+          "nome": "Shambling Mound Abissal",
+          "quantidade": "3",
+          "cr": 8,
+          "funcao": "Brutamonte"
+        }
+      ],
+      "taticas": [
+        "Os blights atacam primeiro para prender e cercar alvos.",
+        "Shambling Mounds emergem apenas após personagens entrarem profundamente no pântano.",
+        "As criaturas focam personagens isolados e caídos."
+      ],
+      "recompensas": [
+        "Coração vegetal corrompido",
+        "Essência necrótica feérica",
+        "Cogumelos raros alquímicos"
+      ],
+      "segredo": "O pântano está sendo lentamente corrompido por energia extraplanar vazando de uma antiga prisão feérica enterrada abaixo da lama."
+    }
 ];
