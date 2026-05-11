@@ -3433,5 +3433,283 @@ const DATA_MONSTROS = [
         }
       },
       "descricao": "Uma montanha viva de raízes, fungos e carne vegetal podre corrompida por forças extraplanares esquecidas."
+    },
+	{
+      "id": "bruxa_verde_morvakka",
+      "nome": "Morvakka, a Bruxa Verde",
+      "tipo": "Fey",
+      "tamanho": "Médio",
+      "alinhamento": "Caótico Mau",
+      "cr": 10,
+      "ac": 17,
+      "hp": 168,
+      "deslocamento": "30 ft.",
+      "atributos": {
+        "for": 12,
+        "des": 16,
+        "con": 18,
+        "int": 18,
+        "sab": 16,
+        "car": 19
+      },
+      "habilidades": [
+        {
+          "nome": "Coven Arcano",
+          "descricao": "Enquanto ao menos uma integrante do coven estiver viva no mesmo plano, Morvakka recebe +2 na CD de suas magias."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Garras Venenosas",
+          "ataque": "+8",
+          "dano": "3d6+4 cortante + 3d8 venenoso"
+        },
+        {
+          "nome": "Explosão de Esporos",
+          "descricao": "Raio de 20 pés, CD 17 Constituição, 6d8 venenoso e condição Envenenado."
+        }
+      ],
+      "magias": {
+        "atributo": "Inteligência",
+        "cd": 17,
+        "ataque_magico": 9,
+        "nivel_conjurador": 13,
+        "magias_preparadas": {
+          "À vontade": [
+            "Poison Spray",
+            "Minor Illusion",
+            "Entangle"
+          ],
+          "3/dia": [
+            "Blight",
+            "Plant Growth",
+            "Stinking Cloud",
+            "Bestow Curse"
+          ],
+          "1/dia": [
+            "Cloudkill",
+            "Wall of Thorns"
+          ]
+        }
+      },
+      "descricao": "Uma bruxa coberta por folhas úmidas, fungos e raízes vivas que crescem sobre sua pele."
+    },
+    {
+      "id": "wyvern_putrefato",
+      "nome": "Wyvern Putrefato",
+      "tipo": "Dragão",
+      "tamanho": "Grande",
+      "alinhamento": "Neutro Mau",
+      "cr": 8,
+      "ac": 17,
+      "hp": 145,
+      "deslocamento": "20 ft., voo 80 ft.",
+      "atributos": {
+        "for": 21,
+        "des": 12,
+        "con": 19,
+        "int": 5,
+        "sab": 12,
+        "car": 6
+      },
+      "acoes": [
+        {
+          "nome": "Multiataque",
+          "descricao": "Mordida e ferrão."
+        },
+        {
+          "nome": "Ferrão Podre",
+          "ataque": "+9",
+          "dano": "2d8+5 perfurante + 4d8 venenoso"
+        }
+      ],
+      "descricao": "Um wyvern coberto de líquens negros e carne necrosada."
+    },
+    {
+      "id": "bruxa_do_destino_elyndra",
+      "nome": "Elyndra das Mil Tramas",
+      "tipo": "Fey",
+      "tamanho": "Médio",
+      "alinhamento": "Neutro Mau",
+      "cr": 11,
+      "ac": 18,
+      "hp": 182,
+      "deslocamento": "30 ft.",
+      "atributos": {
+        "for": 10,
+        "des": 18,
+        "con": 18,
+        "int": 20,
+        "sab": 17,
+        "car": 20
+      },
+      "habilidades": [
+        {
+          "nome": "Reescrever Destino",
+          "descricao": "1/turno, Elyndra força uma criatura a rerrolar um ataque, teste ou resistência."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Fios da Ruína",
+          "descricao": "Cone de 30 pés, CD 18 Sabedoria, 8d8 psíquico e condição Restrained."
+        }
+      ],
+      "magias": {
+        "atributo": "Inteligência",
+        "cd": 18,
+        "ataque_magico": 10,
+        "nivel_conjurador": 15,
+        "magias_preparadas": {
+          "À vontade": [
+            "Mage Hand",
+            "Mind Sliver",
+            "Detect Thoughts"
+          ],
+          "3/dia": [
+            "Slow",
+            "Banishment",
+            "Confusion",
+            "Synaptic Static"
+          ],
+          "1/dia": [
+            "Mass Suggestion",
+            "Modify Memory"
+          ]
+        }
+      },
+      "descricao": "Uma mulher alta envolta em véus dourados, com fios luminosos presos aos dedos como marionetes invisíveis."
+    },
+    {
+      "id": "beholder_oracular",
+      "nome": "Beholder Oracular",
+      "tipo": "Aberração",
+      "tamanho": "Grande",
+      "alinhamento": "Leal Mau",
+      "cr": 10,
+      "ac": 18,
+      "hp": 180,
+      "deslocamento": "0 ft., voo 20 ft.",
+      "atributos": {
+        "for": 10,
+        "des": 16,
+        "con": 18,
+        "int": 18,
+        "sab": 17,
+        "car": 17
+      },
+      "habilidades": [
+        {
+          "nome": "Olhos Proféticos",
+          "descricao": "Possui vantagem em iniciativa e percepção."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Raios Oculares",
+          "descricao": "Dispara 3 raios aleatórios."
+        }
+      ],
+      "descricao": "Um beholder de olhos dourados cobertos por runas orbitais."
+    },
+    {
+      "id": "bruxa_da_noite_nyssara",
+      "nome": "Nyssara da Lua Morta",
+      "tipo": "Fey",
+      "tamanho": "Médio",
+      "alinhamento": "Caótico Mau",
+      "cr": 12,
+      "ac": 19,
+      "hp": 225,
+      "deslocamento": "40 ft.",
+      "atributos": {
+        "for": 13,
+        "des": 20,
+        "con": 20,
+        "int": 21,
+        "sab": 18,
+        "car": 22
+      },
+      "habilidades": [
+        {
+          "nome": "Passo Sombrio",
+          "descricao": "Teleporta-se entre sombras como ação bônus."
+        },
+        {
+          "nome": "Aura da Lua Morta",
+          "descricao": "Inimigos a até 15 pés têm desvantagem contra medo."
+        }
+      ],
+      "acoes": [
+        {
+          "nome": "Toque da Lua Morta",
+          "ataque": "+11",
+          "dano": "4d8 necrótico + 4d8 psíquico"
+        },
+        {
+          "nome": "Grito da Noite Eterna",
+          "descricao": "Raio de 30 pés, CD 19 Sabedoria, 10d8 psíquico e condição Amedrontado."
+        }
+      ],
+      "magias": {
+        "atributo": "Carisma",
+        "cd": 19,
+        "ataque_magico": 11,
+        "nivel_conjurador": 17,
+        "magias_preparadas": {
+          "À vontade": [
+            "Chill Touch",
+            "Minor Illusion",
+            "Darkness"
+          ],
+          "3/dia": [
+            "Phantasmal Killer",
+            "Blight",
+            "Dimension Door",
+            "Fear"
+          ],
+          "1/dia": [
+            "Finger of Death",
+            "Circle of Death",
+            "Dream"
+          ]
+        }
+      },
+      "descricao": "Uma entidade envolta em mantos negros líquidos, com olhos prateados vazios refletindo luas inexistentes."
+    },
+    {
+      "id": "meio_dragao_umbral",
+      "nome": "Meio-Dragão Umbral",
+      "tipo": "Humanoide",
+      "tamanho": "Grande",
+      "alinhamento": "Leal Mau",
+      "cr": 11,
+      "ac": 19,
+      "hp": 210,
+      "deslocamento": "40 ft., voo 60 ft.",
+      "atributos": {
+        "for": 23,
+        "des": 16,
+        "con": 22,
+        "int": 12,
+        "sab": 14,
+        "car": 18
+      },
+      "acoes": [
+        {
+          "nome": "Multiataque",
+          "descricao": "Dois ataques de espada sombria."
+        },
+        {
+          "nome": "Espada Sombria",
+          "ataque": "+10",
+          "dano": "3d10+6 cortante + 2d8 necrótico"
+        },
+        {
+          "nome": "Sopro Umbral (Recarga 5-6)",
+          "descricao": "Cone de 60 pés, CD 18 Constituição, 10d8 necrótico."
+        }
+      ],
+      "descricao": "Um guerreiro dracônico deformado pela magia noturna da Feywild."
     }
 ];
