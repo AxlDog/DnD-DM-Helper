@@ -2602,5 +2602,209 @@ const DATA_MONSTROS = [
 		  "descricao": "Tem vantagem em testes de Furtividade em ambientes naturais."
 		}
 	  ]
-	}
+	},
+	{
+    "id": "mob_sentinela_sirius",
+    "nome": "Sentinela de Sirius",
+    "tipo": "Feerico",
+    "alinhamento": "Leal neutro",
+    "ca": 17,
+    "tipo_ca": "Armadura estelar",
+    "pv": 58,
+    "dados_vida": "9d8 + 18",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Coroa de Sirius"],
+
+    "atributos": {
+      "for": 15,
+      "des": 14,
+      "con": 14,
+      "int": 12,
+      "sab": 14,
+      "car": 12
+    },
+
+    "resistencias": [
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 14",
+    "idiomas": "Comum, Silvestre",
+    "cr": "3",
+    "xp": 700,
+
+    "habilidades": [
+      {
+        "nome": "Selo Estelar",
+        "descricao": "Quando atinge uma criatura, pode marcá-la até o início de seu próximo turno. Criaturas marcadas não se beneficiam de invisibilidade."
+      },
+      {
+        "nome": "Vigília Astral",
+        "descricao": "Tem vantagem em testes contra ser enfeitiçado ou iludido."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com espada estelar."
+      },
+      {
+        "nome": "Espada Estelar",
+        "tipo": "corpo a corpo",
+        "ataque": "+5",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d8 + 3 cortante + 1d4 radiante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Interrupcao Arcana",
+        "descricao": "Como reação, quando uma criatura a até 9m usa teleporte curto, a Sentinela pode forçar um teste de Carisma CD 13. Em falha, o teleporte falha."
+      }
+    ]
+  },
+
+  {
+    "id": "mob_arbitro_firmamento",
+    "nome": "Árbitro do Firmamento",
+    "tipo": "Feerico",
+    "alinhamento": "Leal neutro",
+    "ca": 18,
+    "tipo_ca": "Armadura da Coroa",
+    "pv": 92,
+    "dados_vida": "11d8 + 44",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Coroa de Sirius"],
+
+    "atributos": {
+      "for": 17,
+      "des": 12,
+      "con": 18,
+      "int": 13,
+      "sab": 15,
+      "car": 16
+    },
+
+    "resistencias": [
+      "radiante",
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 18m, Percepção passiva 15",
+    "idiomas": "Comum, Silvestre, Celestial",
+    "cr": "5",
+    "xp": 1800,
+
+    "habilidades": [
+      {
+        "nome": "Aura de Contencao",
+        "descricao": "Criaturas hostis a até 3m têm deslocamento reduzido em 3m."
+      },
+      {
+        "nome": "Autoridade da Coroa",
+        "descricao": "Tem vantagem em testes de resistência contra magia de encanto."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com lâmina do firmamento."
+      },
+      {
+        "nome": "Lamina do Firmamento",
+        "tipo": "corpo a corpo",
+        "ataque": "+7",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "1d10 + 4 cortante + 1d6 radiante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Duelo Ritual",
+        "descricao": "Uma criatura a até 9m deve realizar teste de Sabedoria CD 14. Em falha, fica compelida a focar seus ataques no Árbitro até o final do próximo turno."
+      },
+      {
+        "nome": "Quebra de Encanto",
+        "descricao": "Como ação bônus, pode encerrar um efeito de charme em um aliado a até 9m."
+      }
+    ]
+  },
+  {
+    "id": "mob_custodio_coroa",
+    "nome": "Custódio da Coroa",
+    "tipo": "Feerico",
+    "alinhamento": "Leal neutro",
+    "ca": 19,
+    "tipo_ca": "Armadura constelar",
+    "pv": 138,
+    "dados_vida": "16d8 + 64",
+    "deslocamento": "9m",
+
+    "ambientes": ["Feywild", "Coroa de Sirius"],
+
+    "atributos": {
+      "for": 18,
+      "des": 14,
+      "con": 18,
+      "int": 16,
+      "sab": 16,
+      "car": 18
+    },
+
+    "resistencias": [
+      "radiante",
+      "psiquico",
+      "encantado"
+    ],
+
+    "sentidos": "visão no escuro 24m, Percepção passiva 17",
+    "idiomas": "Comum, Silvestre, Celestial",
+    "cr": "8",
+    "xp": 3900,
+
+    "habilidades": [
+      {
+        "nome": "Olhos de Sirius",
+        "descricao": "Invisibilidade e ilusões simples não impedem que o Custódio perceba criaturas a até 12m."
+      },
+      {
+        "nome": "Guardiao de Juramentos",
+        "descricao": "Tem vantagem contra efeitos mágicos originados de pactos, encantamentos e compulsões."
+      }
+    ],
+
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques com espada constelar."
+      },
+      {
+        "nome": "Espada Constelar",
+        "tipo": "corpo a corpo",
+        "ataque": "+8",
+        "alcance": "1,5m",
+        "alvo": "1 criatura",
+        "dano": "2d8 + 4 cortante + 1d8 radiante"
+      }
+    ],
+
+    "habilidades_especiais": [
+      {
+        "nome": "Circulo Estelar",
+        "descricao": "Uma vez por descanso curto, cria uma área de 6m de raio centrada em si por 1 minuto. Criaturas hostis tratam a área como terreno difícil e sofrem 1d6 radiante ao iniciarem o turno nela."
+      },
+      {
+        "nome": "Revelar Juramento",
+        "descricao": "Uma criatura a até 12m deve realizar teste de Carisma CD 16. Em falha, efeitos de invisibilidade, disfarce mágico e nomes velados são revelados até o fim do próximo turno."
+      }
+    ]
+  }
 ];
