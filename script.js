@@ -760,6 +760,38 @@ function renderBairroView(bairroId) {
 
 /* ----------- MODAL GENÉRICO ------------*/
 
+/**
+ * Função recursiva para formatar qualquer tipo de dado (String, Array, Objeto) para o Modal
+ */
+function formatarValor(valor) {
+  if (valor === null || valor === undefined || valor === "") return "—";
+
+  if (Array.isArray(valor)) {
+    if (valor.length === 0) return "—";
+    // Se for array de objetos (ex: lista de membros com funções e títulos)
+    if (typeof valor[0] === 'object') {
+      return `<div style="margin-top: 5px;">${valor.map(v => `<div style="padding-left: 10px; border-left: 2px solid #E69A28; margin-bottom: 5px;">${formatarValor(v)}</div>`).join('')}</div>`;
+    }
+    // Se for array de strings simples (ex: tags, participantes)
+    return `<ul style="margin: 5px 0; padding-left: 20px;">${valor.map(v => `<li>${formatarValor(v)}</li>`).join('')}</ul>`;
+  }
+
+  // Se for um Objeto (ex: { historia: 12, persuasao: 13 })
+  if (typeof valor === 'object') {
+    return `<ul style="margin: 5px 0; padding-left: 20px;">${Object.entries(valor).map(([k, v]) => {
+      const nomeChave = k.replace(/_/g, ' ').charAt(0).toUpperCase() + k.replace(/_/g, ' ').slice(1);
+      return `<li><strong>${nomeChave}:</strong> ${formatarValor(v)}</li>`;
+    }).join('')}</ul>`;
+  }
+
+  // Para valores normais (String, Número, Boolean)
+  return valor;
+}
+
+/**
+ * Modal Dinâmico que aceita qualquer Objeto e renderiza suas chaves.
+ * Passa por TODOS os elementos e sub-elementos usando recursividade.
+ */
 function openGenericModal(objeto, tituloPadrao) {
   const modal = document.getElementById("npcModal");
   const body = document.getElementById("npcModalBody");
@@ -770,16 +802,18 @@ function openGenericModal(objeto, tituloPadrao) {
     ...(objeto.metadata || {}) 
   };
 
-  if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
-    modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
+  if (modalContent && typeof IMAGES_CACHE !== 'undefined' && IMAGES_CACHE.previewHeader) {
+    modalContent.style.backgroundImage = `url('${IMAGES_CACHE.previewHeader}')`;
   }
+  
   if (!modal || !body) return;
 
   let colunasHtml = "";
-  let tituloPrincipal = tituloPadrao;
+  // Tenta extrair o nome principal de várias formas, senão usa o padrão
+  let tituloPrincipal = dataCompleta.nome || dataCompleta.faccao_nome || dataCompleta.nome_faccao || tituloPadrao;
 
+  // Dicionário para deixar as chaves de sistema bonitas visualmente
   const nomesFormatados = {
-    id: "",
     raca: "Raça",
     faccao: "Facção",
     aparencia: "Aparência",
@@ -794,28 +828,47 @@ function openGenericModal(objeto, tituloPadrao) {
     comportamento: "Comportamento"
   };
 
+  // Aqui passamos por TODAS as chaves do objeto principal
   Object.entries(dataCompleta).forEach(([chave, valor]) => {
     const chaveLower = chave.toLowerCase();
-    if (chaveLower === "metadata" || chaveLower === "created_at" || chaveLower === "id") return;
+    
+    // Ignorar chaves de controle de banco de dados ou chaves que já compõem o Título
+    if (["id", "id_js", "bairro_id", "local_id", "created_at", "metadata", "nome", "faccao_nome", "nome_faccao"].includes(chaveLower)) return;
+    
+    // Ignorar valores nulos, vazios ou arrays/objetos sem nada dentro
+    if (valor === null || valor === undefined || valor === "" || valor === "—") return;
+    if (Array.isArray(valor) && valor.length === 0) return;
+    if (typeof valor === 'object' && Object.keys(valor).length === 0) return;
 
-    if (chaveLower === "nome" || chaveLower === "faccao_nome" || chaveLower === "nome_faccao") {
-      tituloPrincipal = valor;
-      return;
-    }
+    // Converte a chave (ex: informacoes_encontradas) para (Informacoes Encontradas)
+    const label = nomesFormatados[chaveLower] || chave.replace(/_/g, " ").charAt(0).toUpperCase() + chave.replace(/_/g, " ").slice(1);
 
-    if (chaveLower === "id_js") return;
-    if (!valor || valor === "—") return;
-
-    const label = nomesFormatados[chaveLower] || 
-                  chave.replace(/_/g, " ").charAt(0).toUpperCase() + chave.slice(1);
-
+    // O formatarValor(valor) fará a mágica de extrair e exibir qualquer sub-item!
     colunasHtml += `
-      <section class="local-col ${chaveLower === 'segredo' ? 'secret-info' : ''}">
-        <h3>${label}</h3>
-        <p>${typeof formatarValor === 'function' ? formatarValor(valor) : valor}</p>
-      </section>
+      <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1);" class="${chaveLower === 'segredo' ? 'secret-info' : ''}">
+        <strong style="color: #E69A28; font-size: 1.1em;">${label}:</strong>
+        <div style="margin-top: 5px; color: #ddd; font-size: 0.95em;">${formatarValor(valor)}</div>
+      </div>
     `;
   });
+
+  // Renderização e reconstrução visual do modal no HTML
+  body.innerHTML = `
+    <div class="local-modal-container" style="padding: 20px;">
+      <header class="local-modal-header" style="border-bottom: 2px solid #E69A28; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2 style="color: #E69A28; margin: 0;">${tituloPrincipal}</h2>
+        ${dataCompleta.tipo ? `<span class="badge" style="background: #444; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; display: inline-block; margin-top: 10px;">${dataCompleta.tipo.toUpperCase()}</span>` : ''}
+      </header>
+      
+      <div class="local-modal-scroll" style="max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+        ${colunasHtml}
+      </div>
+      
+      <div class="modal-footer" style="margin-top: 20px; text-align: right; border-top: 1px solid #444; padding-top: 15px;">
+         <button class="btn-forja" onclick="closeNPCModal()" style="padding: 8px 16px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-weight: bold;">Fechar</button>
+      </div>
+    </div>
+  `;
 
   modal.classList.remove("hidden");
 }
