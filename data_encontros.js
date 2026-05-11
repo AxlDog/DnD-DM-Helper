@@ -418,7 +418,7 @@ const DATA_ENCONTROS = [
           }
         ]
       },
-      "monstros": [
+      "inimigos": [
         {
           "id": "dryad_feerica_guardia",
           "nome": "Dryad Feérica Guardiã",
@@ -465,7 +465,7 @@ const DATA_ENCONTROS = [
           }
         ]
       },
-      "monstros": [
+      "inimigos": [
         {
           "id": "vine_blight_corrompido",
           "nome": "Vine Blight Corrompido",
@@ -506,7 +506,7 @@ const DATA_ENCONTROS = [
       "bioma": "Pântano Feérico",
       "dificuldade": "Difícil",
       "descricao": "O cheiro de ervas podres e sangue antigo paira sobre o pântano. Uma cabana torta afunda lentamente na lama enquanto um enorme wyvern coberto de fungos circula acima das árvores.",
-      "monstros": [
+      "inimigos": [
         {
           "id": "bruxa_verde_morvakka",
           "nome": "Morvakka, a Bruxa Verde",
@@ -535,7 +535,7 @@ const DATA_ENCONTROS = [
       "bioma": "Ruínas Feéricas",
       "dificuldade": "Muito Difícil",
       "descricao": "Fios dourados atravessam o ar como teias invisíveis enquanto olhos observam de todas as direções. Uma figura encapuzada costura linhas brilhantes diante de um enorme observador deformado.",
-      "monstros": [
+      "inimigos": [
         {
           "id": "bruxa_do_destino_elyndra",
           "nome": "Elyndra das Mil Tramas",
@@ -564,7 +564,7 @@ const DATA_ENCONTROS = [
       "bioma": "Floresta Sombria",
       "dificuldade": "Mortal",
       "descricao": "A floresta mergulha em silêncio absoluto enquanto a lua parece apagar lentamente acima das árvores negras. Entre os galhos, uma criatura dracônica deformada rasteja ao lado de uma mulher de olhos vazios.",
-      "monstros": [
+      "inimigos": [
         {
           "id": "bruxa_da_noite_nyssara",
           "nome": "Nyssara da Lua Morta",
