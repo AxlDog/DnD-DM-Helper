@@ -3590,9 +3590,21 @@ const DATA_MONSTROS = [
 		},
 		{
 		  "nome": "Raios Oculares",
-		  "descricao": "O beholder dispara aleatoriamente um dos seguintes raios em um alvo a até 36m (Role 1d10, jogue novamente se o raio já tiver sido usado neste turno):\n1. Raio de Encantamento: DC 16 Sab. Falha: 13 (3d8) dano psíquico e Encantado por 1 hora.\n2. Raio paralisante: DC 16 Con. Falha: Paralisado (repetir teste no fim dos turnos).\n3. Raio de Medo: DC 16 Sab. Falha: 14 (4d6) dano psíquico e Amedrontado até o fim do próximo turno.\n4. Raio de Lentidão: DC 16 Con. Falha: 18 (4d8) dano necrótico e velocidade reduzida à metade, sem reações.\n5. Raio de Enervação: DC 16 Con. Falha: 13 (3d8) dano de veneno e Envenenado (não recupera PV).\n6. Raio Telecinético: DC 16 For. Move o alvo até 9m ou o deixa Impedido.\n7. Raio de Sono: DC 16 Sab. Falha: Inconsciente por 1 minuto (acorda se sofrer dano).\n8. Raio de Petrificação: DC 16 Con. Falha: Impedido; segunda falha: Petrificado.\n9. Raio de Desintegração: DC 16 Des. Falha: 36 (8d8) dano de força. Reduzido a 0 PV, vira pó.\n10. Raio da Morte: DC 16 Des. Falha: 55 (10d10) dano necrótico. Morre se chegar a 0 PV."
+		  "descricao": "O beholder dispara aleatoriamente um dos seguintes raios em um alvo a até 36m (Role 1d10, jogue novamente se o raio já tiver sido usado neste turno):",
 		}
 	  ],
+	  "raios_oculares": {
+		"1": "Raio de Encantamento: DC 16 Sab. Falha: 13 (3d8) dano psíquico e Encantado por 1 hora.",
+		"2": "Raio Paralisante: DC 16 Con. Falha: Paralisado (repetir teste no fim dos turnos).",
+		"3": "Raio de Medo: DC 16 Sab. Falha: 14 (4d6) dano psíquico e Amedrontado até o fim do próximo turno.",
+		"4": "Raio de Lentidão: DC 16 Con. Falha: 18 (4d8) dano necrótico e velocidade reduzida à metade, sem reações.",
+		"5": "Raio de Enervação: DC 16 Con. Falha: 13 (3d8) dano de veneno e Envenenado (não recupera PV).",
+		"6": "Raio Telecinético: DC 16 For. Move o alvo até 9m ou o deixa Impedido.",
+		"7": "Raio de Sono: DC 16 Sab. Falha: Inconsciente por 1 minuto (acorda se sofrer dano).",
+		"8": "Raio de Petrificação: DC 16 Con. Falha: Impedido; segunda falha: Petrificado.",
+		"9": "Raio de Desintegração: DC 16 Des. Falha: 36 (8d8) dano de força. Reduzido a 0 PV, vira pó.",
+		"10": "Raio da Morte: DC 16 Des. Falha: 55 (10d10) dano necrótico. Morre se chegar a 0 PV."
+	  },
 	  "acoes_lendarias": [
 		{
 		  "nome": "Mastigar (Chomp)",
