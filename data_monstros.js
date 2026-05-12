@@ -2665,8 +2665,8 @@ const DATA_MONSTROS = [
         "sab": 13,
         "car": 14
       },
-      "ac": 18,
-      "hp": 105,
+      "ca": 18,
+      "pv": 105,
       "deslocamento": "30 ft.",
       "habilidades": [
         "Action Surge",
@@ -2711,8 +2711,8 @@ const DATA_MONSTROS = [
         "sab": 14,
         "car": 16
       },
-      "ac": 20,
-      "hp": 165,
+      "ca": 20,
+      "pv": 165,
       "deslocamento": "30 ft.",
       "habilidades": [
         "Action Surge",
@@ -3619,8 +3619,8 @@ const DATA_MONSTROS = [
       "tamanho": "Médio",
       "alinhamento": "Caótico Mau",
       "cr": 12,
-      "ac": 19,
-      "hp": 225,
+      "ca": 19,
+      "pv": 225,
       "deslocamento": "40 ft.",
       "atributos": {
         "for": 13,
@@ -3686,7 +3686,7 @@ const DATA_MONSTROS = [
       "cr": 11,
       "ac": 19,
       "hp": 210,
-      "deslocamento": "40 ft., voo 60 ft.",
+      "deslocamento": "9m",
       "atributos": {
         "for": 23,
         "des": 16,
