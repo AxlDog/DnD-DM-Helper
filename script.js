@@ -2133,6 +2133,7 @@ function openMonsterDetails(event, monstroId) {
           if (item.alvo) detalhes.push(`<em>Alvo:</em> ${item.alvo}`);
           if (item.dano) detalhes.push(`<em>Dano:</em> ${item.dano}`);
           if (item.efeito) detalhes.push(`<em>Efeito:</em> ${item.efeito}`);
+		  if (item.lista_raios) detalhes.push(`<em>Lista de raios:</em> ${item.lista_raios}`);
           desc = detalhes.join(' | ');
         }
 
