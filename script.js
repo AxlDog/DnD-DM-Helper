@@ -2106,7 +2106,8 @@ function openMonsterDetails(event, monstroId) {
     acoes_bonus: "Ações Bônus",
     reacoes: "Reações",
     acoes_lendarias: "Ações Lendárias",
-    magias: "Magias"
+    magias: "Magias",
+	raios_oculares: "Raios Oculares"
   };
 
   let sessoesDinamicasHtml = '';
