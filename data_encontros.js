@@ -447,144 +447,54 @@ const DATA_ENCONTROS = [
       "segredo": "Uma das árvores da clareira contém um portal adormecido conectado às Terras de Entremeio."
     },
     {
-      "id": "encontro_pantano_da_fome_verde",
-      "nome": "Pantano da Fome Verde",
-      "bioma": "Feywild - Outono Corrompido",
-      "dificuldade": "Mortal",
-      "descricao": "O chão pulsa como carne úmida sob folhas apodrecidas. Vinhas negras escorrem de árvores mortas enquanto massas vegetais se movem lentamente sob águas escuras.",
-      "ambiente": {
-        "terreno": [
-          "Lama profunda reduz deslocamento pela metade",
-          "Água escura obscurece criaturas Pequenas ou Médias parcialmente submersas",
-          "Raízes pulsantes dificultam fuga"
-        ],
-        "efeitos": [
-          {
-            "nome": "Esporos da Decadência",
-            "descricao": "Ao sofrer dano corpo a corpo de um blight ou shambling mound, a criatura deve realizar CD 15 de Constituição ou sofre 1d6 dano necrótico adicional."
-          }
-        ]
-      },
-      "inimigos": [
-        {
-          "id": "vine_blight_corrompido",
-          "nome": "Vine Blight Corrompido",
-          "quantidade": "8",
-          "cr": 5,
-          "funcao": "Controle"
-        },
-        {
-          "id": "needle_blight_predador",
-          "nome": "Needle Blight Predador",
-          "quantidade": "10",
-          "cr": 3,
-          "funcao": "Atirador"
-        },
-        {
-          "id": "shambling_mound_abissal",
-          "nome": "Shambling Mound Abissal",
-          "quantidade": "1",
-          "cr": 8,
-          "funcao": "Brutamonte"
-        }
-      ],
-      "taticas": [
-        "Os blights atacam primeiro para prender e cercar alvos.",
-        "Shambling Mounds emergem apenas após personagens entrarem profundamente no pântano.",
-        "As criaturas focam personagens isolados e caídos."
-      ],
-      "recompensas": [
-        "Coração vegetal corrompido",
-        "Essência necrótica feérica",
-        "Cogumelos raros alquímicos"
-      ],
-      "segredo": "O pântano está sendo lentamente corrompido por energia extraplanar vazando de uma antiga prisão feérica enterrada abaixo da lama."
-    },
-	{
-      "id": "encontro_bruxa_verde_do_pantano",
-      "nome": "A Lama que Respira",
-      "bioma": "Pântano Feérico",
-      "dificuldade": "Difícil",
-      "descricao": "O cheiro de ervas podres e sangue antigo paira sobre o pântano. Uma cabana torta afunda lentamente na lama enquanto um enorme wyvern coberto de fungos circula acima das árvores.",
-      "inimigos": [
-        {
-          "id": "bruxa_verde_morvakka",
-          "nome": "Morvakka, a Bruxa Verde",
-          "quantidade": 1,
-          "cr": 10,
-          "funcao": "Controladora"
-        },
-        {
-          "id": "wyvern_putrefato",
-          "nome": "Wyvern Putrefato",
-          "quantidade": 1,
-          "cr": 8,
-          "funcao": "Predador"
-        }
-      ],
-      "taticas": [
-        "Morvakka utiliza magia de terreno e venenos para separar o grupo.",
-        "O wyvern mergulha contra conjuradores e tenta arrastar vítimas para a lama.",
-        "A bruxa utiliza ilusões vegetais para dificultar visão."
-      ],
-      "segredo": "A cabana da bruxa possui raízes conectadas diretamente a um antigo coração feérico enterrado sob o pântano."
-    },
-    {
-      "id": "encontro_bruxa_do_destino",
-      "nome": "O Tear das Possibilidades",
-      "bioma": "Ruínas Feéricas",
-      "dificuldade": "Muito Difícil",
-      "descricao": "Fios dourados atravessam o ar como teias invisíveis enquanto olhos observam de todas as direções. Uma figura encapuzada costura linhas brilhantes diante de um enorme observador deformado.",
-      "inimigos": [
-        {
-          "id": "bruxa_do_destino_elyndra",
-          "nome": "Elyndra das Mil Tramas",
-          "quantidade": 1,
-          "cr": 11,
-          "funcao": "Manipuladora"
-        },
-        {
-          "id": "beholder_oracular",
-          "nome": "Beholder Oracular",
-          "quantidade": 1,
-          "cr": 10,
-          "funcao": "Artilharia"
-        }
-      ],
-      "taticas": [
-        "Elyndra força rerrolagens, manipula iniciativa e enfraquece alvos prioritários.",
-        "O beholder mantém distância enquanto cobre corredores e áreas abertas.",
-        "As linhas douradas do cenário funcionam como alarmes mágicos."
-      ],
-      "segredo": "Parte das profecias da bruxa menciona estrelas desaparecendo do céu da Feywild."
-    },
-    {
-      "id": "encontro_bruxa_da_noite",
-      "nome": "O Banquete da Lua Morta",
-      "bioma": "Floresta Sombria",
-      "dificuldade": "Mortal",
-      "descricao": "A floresta mergulha em silêncio absoluto enquanto a lua parece apagar lentamente acima das árvores negras. Entre os galhos, uma criatura dracônica deformada rasteja ao lado de uma mulher de olhos vazios.",
-      "inimigos": [
-        {
-          "id": "bruxa_da_noite_nyssara",
-          "nome": "Nyssara da Lua Morta",
-          "quantidade": 1,
-          "cr": 12,
-          "funcao": "Arquimaga Sombria"
-        },
-        {
-          "id": "meio_dragao_umbral",
-          "nome": "Meio-Dragão Umbral",
-          "quantidade": 1,
-          "cr": 11,
-          "funcao": "Executor"
-        }
-      ],
-      "taticas": [
-        "Nyssara utiliza escuridão mágica e magia psíquica para quebrar formação.",
-        "O meio-dragão caça alvos isolados nas sombras.",
-        "A bruxa tenta incapacitar antes de causar dano massivo."
-      ],
-      "segredo": "Nyssara possui fragmentos de memórias roubadas de arquifadas desaparecidas."
-    }
+    "id": "encontro_bruxa_verde_do_pantano",
+    "nome": "A Lama que Respira",
+    "bioma": "Pântano Feérico",
+    "nivel_recomendado": "Difícil",
+    "descricao": "O cheiro de ervas podres e sangue antigo paira sobre o pântano. Uma cabana torta afunda lentamente na lama enquanto um enorme wyvern coberto de fungos circula acima das árvores.",
+    "inimigos": [
+      { "id": "bruxa_verde_morvakka", "quantidade": 1 },
+      { "id": "wyvern_putrefato", "quantidade": 1 }
+    ],
+    "taticas": [
+      "Morvakka utiliza magia de terreno e venenos para separar o grupo.",
+      "O wyvern mergulha contra conjuradores e tenta arrastar vítimas para a lama.",
+      "A bruxa utiliza ilusões vegetais para dificultar visão."
+    ],
+    "segredo": "A cabana da bruxa possui raízes conectadas diretamente a um antigo coração feérico enterrado sob o pântano."
+  },
+  {
+    "id": "encontro_bruxa_do_destino",
+    "nome": "O Tear das Possibilidades",
+    "bioma": "Ruínas Feéricas",
+    "nivel_recomendado": "Muito Difícil",
+    "descricao": "Fios dourados atravessam o ar como teias invisíveis enquanto olhos observam de todas as direções. Uma figura encapuzada costura linhas brilhantes diante de um enorme observador deformado.",
+    "inimigos": [
+      { "id": "bruxa_do_destino_elyndra", "quantidade": 1 },
+      { "id": "beholder_oracular", "quantidade": 1 }
+    ],
+    "taticas": [
+      "Elyndra força rerrolagens, manipula iniciativa e enfraquece alvos prioritários.",
+      "O beholder mantém distância enquanto cobre corredores e áreas abertas.",
+      "As linhas douradas do cenário funcionam como alarmes mágicos."
+    ],
+    "segredo": "Parte das profecias da bruxa menciona estrelas desaparecendo do céu da Feywild."
+  },
+  {
+    "id": "encontro_bruxa_da_noite",
+    "nome": "O Banquete da Lua Morta",
+    "bioma": "Floresta Sombria",
+    "nivel_recomendado": "Mortal",
+    "descricao": "A floresta mergulha em silêncio absoluto enquanto a lua parece apagar lentamente acima das árvores negras. Entre os galhos, uma criatura dracônica deformada rasteja ao lado de uma mulher de olhos vazios.",
+    "inimigos": [
+      { "id": "bruxa_da_noite_nyssara", "quantidade": 1 },
+      { "id": "meio_dragao_umbral", "quantidade": 1 }
+    ],
+    "taticas": [
+      "Nyssara utiliza escuridão mágica e magia psíquica para quebrar formação.",
+      "O meio-dragão caça alvos isolados nas sombras.",
+      "A bruxa tenta incapacitar antes de causar dano massivo."
+    ],
+    "segredo": "Nyssara possui fragmentos de memórias roubadas de arquifadas desaparecidas."
+  }
 ];
