@@ -2604,232 +2604,260 @@ const DATA_MONSTROS = [
 	  ]
 	},
     {
-      "id": "fey_primavera_soldado",
-      "nome": "Guardião do Florescer",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Neutro",
-      "cr": 3,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Elfos e sátiros de armaduras leves cobertas por musgo, folhas jovens e flores vivas. Seus olhos brilham em tons esmeralda e dourado.",
-      "atributos": {
-        "for": 16,
-        "des": 14,
-        "con": 14,
-        "int": 12,
-        "sab": 12,
-        "car": 13
-      },
-      "ac": 17,
-      "hp": 60,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Fey Ancestry",
-        "Second Wind",
-        "War Magic"
-      ],
-      "ataques": [
-        {
-          "nome": "Lâmina Verdejante",
-          "ataque": 6,
-          "dano": "1d8+3 cortante + 1d4 radiante"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 13,
-        "ataque_magico": 5,
-        "preparadas": [
-          "Shield",
-          "Absorb Elements",
-          "Magic Missile",
-          "Entangle"
-        ]
-      },
-      "descricao": "Patrulheiros rápidos e atentos, usados para conter intrusos sem destruir a beleza viva da corte."
-    },
-    {
-      "id": "fey_primavera_capitao",
-      "nome": "Capitão do Broto Dourado",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Neutro",
-      "cr": 6,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Vestes de batalha verdes e douradas, coroas de ramos vivos e runas de seiva luminosa correndo pelos braços.",
-      "atributos": {
-        "for": 18,
-        "des": 14,
-        "con": 16,
-        "int": 14,
-        "sab": 13,
-        "car": 14
-      },
-      "ca": 18,
-      "pv": 105,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "War Magic",
-        "Fey Step (1/descanso curto)"
-      ],
-      "ataques": [
-        {
-          "nome": "Espada do Primeiro Sol",
-          "ataque": 8,
-          "dano": "1d8+4 cortante + 2d4 radiante"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 14,
-        "ataque_magico": 6,
-        "preparadas": [
-          "Shield",
-          "Absorb Elements",
-          "Misty Step",
-          "Magic Weapon",
-          "Web"
-        ]
-      },
-      "descricao": "Comandam expedições de fronteira e escoltam emissários entre as terras de entremeio."
-    },
-    {
-      "id": "fey_primavera_comandante",
-      "nome": "Comandante da Aurora Verde",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Neutro",
-      "cr": 10,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Armadura viva formada por galhos, pétalas e luz dourada. Cada passo faz pequenas flores nascerem sob os pés.",
-      "atributos": {
-        "for": 20,
-        "des": 16,
-        "con": 18,
-        "int": 16,
-        "sab": 14,
-        "car": 16
-      },
-      "ca": 20,
-      "pv": 165,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "War Magic",
-        "Indomitable",
-        "Fey Step"
-      ],
-      "ataques": [
-        {
-          "nome": "Lâmina do Florescer Eterno",
-          "ataque": 10,
-          "dano": "2d8+5 cortante + 2d6 radiante"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 16,
-        "ataque_magico": 8,
-        "preparadas": [
-          "Shield",
-          "Absorb Elements",
-          "Misty Step",
-          "Mirror Image",
-          "Plant Growth",
-          "Haste"
-        ]
-      },
-      "descricao": "São os defensores centrais da Primavera, capazes de transformar um campo de batalha em floresta viva."
-    },
-	{
-      "id": "fey_verao_soldado",
-      "nome": "Lança do Sol Ardente",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Bom",
-      "cr": 3,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Guerreiros de bronze polido, capas vermelhas e olhos brilhando como brasas.",
-      "atributos": {
-        "for": 17,
-        "des": 13,
-        "con": 14,
-        "int": 12,
-        "sab": 12,
-        "car": 13
-      },
-      "ac": 18,
-      "hp": 64,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Second Wind",
-        "War Magic"
-      ],
-      "ataques": [
-        {
-          "nome": "Lança Solar",
-          "ataque": 6,
-          "dano": "1d8+3 perfurante + 1d4 fogo"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 13,
-        "ataque_magico": 5,
-        "preparadas": [
-          "Shield",
-          "Absorb Elements",
-          "Burning Hands",
-          "Magic Missile"
-        ]
-      },
-      "descricao": "Infantaria disciplinada da corte, avançam como muralhas de verão."
-    },
-    {
-      "id": "fey_verao_capitao",
-      "nome": "Capitão da Chama Real",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Bom",
-      "cr": 6,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Armaduras douradas marcadas por brasas vivas e mantos cor de cobre.",
-      "atributos": {
-        "for": 18,
-        "des": 14,
-        "con": 16,
-        "int": 14,
-        "sab": 13,
-        "car": 15
-      },
-      "ac": 19,
-      "hp": 112,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "War Magic"
-      ],
-      "ataques": [
-        {
-          "nome": "Espada do Meio-Dia",
-          "ataque": 8,
-          "dano": "1d8+4 cortante + 2d4 fogo"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 14,
-        "ataque_magico": 6,
-        "preparadas": [
-          "Shield",
-          "Scorching Ray",
-          "Misty Step",
-          "Magic Weapon"
-        ]
-      },
-      "descricao": "Lideram formações ofensivas e mantêm o ímpeto da corte em batalhas abertas."
-    },
+		"id": "fey_primavera_soldado",
+		"nome": "Guardião do Florescer",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Neutro",
+		"ca": 17,
+		"pv": 60,
+		"hp_max": 60,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 16,
+		  "des": 14,
+		  "con": 14,
+		  "int": 12,
+		  "sab": 12,
+		  "car": 13
+		},
+		"cr": 3,
+		"xp": 700,
+		"habilidades": [
+		  { "nome": "Fey Ancestry", "descricao": "Vantagem contra ser enfeitiçado; magia não pode colocá-lo para dormir." },
+		  { "nome": "Second Wind", "descricao": "Recupera 1d10+3 PV como ação bônus (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 13,
+		  "ataque": 5,
+		  "preparadas": ["Shield", "Absorb Elements", "Magic Missile", "Entangle"]
+		},
+		"acoes": [
+		  {
+			"nome": "Lâmina Verdejante",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"dano": "1d8 + 3 cortante + 1d4 radiante"
+		  }
+		],
+		"descricao": "Elfos e sátiros de armaduras leves cobertas por musgo e flores vivas. Patrulheiros rápidos usados para conter intrusos."
+	  },
+	  {
+		"id": "fey_primavera_capitao",
+		"nome": "Capitão do Broto Dourado",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Neutro",
+		"ca": 18,
+		"pv": 105,
+		"hp_max": 105,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 18,
+		  "des": 14,
+		  "con": 16,
+		  "int": 14,
+		  "sab": 13,
+		  "car": 14
+		},
+		"cr": 6,
+		"xp": 2300,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." },
+		  { "nome": "Fey Step", "descricao": "Pode conjurar Passo Nevoado (Misty Step) sem gastar slot (1/descanso curto)." }
+		],
+		"magias": {
+		  "cd": 14,
+		  "ataque": 6,
+		  "preparadas": ["Shield", "Absorb Elements", "Misty Step", "Magic Weapon", "Web"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques com a Espada do Primeiro Sol."
+		  },
+		  {
+			"nome": "Espada do Primeiro Sol",
+			"tipo": "corpo a corpo",
+			"ataque": "+8",
+			"alcance": "1,5m",
+			"dano": "1d8 + 4 cortante + 2d4 radiante"
+		  }
+		],
+		"descricao": "Vestes de batalha verdes e douradas. Comandam expedições de fronteira e escoltam emissários."
+	  },
+	  {
+		"id": "fey_primavera_comandante",
+		"nome": "Comandante da Aurora Verde",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Neutro",
+		"ca": 20,
+		"pv": 165,
+		"hp_max": 165,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 20,
+		  "des": 16,
+		  "con": 18,
+		  "int": 16,
+		  "sab": 14,
+		  "car": 16
+		},
+		"cr": 10,
+		"xp": 5900,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." },
+		  { "nome": "Indomitable", "descricao": "Pode refazer um teste de resistência que falhou (1/dia)." },
+		  { "nome": "Fey Step", "descricao": "Pode se teletransportar até 9m como ação bônus." }
+		],
+		"magias": {
+		  "cd": 16,
+		  "ataque": 8,
+		  "preparadas": ["Shield", "Absorb Elements", "Misty Step", "Mirror Image", "Plant Growth", "Haste"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza três ataques com a Lâmina do Florescer Eterno."
+		  },
+		  {
+			"nome": "Lâmina do Florescer Eterno",
+			"tipo": "corpo a corpo",
+			"ataque": "+10",
+			"alcance": "1,5m",
+			"dano": "2d8 + 5 cortante + 2d6 radiante"
+		  }
+		],
+		"descricao": "Armadura viva de galhos e luz dourada. Capazes de transformar o campo de batalha em uma floresta viva."
+	  },
+	  {
+		"id": "fey_verao_soldado",
+		"nome": "Lança do Sol Ardente",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Bom",
+		"ca": 18,
+		"pv": 64,
+		"hp_max": 64,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 17,
+		  "des": 13,
+		  "con": 14,
+		  "int": 12,
+		  "sab": 12,
+		  "car": 13
+		},
+		"cr": 3,
+		"xp": 700,
+		"habilidades": [
+		  { "nome": "Second Wind", "descricao": "Recupera 1d10+3 PV como ação bônus (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 13,
+		  "ataque": 5,
+		  "preparadas": ["Shield", "Absorb Elements", "Burning Hands", "Magic Missile"]
+		},
+		"acoes": [
+		  {
+			"nome": "Lança Solar",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"dano": "1d8 + 3 perfurante + 1d4 fogo"
+		  }
+		],
+		"descricao": "Guerreiros de bronze polido e capas vermelhas. Avançam como muralhas de verão."
+	  },
+	  {
+		"id": "fey_verao_capitao",
+		"nome": "Capitão da Chama Real",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Bom",
+		"ca": 19,
+		"pv": 112,
+		"hp_max": 112,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 18,
+		  "des": 14,
+		  "con": 16,
+		  "int": 14,
+		  "sab": 13,
+		  "car": 15
+		},
+		"cr": 6,
+		"xp": 2300,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 14,
+		  "ataque": 6,
+		  "preparadas": ["Shield", "Scorching Ray", "Misty Step", "Magic Weapon"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques com a Espada do Meio-Dia."
+		  },
+		  {
+			"nome": "Espada do Meio-Dia",
+			"tipo": "corpo a corpo",
+			"ataque": "+8",
+			"alcance": "1,5m",
+			"dano": "1d8 + 4 cortante + 2d4 fogo"
+		  }
+		],
+		"descricao": "Armaduras douradas marcadas por brasas vivas. Lideram formações ofensivas agressivas."
+	  },
+	  {
+		"id": "fey_verao_comandante",
+		"nome": "Comandante do Sol de Bronze",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Bom",
+		"ca": 20,
+		"pv": 172,
+		"hp_max": 172,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 20,
+		  "des": 15,
+		  "con": 18,
+		  "int": 16,
+		  "sab": 14,
+		  "car": 16
+		},
+		"cr": 10,
+		"xp": 5900,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." },
+		  { "nome": "Indomitable", "descricao": "Pode refazer um teste de resistência que falhou (1/dia)." }
+		],
+		"magias": {
+		  "cd": 16,
+		  "ataque": 8,
+		  "preparadas": ["Shield", "Misty Step", "Scorching Ray", "Fireball", "Haste"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza três ataques com a Lâmina do Alto Sol."
+		  },
+		  {
+			"nome": "Lâmina do Alto Sol",
+			"tipo": "corpo a corpo",
+			"ataque": "+10",
+			"alcance": "1,5m",
+			"dano": "2d8 + 5 cortante + 2d6 fogo"
+		  }
+		],
+		"descricao": "Placas douradas quase incandescentes. Quando entram em batalha, parecem trazer o meio-dia consigo."
+	  },
     {
 		"id": "fey_verao_comandante",
 		"nome": "Comandante do Sol de Bronze",
