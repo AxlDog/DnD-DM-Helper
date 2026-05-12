@@ -3590,7 +3590,7 @@ const DATA_MONSTROS = [
 		},
 		{
 		  "nome": "Raios Oculares",
-		  "descricao": "O beholder dispara aleatoriamente um dos seguintes raios em um alvo a até 36m (Role 1d10, jogue novamente se o raio já tiver sido usado neste turno):",
+		  "descricao": "O beholder dispara aleatoriamente um dos seguintes raios em um alvo a até 36m (Role 1d10, jogue novamente se o raio já tiver sido usado neste turno):"
 		}
 	  ],
 	  "raios_oculares": {
