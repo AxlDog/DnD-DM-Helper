@@ -2831,329 +2831,306 @@ const DATA_MONSTROS = [
       "descricao": "Lideram formações ofensivas e mantêm o ímpeto da corte em batalhas abertas."
     },
     {
-      "id": "fey_verao_comandante",
-      "nome": "Comandante do Sol de Bronze",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Bom",
-      "cr": 10,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Placas douradas quase incandescentes e uma coroa de fogo contido.",
-      "atributos": {
-        "for": 20,
-        "des": 15,
-        "con": 18,
-        "int": 16,
-        "sab": 14,
-        "car": 16
-      },
-      "ac": 20,
-      "hp": 172,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "War Magic",
-        "Indomitable"
-      ],
-      "ataques": [
-        {
-          "nome": "Lâmina do Alto Sol",
-          "ataque": 10,
-          "dano": "2d8+5 cortante + 2d6 fogo"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 16,
-        "ataque_magico": 8,
-        "preparadas": [
-          "Shield",
-          "Misty Step",
-          "Scorching Ray",
-          "Fireball",
-          "Haste"
-        ]
-      },
-      "descricao": "Quando entram em batalha, parecem trazer o meio-dia consigo."
-    },
-	{
-      "id": "fey_outono_soldado",
-      "nome": "Sentinela das Folhas Mortas",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro",
-      "cr": 3,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Guerreiros envoltos em mantos ocres e ferrugem, usando máscaras finas de madeira rachada. Folhas secas giram ao redor de seus passos.",
-      "atributos": {
-        "for": 16,
-        "des": 14,
-        "con": 14,
-        "int": 13,
-        "sab": 12,
-        "car": 12
-      },
-      "ac": 17,
-      "hp": 62,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Fey Ancestry",
-        "Second Wind",
-        "War Magic"
-      ],
-      "ataques": [
-        {
-          "nome": "Foice das Folhas Secas",
-          "ataque": 6,
-          "dano": "1d8+3 cortante + 1d4 necrótico"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 13,
-        "ataque_magico": 5,
-        "preparadas": [
-          "Shield",
-          "Cause Fear",
-          "Ray of Sickness",
-          "Absorb Elements"
-        ]
-      },
-      "descricao": "Guardas silenciosos usados para patrulhar florestas douradas e regiões onde a Feywild começa lentamente a apodrecer."
-    },
+		"id": "fey_verao_comandante",
+		"nome": "Comandante do Sol de Bronze",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Bom",
+		"ca": 20,
+		"pv": 172,
+		"hp_max": 172,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 20,
+		  "des": 15,
+		  "con": 18,
+		  "int": 16,
+		  "sab": 14,
+		  "car": 16
+		},
+		"cr": 10,
+		"xp": 5900,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." },
+		  { "nome": "Indomitable", "descricao": "Pode refazer um teste de resistência que falhou (1/dia)." }
+		],
+		"magias": {
+		  "cd": 16,
+		  "ataque": 8,
+		  "preparadas": ["Shield", "Misty Step", "Scorching Ray", "Fireball", "Haste"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza três ataques com a Lâmina do Alto Sol."
+		  },
+		  {
+			"nome": "Lâmina do Alto Sol",
+			"tipo": "corpo a corpo",
+			"ataque": "+10",
+			"alcance": "1,5m",
+			"dano": "2d8 + 5 cortante + 2d6 fogo"
+		  }
+		],
+		"descricao": "Placas douradas quase incandescentes e uma coroa de fogo contido. Quando entram em batalha, parecem trazer o meio-dia consigo."
+	  },
+	  {
+		"id": "fey_outono_soldado",
+		"nome": "Sentinela das Folhas Mortas",
+		"tipo": "Fey",
+		"alinhamento": "Neutro",
+		"ca": 17,
+		"pv": 62,
+		"hp_max": 62,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 16,
+		  "des": 14,
+		  "con": 14,
+		  "int": 13,
+		  "sab": 12,
+		  "car": 12
+		},
+		"cr": 3,
+		"xp": 700,
+		"habilidades": [
+		  { "nome": "Fey Ancestry", "descricao": "Vantagem em testes contra ser enfeitiçado e magia não pode colocá-lo para dormir." },
+		  { "nome": "Second Wind", "descricao": "Recupera 1d10+3 PV como ação bônus (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 13,
+		  "ataque": 5,
+		  "preparadas": ["Shield", "Cause Fear", "Ray of Sickness", "Absorb Elements"]
+		},
+		"acoes": [
+		  {
+			"nome": "Foice das Folhas Secas",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"dano": "1d8 + 3 cortante + 1d4 necrótico"
+		  }
+		],
+		"descricao": "Guerreiros envoltos em mantos ocres e ferrugem. Patrulham florestas onde a Feywild começa a apodrecer."
+	  },
+	  {
+		"id": "fey_outono_capitao",
+		"nome": "Capitão da Colheita Sombria",
+		"tipo": "Fey",
+		"alinhamento": "Neutro",
+		"ca": 18,
+		"pv": 110,
+		"hp_max": 110,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 18,
+		  "des": 14,
+		  "con": 16,
+		  "int": 14,
+		  "sab": 13,
+		  "car": 14
+		},
+		"cr": 6,
+		"xp": 2300,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." },
+		  { "nome": "Aura da Melancolia", "descricao": "Inimigos a até 3m têm desvantagem em testes de iniciativa e percepção passiva." }
+		],
+		"magias": {
+		  "cd": 14,
+		  "ataque": 6,
+		  "preparadas": ["Shield", "Misty Step", "Blindness/Deafness", "Shadow Blade", "Hold Person"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques com a Lâmina do Crepúsculo."
+		  },
+		  {
+			"nome": "Lâmina do Crepúsculo",
+			"tipo": "corpo a corpo",
+			"ataque": "+8",
+			"alcance": "1,5m",
+			"dano": "1d10 + 4 cortante + 2d4 necrótico"
+		  }
+		],
+		"descricao": "Vestes longas de tons cobre e vinho. Preferem vitórias lentas e inevitáveis através do desgaste."
+	  },
+	  {
+		"id": "fey_outono_comandante",
+		"nome": "Comandante da Última Colheita",
+		"tipo": "Fey",
+		"alinhamento": "Neutro",
+		"ca": 20,
+		"pv": 170,
+		"hp_max": 170,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 20,
+		  "des": 15,
+		  "con": 18,
+		  "int": 16,
+		  "sab": 15,
+		  "car": 16
+		},
+		"cr": 10,
+		"xp": 5900,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "Indomitable", "descricao": "Pode refazer um teste de resistência que falhou (1/dia)." },
+		  { "nome": "Aura da Decadência", "descricao": "Inimigos que iniciam o turno a até 3m sofrem 1d10 de dano necrótico." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 16,
+		  "ataque": 8,
+		  "preparadas": ["Shield", "Fear", "Blight", "Shadow Blade", "Misty Step", "Bestow Curse"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza três ataques com a Espada da Folha Final."
+		  },
+		  {
+			"nome": "Espada da Folha Final",
+			"tipo": "corpo a corpo",
+			"ataque": "+10",
+			"alcance": "1,5m",
+			"dano": "2d8 + 5 cortante + 2d6 necrótico"
+		  }
+		],
+		"descricao": "Uma figura alta envolta em folhas secas eternamente giratórias. Carregam a inevitabilidade do fim."
+	  },
     {
-      "id": "fey_outono_capitao",
-      "nome": "Capitão da Colheita Sombria",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro",
-      "cr": 6,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Vestes longas de guerra em tons de cobre escuro e vinho envelhecido. Seus olhos parecem lanternas âmbar brilhando sob capuzes de folhas secas.",
-      "atributos": {
-        "for": 18,
-        "des": 14,
-        "con": 16,
-        "int": 14,
-        "sab": 13,
-        "car": 14
-      },
-      "ac": 18,
-      "hp": 110,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "War Magic",
-        "Aura da Melancolia"
-      ],
-      "ataques": [
-        {
-          "nome": "Lâmina do Crepúsculo",
-          "ataque": 8,
-          "dano": "1d10+4 cortante + 2d4 necrótico"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 14,
-        "ataque_magico": 6,
-        "preparadas": [
-          "Shield",
-          "Misty Step",
-          "Blindness/Deafness",
-          "Shadow Blade",
-          "Hold Person"
-        ]
-      },
-      "descricao": "Capitães do Outono preferem vitórias lentas e inevitáveis, enfraquecendo inimigos até que cedam ao desgaste."
-    },
-    {
-      "id": "fey_outono_comandante",
-      "nome": "Comandante da Última Colheita",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro",
-      "cr": 10,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Uma figura alta envolta em folhas secas eternamente giratórias, com armadura negra marcada por rachaduras douradas como madeira antiga.",
-      "atributos": {
-        "for": 20,
-        "des": 15,
-        "con": 18,
-        "int": 16,
-        "sab": 15,
-        "car": 16
-      },
-      "ac": 20,
-      "hp": 170,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "Indomitable",
-        "War Magic",
-        "Aura da Decadência"
-      ],
-      "ataques": [
-        {
-          "nome": "Espada da Folha Final",
-          "ataque": 10,
-          "dano": "2d8+5 cortante + 2d6 necrótico"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 16,
-        "ataque_magico": 8,
-        "preparadas": [
-          "Shield",
-          "Fear",
-          "Blight",
-          "Shadow Blade",
-          "Misty Step",
-          "Bestow Curse"
-        ]
-      },
-      "descricao": "Comandantes do Outono carregam a inevitabilidade do fim. Campos inteiros silenciam quando eles passam."
-    },
-    {
-      "id": "fey_inverno_soldado_controlado",
-      "nome": "Sentinela da Geada",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Leal Neutro",
-      "cr": 3,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Guerreiros de armaduras azul-pálidas cobertas de gelo fino. Vapor frio escapa lentamente entre as juntas metálicas.",
-      "atributos": {
-        "for": 16,
-        "des": 13,
-        "con": 15,
-        "int": 12,
-        "sab": 13,
-        "car": 11
-      },
-      "ac": 18,
-      "hp": 68,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Second Wind",
-        "War Magic",
-        "Resistência a Frio"
-      ],
-      "ataques": [
-        {
-          "nome": "Espada Congelante",
-          "ataque": 6,
-          "dano": "1d8+3 cortante + 1d4 frio"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 13,
-        "ataque_magico": 5,
-        "preparadas": [
-          "Shield",
-          "Absorb Elements",
-          "Armor of Agathys",
-          "Ice Knife"
-        ]
-      },
-      "descricao": "Soldados disciplinados e silenciosos que defendem os domínios congelados do Inverno."
-    },
-    {
-      "id": "fey_inverno_capitao_controlado",
-      "nome": "Capitão do Véu Branco",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Leal Neutro",
-      "cr": 6,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Capas longas de neve encantada arrastam pelo chão enquanto gelo cristalino cobre suas armas.",
-      "atributos": {
-        "for": 18,
-        "des": 14,
-        "con": 16,
-        "int": 14,
-        "sab": 14,
-        "car": 12
-      },
-      "ac": 19,
-      "hp": 118,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "War Magic",
-        "Indomitable"
-      ],
-      "ataques": [
-        {
-          "nome": "Lâmina da Tempestade Pálida",
-          "ataque": 8,
-          "dano": "1d10+4 cortante + 2d4 frio"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 14,
-        "ataque_magico": 6,
-        "preparadas": [
-          "Shield",
-          "Misty Step",
-          "Hold Person",
-          "Snilloc's Snowball Swarm",
-          "Mirror Image"
-        ]
-      },
-      "descricao": "Capitães do Inverno mantêm formação impecável mesmo durante tempestades feéricas."
-    },
-    {
-      "id": "fey_inverno_comandante_controlado",
-      "nome": "Comandante da Coroa Invernal",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Leal Neutro",
-      "cr": 10,
-      "classe_base": "Fighter (Eldritch Knight)",
-      "aparencia": "Uma figura envolta por neve contínua, usando armadura branca azulada com cristais de gelo crescendo como espinhos.",
-      "atributos": {
-        "for": 20,
-        "des": 15,
-        "con": 18,
-        "int": 16,
-        "sab": 15,
-        "car": 14
-      },
-      "ac": 21,
-      "hp": 178,
-      "deslocamento": "30 ft.",
-      "habilidades": [
-        "Action Surge",
-        "Indomitable",
-        "War Magic",
-        "Aura Congelante"
-      ],
-      "ataques": [
-        {
-          "nome": "Espada da Noite Glacial",
-          "ataque": 10,
-          "dano": "2d8+5 cortante + 2d6 frio"
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 16,
-        "ataque_magico": 8,
-        "preparadas": [
-          "Shield",
-          "Cone of Cold",
-          "Hold Monster",
-          "Armor of Agathys",
-          "Misty Step",
-          "Counterspell"
-        ]
-      },
-      "descricao": "Os comandantes da Corte Invernal parecem carregar o próprio silêncio da neve eterna."
-    },
+		"id": "fey_inverno_soldado_controlado",
+		"nome": "Sentinela da Geada",
+		"tipo": "Fey",
+		"alinhamento": "Leal Neutro",
+		"ca": 18,
+		"pv": 68,
+		"hp_max": 68,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 16,
+		  "des": 13,
+		  "con": 15,
+		  "int": 12,
+		  "sab": 13,
+		  "car": 11
+		},
+		"resistencias": ["Frio"],
+		"cr": 3,
+		"xp": 700,
+		"habilidades": [
+		  { "nome": "Second Wind", "descricao": "Recupera 1d10+3 PV como ação bônus (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 13,
+		  "ataque": 5,
+		  "preparadas": ["Shield", "Absorb Elements", "Armor of Agathys", "Ice Knife"]
+		},
+		"acoes": [
+		  {
+			"nome": "Espada Congelante",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "1,5m",
+			"dano": "1d8 + 3 cortante + 1d4 frio"
+		  }
+		],
+		"descricao": "Guerreiros de armaduras azul-pálidas cobertas de gelo fino. Soldados disciplinados do Inverno."
+	  },
+	  {
+		"id": "fey_inverno_capitao_controlado",
+		"nome": "Capitão do Véu Branco",
+		"tipo": "Fey",
+		"alinhamento": "Leal Neutro",
+		"ca": 19,
+		"pv": 118,
+		"hp_max": 118,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 18,
+		  "des": 14,
+		  "con": 16,
+		  "int": 14,
+		  "sab": 14,
+		  "car": 12
+		},
+		"cr": 6,
+		"xp": 2300,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." },
+		  { "nome": "Indomitable", "descricao": "Pode refazer um teste de resistência que falhou (1/dia)." }
+		],
+		"magias": {
+		  "cd": 14,
+		  "ataque": 6,
+		  "preparadas": ["Shield", "Misty Step", "Hold Person", "Snilloc's Snowball Swarm", "Mirror Image"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques com a Lâmina da Tempestade Pálida."
+		  },
+		  {
+			"nome": "Lâmina da Tempestade Pálida",
+			"tipo": "corpo a corpo",
+			"ataque": "+8",
+			"alcance": "1,5m",
+			"dano": "1d10 + 4 cortante + 2d4 frio"
+		  }
+		],
+		"descricao": "Capitães do Inverno mantêm formação impecável mesmo durante tempestades feéricas."
+	  },
+	  {
+		"id": "fey_inverno_comandante_controlado",
+		"nome": "Comandante da Coroa Invernal",
+		"tipo": "Fey",
+		"alinhamento": "Leal Neutro",
+		"ca": 21,
+		"pv": 178,
+		"hp_max": 178,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 20,
+		  "des": 15,
+		  "con": 18,
+		  "int": 16,
+		  "sab": 15,
+		  "car": 14
+		},
+		"cr": 10,
+		"xp": 5900,
+		"habilidades": [
+		  { "nome": "Action Surge", "descricao": "Pode realizar uma ação adicional no turno (1/descanso)." },
+		  { "nome": "Aura Congelante", "descricao": "Criaturas a até 3m têm o deslocamento reduzido em 3m devido ao frio intenso." },
+		  { "nome": "War Magic", "descricao": "Ao usar um truque, pode fazer um ataque de arma como ação bônus." }
+		],
+		"magias": {
+		  "cd": 16,
+		  "ataque": 8,
+		  "preparadas": ["Shield", "Cone of Cold", "Hold Monster", "Armor of Agathys", "Misty Step", "Counterspell"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza três ataques com a Espada da Noite Glacial."
+		  },
+		  {
+			"nome": "Espada da Noite Glacial",
+			"tipo": "corpo a corpo",
+			"ataque": "+10",
+			"alcance": "1,5m",
+			"dano": "2d8 + 5 cortante + 2d6 frio"
+		  }
+		],
+		"descricao": "Uma figura envolta por neve contínua, carregando o próprio silêncio da neve eterna."
+	  },
 	{
 		"id": "dryad_feerica_guardia",
 		"nome": "Dryad Feérica Guardiã",
