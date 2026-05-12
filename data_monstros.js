@@ -3155,561 +3155,493 @@ const DATA_MONSTROS = [
       "descricao": "Os comandantes da Corte Invernal parecem carregar o próprio silêncio da neve eterna."
     },
 	{
-      "id": "dryad_feerica_guardia",
-      "nome": "Dryad Feérica Guardiã",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro",
-      "cr": 5,
-      "ac": 16,
-      "hp": 97,
-      "deslocamento": "30 ft.",
-      "atributos": {
-        "for": 10,
-        "des": 16,
-        "con": 16,
-        "int": 14,
-        "sab": 15,
-        "car": 18
-      },
-      "resistencias": [
-        "Contundente, Cortante e Perfurante de ataques não mágicos"
-      ],
-      "imunidades_condicao": [
-        "Enfeitiçado"
-      ],
-      "habilidades": [
-        {
-          "nome": "Passo Arbóreo",
-          "descricao": "A dryad pode usar uma árvore viva para se teleportar até outra árvore a até 60 pés."
-        },
-        {
-          "nome": "Aura Calmante",
-          "descricao": "Criaturas hostis que iniciarem o turno a até 10 pés devem passar em CD 15 de Sabedoria ou terão desvantagem no primeiro ataque realizado no turno."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Multiataque",
-          "descricao": "A dryad realiza dois ataques com Chicote de Vinhas."
-        },
-        {
-          "nome": "Chicote de Vinhas",
-          "ataque": "+7",
-          "alcance": "15 ft.",
-          "dano": "2d6+4 contundente + 2d6 venenoso"
-        },
-        {
-          "nome": "Explosão Floral (Recarga 5-6)",
-          "descricao": "Criaturas em um raio de 20 pés realizam CD 15 de Constituição. Falha: 4d8 venenoso e condição Envenenado até o próximo turno. Sucesso: metade do dano."
-        },
-        {
-          "nome": "Enfeitiçar",
-          "descricao": "Uma criatura humanoide a até 30 pés deve realizar CD 15 de Sabedoria ou ficará Enfeitiçada por 1 hora."
-        }
-      ],
-      "magias": {
-        "atributo": "Carisma",
-        "cd": 15,
-        "ataque_magico": 7,
-        "nivel_conjurador": 8,
-        "magias_preparadas": {
-          "À vontade": [
-            "Druidcraft",
-            "Entangle"
-          ],
-          "3/dia": [
-            "Spike Growth",
-            "Moonbeam",
-            "Lesser Restoration"
-          ],
-          "1/dia": [
-            "Plant Growth",
-            "Wall of Thorns"
-          ]
-        }
-      },
-      "descricao": "Guardiãs feéricas de antigas clareiras vivas, ligadas emocionalmente às árvores ancestrais da Feywild."
-    },
+		"id": "dryad_feerica_guardia",
+		"nome": "Dryad Feérica Guardiã",
+		"tipo": "Fey",
+		"alinhamento": "Neutro",
+		"ca": 16,
+		"pv": 97,
+		"hp_max": 97,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 10,
+		  "des": 16,
+		  "con": 16,
+		  "int": 14,
+		  "sab": 15,
+		  "car": 18
+		},
+		"resistencias": ["Contundente, Cortante e Perfurante de ataques não mágicos"],
+		"imunidades_condicao": ["Enfeitiçado"],
+		"cr": 5,
+		"xp": 1800,
+		"habilidades": [
+		  {
+			"nome": "Passo Arbóreo",
+			"descricao": "Pode usar uma árvore viva para se teleportar até outra árvore a até 18m."
+		  },
+		  {
+			"nome": "Aura Calmante",
+			"descricao": "Inimigos que iniciem o turno a até 3m devem passar em CD 15 de Sabedoria ou terão desvantagem no primeiro ataque do turno."
+		  }
+		],
+		"magias": {
+		  "truques": ["Druidcraft", "Entangle"],
+		  "3/dia": ["Spike Growth", "Moonbeam", "Lesser Restoration"],
+		  "1/dia": ["Plant Growth", "Wall of Thorns"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques com Chicote de Vinhas."
+		  },
+		  {
+			"nome": "Chicote de Vinhas",
+			"tipo": "corpo a corpo",
+			"ataque": "+7",
+			"alcance": "4,5m",
+			"dano": "2d6 + 4 contundente + 2d6 venenoso"
+		  },
+		  {
+			"nome": "Explosão Floral (Recarga 5-6)",
+			"tipo": "área",
+			"descricao": "Raio de 6m, CD 15 Constituição. Falha: 4d8 venenoso e Envenenado até o próximo turno."
+		  },
+		  {
+			"nome": "Enfeitiçar",
+			"descricao": "Humanoide a até 9m, CD 15 Sabedoria ou fica Enfeitiçado por 1 hora."
+		  }
+		],
+		"descricao": "Guardiãs feéricas de antigas clareiras vivas, ligadas emocionalmente às árvores ancestrais."
+	  },
+	  {
+		"id": "treant_guardiao_ancestral",
+		"nome": "Treant Guardião Ancestral",
+		"tipo": "Planta",
+		"alinhamento": "Neutro Bom",
+		"ca": 17,
+		"pv": 170,
+		"hp_max": 170,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 24,
+		  "des": 8,
+		  "con": 22,
+		  "int": 12,
+		  "sab": 16,
+		  "car": 14
+		},
+		"resistencias": ["Contundente e Perfurante não mágicos"],
+		"cr": 9,
+		"xp": 5000,
+		"habilidades": [
+		  {
+			"nome": "Cerco Vivo",
+			"descricao": "Criaturas Grandes ou menores atingidas por ataques devem realizar CD 17 de Força ou ficam Agarradas."
+		  }
+		],
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques com Galho Esmagador."
+		  },
+		  {
+			"nome": "Galho Esmagador",
+			"tipo": "corpo a corpo",
+			"ataque": "+10",
+			"alcance": "4,5m",
+			"dano": "3d8 + 7 contundente"
+		  },
+		  {
+			"nome": "Arremessar Rocha",
+			"tipo": "à distância",
+			"ataque": "+10",
+			"alcance": "18m/54m",
+			"dano": "4d10 + 7 contundente"
+		  },
+		  {
+			"nome": "Raízes Ascendentes (Recarga 5-6)",
+			"tipo": "área",
+			"descricao": "Raio de 6m. CD 17 Destreza. Falha: 5d8 contundente e ficam Presas (Restrained)."
+		  }
+		],
+		"descricao": "Treants antigos que despertaram após séculos protegendo regiões sagradas."
+	  },
     {
-      "id": "treant_guardiao_ancestral",
-      "nome": "Treant Guardião Ancestral",
-      "tipo": "Planta",
-      "tamanho": "Enorme",
-      "alinhamento": "Neutro Bom",
-      "cr": 9,
-      "ac": 17,
-      "hp": 170,
-      "deslocamento": "30 ft.",
-      "atributos": {
-        "for": 24,
-        "des": 8,
-        "con": 22,
-        "int": 12,
-        "sab": 16,
-        "car": 14
-      },
-      "resistencias": [
-        "Contundente e Perfurante não mágicos"
-      ],
-      "habilidades": [
-        {
-          "nome": "Cerco Vivo",
-          "descricao": "Criaturas Grandes ou menores atingidas pelos ataques do Treant devem realizar CD 17 de Força ou ficam Agarradas."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Multiataque",
-          "descricao": "O treant realiza dois ataques com Galho Esmagador."
-        },
-        {
-          "nome": "Galho Esmagador",
-          "ataque": "+10",
-          "alcance": "15 ft.",
-          "dano": "3d8+7 contundente"
-        },
-        {
-          "nome": "Arremessar Rocha",
-          "ataque": "+10",
-          "alcance": "60/180 ft.",
-          "dano": "4d10+7 contundente"
-        },
-        {
-          "nome": "Raízes Ascendentes (Recarga 5-6)",
-          "descricao": "Raízes explodem em um raio de 20 pés. Criaturas realizam CD 17 de Destreza. Falha: 5d8 contundente e ficam Restrained."
-        }
-      ],
-      "descricao": "Treants antigos que despertaram após séculos protegendo regiões sagradas da Primavera."
-    },
+		"id": "vine_blight_corrompido",
+		"nome": "Vine Blight Corrompido",
+		"tipo": "Planta",
+		"alinhamento": "Neutro Mau",
+		"ca": 15,
+		"pv": 68,
+		"hp_max": 68,
+		"deslocamento": "7,5m",
+		"atributos": {
+		  "for": 18,
+		  "des": 10,
+		  "con": 18,
+		  "int": 6,
+		  "sab": 10,
+		  "car": 5
+		},
+		"resistencias": ["Elétrico", "Perfurante"],
+		"cr": 3,
+		"xp": 700,
+		"acoes": [
+		  {
+			"nome": "Constrição de Vinhas",
+			"tipo": "corpo a corpo",
+			"ataque": "+6",
+			"alcance": "4,5m",
+			"dano": "2d8 + 4 contundente"
+		  },
+		  {
+			"nome": "Nuvem de Esporos",
+			"tipo": "área",
+			"descricao": "Cone de 4,5m, CD 14 Constituição. Falha: 3d8 venenoso e velocidade reduzida pela metade."
+		  }
+		],
+		"descricao": "Blights inchados por energia feérica corrompida, cobertos de fungos negros pulsantes."
+	  },
+	  {
+		"id": "needle_blight_predador",
+		"nome": "Needle Blight Predador",
+		"tipo": "Planta",
+		"alinhamento": "Neutro Mau",
+		"ca": 14,
+		"pv": 52,
+		"hp_max": 52,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 14,
+		  "des": 16,
+		  "con": 14,
+		  "int": 5,
+		  "sab": 10,
+		  "car": 3
+		},
+		"cr": 2,
+		"xp": 450,
+		"acoes": [
+		  {
+			"nome": "Rajada de Espinhos",
+			"tipo": "à distância",
+			"ataque": "+6",
+			"alcance": "18m",
+			"dano": "2d8 + 3 perfurante"
+		  },
+		  {
+			"nome": "Salva Espinhosa (Recarga 5-6)",
+			"tipo": "área",
+			"descricao": "Linha de 9m, CD 14 Destreza. Falha: 4d6 perfurante."
+		  }
+		],
+		"descricao": "Criaturas vegetais rápidas e agressivas que caçam em grupos."
+	  },
+	  {
+		"id": "shambling_mound_abissal",
+		"nome": "Shambling Mound Abissal",
+		"tipo": "Planta",
+		"alinhamento": "Caótico Mau",
+		"ca": 18,
+		"pv": 248,
+		"hp_max": 248,
+		"deslocamento": "9m, escalar 6m",
+		"atributos": {
+		  "for": 24,
+		  "des": 8,
+		  "con": 24,
+		  "int": 7,
+		  "sab": 12,
+		  "car": 6
+		},
+		"resistencias": ["Frio", "Elétrico", "Necrótico"],
+		"imunidades_condicao": ["Caído", "Enfeitiçado"],
+		"cr": 12,
+		"xp": 8400,
+		"habilidades": [
+		  {
+			"nome": "Corpo Absorvente",
+			"descricao": "Sempre que sofre dano elétrico, recupera HP igual ao dano."
+		  },
+		  {
+			"nome": "Aura Putrefata",
+			"descricao": "Inimigos a até 3m sofrem 1d8 necrótico no início do turno."
+		  }
+		],
+		"magias": {
+		  "truques": ["Entangle", "Poison Spray"],
+		  "3/dia": ["Plant Growth", "Erupting Earth", "Blight"],
+		  "1/dia": ["Cloudkill", "Insect Plague"]
+		},
+		"acoes": [
+		  {
+			"nome": "Multiataque",
+			"descricao": "Realiza dois ataques de Pancada Corrompida."
+		  },
+		  {
+			"nome": "Pancada Corrompida",
+			"tipo": "corpo a corpo",
+			"ataque": "+11",
+			"alcance": "3m",
+			"dano": "3d10 + 7 contundente + 2d8 necrótico"
+		  },
+		  {
+			"nome": "Engolir",
+			"descricao": "Criatura agarrada, CD 18 Destreza ou é absorvida."
+		  },
+		  {
+			"nome": "Explosão de Esporos (Recarga 5-6)",
+			"tipo": "área",
+			"descricao": "Raio de 9m, CD 18 Cons. Falha: 8d8 venenoso + Envenenado."
+		  }
+		],
+		"descricao": "Uma montanha viva de raízes e carne vegetal podre."
+	  },
+	  {
+		"id": "bruxa_verde_morvakka",
+		"nome": "Morvakka, a Bruxa Verde",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Mau",
+		"ca": 17,
+		"pv": 168,
+		"hp_max": 168,
+		"deslocamento": "9m",
+		"atributos": {
+		  "for": 12,
+		  "des": 16,
+		  "con": 18,
+		  "int": 18,
+		  "sab": 16,
+		  "car": 19
+		},
+		"cr": 10,
+		"xp": 5900,
+		"habilidades": [
+		  {
+			"nome": "Coven Arcano",
+			"descricao": "Enquanto ao menos uma integrante do coven estiver viva, Morvakka recebe +2 na CD de magias."
+		  }
+		],
+		"magias": {
+		  "truques": ["Poison Spray", "Minor Illusion", "Entangle"],
+		  "3/dia": ["Blight", "Plant Growth", "Stinking Cloud", "Bestow Curse"],
+		  "1/dia": ["Cloudkill", "Wall of Thorns"]
+		},
+		"acoes": [
+		  {
+			"nome": "Garras Venenosas",
+			"tipo": "corpo a corpo",
+			"ataque": "+8",
+			"dano": "3d6 + 4 cortante + 3d8 venenoso"
+		  },
+		  {
+			"nome": "Explosão de Esporos",
+			"tipo": "área",
+			"descricao": "Raio de 6m, CD 17 Cons. Falha: 6d8 venenoso e Envenenado."
+		  }
+		],
+		"descricao": "Uma bruxa coberta por folhas úmidas e fungos."
+	  },
     {
-      "id": "vine_blight_corrompido",
-      "nome": "Vine Blight Corrompido",
-      "tipo": "Planta",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro Mau",
-      "cr": 3,
-      "ac": 15,
-      "hp": 68,
-      "deslocamento": "25 ft.",
-      "atributos": {
-        "for": 18,
-        "des": 10,
-        "con": 18,
-        "int": 6,
-        "sab": 10,
-        "car": 5
-      },
-      "resistencias": [
-        "Elétrico",
-        "Perfurante"
-      ],
-      "acoes": [
-        {
-          "nome": "Constrição de Vinhas",
-          "ataque": "+6",
-          "alcance": "15 ft.",
-          "dano": "2d8+4 contundente"
-        },
-        {
-          "nome": "Nuvem de Esporos",
-          "descricao": "Criaturas em cone de 15 pés realizam CD 14 de Constituição. Falha: 3d8 venenoso e velocidade reduzida pela metade."
-        }
-      ],
-      "descricao": "Blights inchados por energia feérica corrompida, cobertos de fungos negros pulsantes."
+    "id": "wyvern_putrefato",
+    "nome": "Wyvern Putrefato",
+    "tipo": "Dragão",
+    "alinhamento": "Neutro Mau",
+    "ca": 17,
+    "pv": 145,
+    "hp_max": 145,
+    "deslocamento": "6m, voo 24m",
+    "atributos": {
+      "for": 21,
+      "des": 12,
+      "con": 19,
+      "int": 5,
+      "sab": 12,
+      "car": 6
     },
-    {
-      "id": "needle_blight_predador",
-      "nome": "Needle Blight Predador",
-      "tipo": "Planta",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro Mau",
-      "cr": 2,
-      "ac": 14,
-      "hp": 52,
-      "deslocamento": "30 ft.",
-      "atributos": {
-        "for": 14,
-        "des": 16,
-        "con": 14,
-        "int": 5,
-        "sab": 10,
-        "car": 3
+    "cr": 8,
+    "xp": 3900,
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "O wyvern realiza um ataque de Mordida e um de Ferrão."
       },
-      "acoes": [
-        {
-          "nome": "Rajada de Espinhos",
-          "ataque": "+6",
-          "alcance": "60 ft.",
-          "dano": "2d8+3 perfurante"
-        },
-        {
-          "nome": "Salva Espinhosa (Recarga 5-6)",
-          "descricao": "Criaturas em linha de 30 pés realizam CD 14 de Destreza. Falha: 4d6 perfurante."
-        }
-      ],
-      "descricao": "Criaturas vegetais rápidas e agressivas que caçam em grupos entre árvores mortas."
+      {
+        "nome": "Mordida",
+        "tipo": "corpo a corpo",
+        "ataque": "+9",
+        "alcance": "3m",
+        "dano": "2d10 + 5 perfurante"
+      },
+      {
+        "nome": "Ferrão Podre",
+        "tipo": "corpo a corpo",
+        "ataque": "+9",
+        "alcance": "3m",
+        "dano": "2d8 + 5 perfurante + 4d8 venenoso"
+      }
+    ],
+    "descricao": "Um wyvern coberto de líquens negros e carne necrosada."
+  },
+  {
+    "id": "bruxa_do_destino_elyndra",
+    "nome": "Elyndra das Mil Tramas",
+    "tipo": "Fey",
+    "alinhamento": "Neutro Mau",
+    "ca": 18,
+    "pv": 182,
+    "hp_max": 182,
+    "deslocamento": "9m",
+    "atributos": {
+      "for": 10,
+      "des": 18,
+      "con": 18,
+      "int": 20,
+      "sab": 17,
+      "car": 20
     },
-    {
-      "id": "shambling_mound_abissal",
-      "nome": "Shambling Mound Abissal",
-      "tipo": "Planta",
-      "tamanho": "Enorme",
-      "alinhamento": "Caótico Mau",
-      "cr": 12,
-      "ac": 18,
-      "hp": 248,
-      "deslocamento": "30 ft., escalar 20 ft.",
-      "atributos": {
-        "for": 24,
-        "des": 8,
-        "con": 24,
-        "int": 7,
-        "sab": 12,
-        "car": 6
-      },
-      "resistencias": [
-        "Frio",
-        "Elétrico",
-        "Necrótico"
-      ],
-      "imunidades_condicao": [
-        "Caído",
-        "Enfeitiçado"
-      ],
-      "habilidades": [
-        {
-          "nome": "Corpo Absorvente",
-          "descricao": "Sempre que sofre dano elétrico, recupera quantidade igual de HP."
-        },
-        {
-          "nome": "Aura Putrefata",
-          "descricao": "Criaturas a até 10 pés sofrem 1d8 necrótico no início do turno."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Multiataque",
-          "descricao": "Realiza dois ataques de Pancada Corrompida."
-        },
-        {
-          "nome": "Pancada Corrompida",
-          "ataque": "+11",
-          "alcance": "10 ft.",
-          "dano": "3d10+7 contundente + 2d8 necrótico"
-        },
-        {
-          "nome": "Engolir",
-          "descricao": "Criatura agarrada realiza CD 18 de Destreza ou é absorvida parcialmente pela massa vegetal."
-        },
-        {
-          "nome": "Explosão de Esporos Abissais (Recarga 5-6)",
-          "descricao": "Raio de 30 pés. Criaturas realizam CD 18 de Constituição. Falha: 8d8 venenoso + condição Envenenado por 1 minuto."
-        },
-        {
-          "nome": "Tempestade de Vinhas",
-          "descricao": "Raio de 20 pés. Criaturas realizam CD 18 de Força. Falha: 6d8 contundente e ficam Restrained."
-        }
-      ],
-      "magias": {
-        "atributo": "Sabedoria",
-        "cd": 17,
-        "ataque_magico": 9,
-        "nivel_conjurador": 10,
-        "magias_preparadas": {
-          "À vontade": [
-            "Entangle",
-            "Poison Spray"
-          ],
-          "3/dia": [
-            "Plant Growth",
-            "Erupting Earth",
-            "Blight"
-          ],
-          "1/dia": [
-            "Cloudkill",
-            "Insect Plague"
-          ]
-        }
-      },
-      "descricao": "Uma montanha viva de raízes, fungos e carne vegetal podre corrompida por forças extraplanares esquecidas."
+    "cr": 11,
+    "xp": 7200,
+    "habilidades": [
+      {
+        "nome": "Reescrever Destino",
+        "descricao": "1/turno, Elyndra força uma criatura a rerrolar um ataque, teste ou resistência."
+      }
+    ],
+    "magias": {
+      "truques": ["Mage Hand", "Mind Sliver"],
+      "Nível 1-5": ["Detect Thoughts", "Slow", "Banishment", "Confusion", "Synaptic Static"],
+      "1/dia": ["Mass Suggestion", "Modify Memory"]
     },
-	{
-      "id": "bruxa_verde_morvakka",
-      "nome": "Morvakka, a Bruxa Verde",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Mau",
-      "cr": 10,
-      "ac": 17,
-      "hp": 168,
-      "deslocamento": "30 ft.",
-      "atributos": {
-        "for": 12,
-        "des": 16,
-        "con": 18,
-        "int": 18,
-        "sab": 16,
-        "car": 19
-      },
-      "habilidades": [
-        {
-          "nome": "Coven Arcano",
-          "descricao": "Enquanto ao menos uma integrante do coven estiver viva no mesmo plano, Morvakka recebe +2 na CD de suas magias."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Garras Venenosas",
-          "ataque": "+8",
-          "dano": "3d6+4 cortante + 3d8 venenoso"
-        },
-        {
-          "nome": "Explosão de Esporos",
-          "descricao": "Raio de 20 pés, CD 17 Constituição, 6d8 venenoso e condição Envenenado."
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 17,
-        "ataque_magico": 9,
-        "nivel_conjurador": 13,
-        "magias_preparadas": {
-          "À vontade": [
-            "Poison Spray",
-            "Minor Illusion",
-            "Entangle"
-          ],
-          "3/dia": [
-            "Blight",
-            "Plant Growth",
-            "Stinking Cloud",
-            "Bestow Curse"
-          ],
-          "1/dia": [
-            "Cloudkill",
-            "Wall of Thorns"
-          ]
-        }
-      },
-      "descricao": "Uma bruxa coberta por folhas úmidas, fungos e raízes vivas que crescem sobre sua pele."
+    "acoes": [
+      {
+        "nome": "Fios da Ruína",
+        "tipo": "área",
+        "descricao": "Cone de 9m, CD 18 Sabedoria, 8d8 psíquico e condição Restrained (Preso)."
+      }
+    ],
+    "descricao": "Uma mulher alta envolta em véus dourados, com fios luminosos presos aos dedos."
+  },
+  {
+    "id": "beholder_oracular",
+    "nome": "Beholder Oracular",
+    "tipo": "Aberração",
+    "alinhamento": "Leal Mau",
+    "ca": 18,
+    "pv": 180,
+    "hp_max": 180,
+    "deslocamento": "0m, voo 6m (flutuar)",
+    "atributos": {
+      "for": 10,
+      "des": 16,
+      "con": 18,
+      "int": 18,
+      "sab": 17,
+      "car": 17
     },
-    {
-      "id": "wyvern_putrefato",
-      "nome": "Wyvern Putrefato",
-      "tipo": "Dragão",
-      "tamanho": "Grande",
-      "alinhamento": "Neutro Mau",
-      "cr": 8,
-      "ac": 17,
-      "hp": 145,
-      "deslocamento": "20 ft., voo 80 ft.",
-      "atributos": {
-        "for": 21,
-        "des": 12,
-        "con": 19,
-        "int": 5,
-        "sab": 12,
-        "car": 6
-      },
-      "acoes": [
-        {
-          "nome": "Multiataque",
-          "descricao": "Mordida e ferrão."
-        },
-        {
-          "nome": "Ferrão Podre",
-          "ataque": "+9",
-          "dano": "2d8+5 perfurante + 4d8 venenoso"
-        }
-      ],
-      "descricao": "Um wyvern coberto de líquens negros e carne necrosada."
+    "cr": 10,
+    "xp": 5900,
+    "habilidades": [
+      {
+        "nome": "Olhos Proféticos",
+        "descricao": "Possui vantagem em iniciativa e testes de Percepção."
+      }
+    ],
+    "acoes": [
+      {
+        "nome": "Raios Oculares",
+        "descricao": "O beholder dispara 3 raios oculares aleatórios em alvos que ele possa ver."
+      }
+    ],
+    "descricao": "Um beholder de olhos dourados cobertos por runas orbitais."
+  },
+  {
+    "id": "bruxa_da_noite_nyssara",
+    "nome": "Nyssara da Lua Morta",
+    "tipo": "Fey",
+    "alinhamento": "Caótico Mau",
+    "ca": 19,
+    "pv": 225,
+    "hp_max": 225,
+    "deslocamento": "12m",
+    "atributos": {
+      "for": 13,
+      "des": 20,
+      "con": 20,
+      "int": 21,
+      "sab": 18,
+      "car": 22
     },
-    {
-      "id": "bruxa_do_destino_elyndra",
-      "nome": "Elyndra das Mil Tramas",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Neutro Mau",
-      "cr": 11,
-      "ac": 18,
-      "hp": 182,
-      "deslocamento": "30 ft.",
-      "atributos": {
-        "for": 10,
-        "des": 18,
-        "con": 18,
-        "int": 20,
-        "sab": 17,
-        "car": 20
+    "cr": 12,
+    "xp": 8400,
+    "habilidades": [
+      {
+        "nome": "Passo Sombrio",
+        "descricao": "Pode teletransportar-se entre sombras como ação bônus."
       },
-      "habilidades": [
-        {
-          "nome": "Reescrever Destino",
-          "descricao": "1/turno, Elyndra força uma criatura a rerrolar um ataque, teste ou resistência."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Fios da Ruína",
-          "descricao": "Cone de 30 pés, CD 18 Sabedoria, 8d8 psíquico e condição Restrained."
-        }
-      ],
-      "magias": {
-        "atributo": "Inteligência",
-        "cd": 18,
-        "ataque_magico": 10,
-        "nivel_conjurador": 15,
-        "magias_preparadas": {
-          "À vontade": [
-            "Mage Hand",
-            "Mind Sliver",
-            "Detect Thoughts"
-          ],
-          "3/dia": [
-            "Slow",
-            "Banishment",
-            "Confusion",
-            "Synaptic Static"
-          ],
-          "1/dia": [
-            "Mass Suggestion",
-            "Modify Memory"
-          ]
-        }
-      },
-      "descricao": "Uma mulher alta envolta em véus dourados, com fios luminosos presos aos dedos como marionetes invisíveis."
+      {
+        "nome": "Aura da Lua Morta",
+        "descricao": "Inimigos a até 4,5m têm desvantagem em testes de resistência contra medo."
+      }
+    ],
+    "magias": {
+      "truques": ["Chill Touch", "Minor Illusion"],
+      "3/dia": ["Phantasmal Killer", "Blight", "Dimension Door", "Fear"],
+      "1/dia": ["Finger of Death", "Circle of Death", "Dream"]
     },
-    {
-      "id": "beholder_oracular",
-      "nome": "Beholder Oracular",
-      "tipo": "Aberração",
-      "tamanho": "Grande",
-      "alinhamento": "Leal Mau",
-      "cr": 10,
-      "ac": 18,
-      "hp": 180,
-      "deslocamento": "0 ft., voo 20 ft.",
-      "atributos": {
-        "for": 10,
-        "des": 16,
-        "con": 18,
-        "int": 18,
-        "sab": 17,
-        "car": 17
+    "acoes": [
+      {
+        "nome": "Toque da Lua Morta",
+        "tipo": "corpo a corpo",
+        "ataque": "+11",
+        "dano": "4d8 necrótico + 4d8 psíquico"
       },
-      "habilidades": [
-        {
-          "nome": "Olhos Proféticos",
-          "descricao": "Possui vantagem em iniciativa e percepção."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Raios Oculares",
-          "descricao": "Dispara 3 raios aleatórios."
-        }
-      ],
-      "descricao": "Um beholder de olhos dourados cobertos por runas orbitais."
+      {
+        "nome": "Grito da Noite Eterna",
+        "tipo": "área",
+        "descricao": "Raio de 9m, CD 19 Sabedoria, 10d8 psíquico e condição Amedrontado."
+      }
+    ],
+    "descricao": "Uma entidade envolta em mantos negros líquidos, com olhos prateados vazios."
+  },
+  {
+    "id": "meio_dragao_umbral",
+    "nome": "Meio-Dragão Umbral",
+    "tipo": "Humanoide",
+    "alinhamento": "Leal Mau",
+    "ca": 19,
+    "pv": 210,
+    "hp_max": 210,
+    "deslocamento": "9m",
+    "atributos": {
+      "for": 23,
+      "des": 16,
+      "con": 22,
+      "int": 12,
+      "sab": 14,
+      "car": 18
     },
-    {
-      "id": "bruxa_da_noite_nyssara",
-      "nome": "Nyssara da Lua Morta",
-      "tipo": "Fey",
-      "tamanho": "Médio",
-      "alinhamento": "Caótico Mau",
-      "cr": 12,
-      "ca": 19,
-      "pv": 225,
-      "deslocamento": "40 ft.",
-      "atributos": {
-        "for": 13,
-        "des": 20,
-        "con": 20,
-        "int": 21,
-        "sab": 18,
-        "car": 22
+    "cr": 11,
+    "xp": 7200,
+    "acoes": [
+      {
+        "nome": "Multiataque",
+        "descricao": "Realiza dois ataques de espada sombria."
       },
-      "habilidades": [
-        {
-          "nome": "Passo Sombrio",
-          "descricao": "Teleporta-se entre sombras como ação bônus."
-        },
-        {
-          "nome": "Aura da Lua Morta",
-          "descricao": "Inimigos a até 15 pés têm desvantagem contra medo."
-        }
-      ],
-      "acoes": [
-        {
-          "nome": "Toque da Lua Morta",
-          "ataque": "+11",
-          "dano": "4d8 necrótico + 4d8 psíquico"
-        },
-        {
-          "nome": "Grito da Noite Eterna",
-          "descricao": "Raio de 30 pés, CD 19 Sabedoria, 10d8 psíquico e condição Amedrontado."
-        }
-      ],
-      "magias": {
-        "atributo": "Carisma",
-        "cd": 19,
-        "ataque_magico": 11,
-        "nivel_conjurador": 17,
-        "magias_preparadas": {
-          "À vontade": [
-            "Chill Touch",
-            "Minor Illusion",
-            "Darkness"
-          ],
-          "3/dia": [
-            "Phantasmal Killer",
-            "Blight",
-            "Dimension Door",
-            "Fear"
-          ],
-          "1/dia": [
-            "Finger of Death",
-            "Circle of Death",
-            "Dream"
-          ]
-        }
+      {
+        "nome": "Espada Sombria",
+        "tipo": "corpo a corpo",
+        "ataque": "+10",
+        "alcance": "1,5m",
+        "dano": "3d10 + 6 cortante + 2d8 necrótico"
       },
-      "descricao": "Uma entidade envolta em mantos negros líquidos, com olhos prateados vazios refletindo luas inexistentes."
-    },
-    {
-      "id": "meio_dragao_umbral",
-      "nome": "Meio-Dragão Umbral",
-      "tipo": "Humanoide",
-      "tamanho": "Grande",
-      "alinhamento": "Leal Mau",
-      "cr": 11,
-      "ac": 19,
-      "hp": 210,
-      "deslocamento": "9m",
-      "atributos": {
-        "for": 23,
-        "des": 16,
-        "con": 22,
-        "int": 12,
-        "sab": 14,
-        "car": 18
-      },
-      "acoes": [
-        {
-          "nome": "Multiataque",
-          "descricao": "Dois ataques de espada sombria."
-        },
-        {
-          "nome": "Espada Sombria",
-          "ataque": "+10",
-          "dano": "3d10+6 cortante + 2d8 necrótico"
-        },
-        {
-          "nome": "Sopro Umbral (Recarga 5-6)",
-          "descricao": "Cone de 60 pés, CD 18 Constituição, 10d8 necrótico."
-        }
-      ],
-      "descricao": "Um guerreiro dracônico deformado pela magia noturna da Feywild."
-    }
+      {
+        "nome": "Sopro Umbral (Recarga 5-6)",
+        "tipo": "área",
+        "descricao": "Cone de 18m, CD 18 Constituição, 10d8 dano necrótico."
+      }
+    ],
+    "descricao": "Um guerreiro dracônico deformado pela magia noturna da Feywild."
+  }
 ];
