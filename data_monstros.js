@@ -3527,89 +3527,147 @@ const DATA_MONSTROS = [
       }
     ],
     "descricao": "Uma mulher alta envolta em véus dourados, com fios luminosos presos aos dedos."
-  },
-  {
-    "id": "beholder_oracular",
-    "nome": "Beholder Oracular",
-    "tipo": "Aberração",
-    "alinhamento": "Leal Mau",
-    "ca": 18,
-    "pv": 180,
-    "hp_max": 180,
-    "deslocamento": "0m, voo 6m (flutuar)",
-    "atributos": {
-      "for": 10,
-      "des": 16,
-      "con": 18,
-      "int": 18,
-      "sab": 17,
-      "car": 17
-    },
-    "cr": 10,
-    "xp": 5900,
-    "habilidades": [
-      {
-        "nome": "Olhos Proféticos",
-        "descricao": "Possui vantagem em iniciativa e testes de Percepção."
-      }
-    ],
-    "acoes": [
-      {
-        "nome": "Raios Oculares",
-        "descricao": "O beholder dispara 3 raios oculares aleatórios em alvos que ele possa ver."
-      }
-    ],
-    "descricao": "Um beholder de olhos dourados cobertos por runas orbitais."
-  },
-  {
-    "id": "bruxa_da_noite_nyssara",
-    "nome": "Nyssara da Lua Morta",
-    "tipo": "Fey",
-    "alinhamento": "Caótico Mau",
-    "ca": 19,
-    "pv": 225,
-    "hp_max": 225,
-    "deslocamento": "12m",
-    "atributos": {
-      "for": 13,
-      "des": 20,
-      "con": 20,
-      "int": 21,
-      "sab": 18,
-      "car": 22
-    },
-    "cr": 12,
-    "xp": 8400,
-    "habilidades": [
-      {
-        "nome": "Passo Sombrio",
-        "descricao": "Pode teletransportar-se entre sombras como ação bônus."
-      },
-      {
-        "nome": "Aura da Lua Morta",
-        "descricao": "Inimigos a até 4,5m têm desvantagem em testes de resistência contra medo."
-      }
-    ],
-    "magias": {
-      "truques": ["Chill Touch", "Minor Illusion"],
-      "3/dia": ["Phantasmal Killer", "Blight", "Dimension Door", "Fear"],
-      "1/dia": ["Finger of Death", "Circle of Death", "Dream"]
-    },
-    "acoes": [
-      {
-        "nome": "Toque da Lua Morta",
-        "tipo": "corpo a corpo",
-        "ataque": "+11",
-        "dano": "4d8 necrótico + 4d8 psíquico"
-      },
-      {
-        "nome": "Grito da Noite Eterna",
-        "tipo": "área",
-        "descricao": "Raio de 9m, CD 19 Sabedoria, 10d8 psíquico e condição Amedrontado."
-      }
-    ],
-    "descricao": "Uma entidade envolta em mantos negros líquidos, com olhos prateados vazios."
-  },
+	},
+	{
+	  "id": "beholder_oracular",
+	  "nome": "Beholder Oracular",
+	  "tipo": "Aberração (Grande)",
+	  "alinhamento": "Leal Mau",
+	  "ca": 18,
+	  "pv": 190,
+	  "hp_max": 190,
+	  "dados_vida": "20d10 + 80",
+	  "deslocamento": "1,5m, voo 12m (flutuar)",
+	  "iniciativa": 22,
+	  "atributos": {
+		"for": 10,
+		"des": 16,
+		"con": 18,
+		"int": 18,
+		"sab": 17,
+		"car": 17
+	  },
+	  "testes_resistencia": {
+		"con": "+9",
+		"int": "+8",
+		"sab": "+7"
+	  },
+	  "pericias": {
+		"percepcao": "+12"
+	  },
+	  "imunidades_condicao": ["Caído (Prone)"],
+	  "sentidos": "Visão no Escuro 36m, Percepção Passiva 22",
+	  "idiomas": "Dialeto Profundo, Subcomum",
+	  "cr": 13,
+	  "xp": 10000,
+	  "habilidades": [
+		{
+		  "nome": "Olhos Proféticos",
+		  "descricao": "O Beholder possui vantagem em iniciativa e testes de Percepção. Ele não pode ser surpreendido enquanto estiver consciente."
+		},
+		{
+		  "nome": "Resistência Lendária (3/Dia)",
+		  "descricao": "Se o beholder falhar em um teste de resistência, ele pode escolher passar em vez disso."
+		}
+	  ],
+	  "acoes_bonus": [
+		{
+		  "nome": "Cone Antimagia",
+		  "descricao": "O olho central emite uma onda invisível em um cone de 45m. Até o início do próximo turno do beholder, essa área funciona como a magia Campo Antimagia. Os próprios raios oculares do beholder não funcionam dentro desta área."
+		}
+	  ],
+	  "acoes": [
+		{
+		  "nome": "Multiataque",
+		  "descricao": "O beholder usa seus Raios Oculares três vezes."
+		},
+		{
+		  "nome": "Mordida",
+		  "tipo": "corpo a corpo",
+		  "ataque": "+8",
+		  "alcance": "1,5m",
+		  "dano": "3d6 + 3 perfurante"
+		},
+		{
+		  "nome": "Raios Oculares",
+		  "descricao": "O beholder dispara aleatoriamente um dos seguintes raios em um alvo a até 36m (Role 1d10, jogue novamente se o raio já tiver sido usado neste turno):",
+		  "lista_raios": [
+			"1. Raio de Encantamento: DC 16 Sab. Falha: 13 (3d8) dano psíquico e Encantado por 1 hora.",
+			"2. Raio paralisante: DC 16 Con. Falha: Paralisado (repetir teste no fim dos turnos).",
+			"3. Raio de Medo: DC 16 Sab. Falha: 14 (4d6) dano psíquico e Amedrontado até o fim do próximo turno.",
+			"4. Raio de Lentidão: DC 16 Con. Falha: 18 (4d8) dano necrótico e velocidade reduzida à metade, sem reações.",
+			"5. Raio de Enervação: DC 16 Con. Falha: 13 (3d8) dano de veneno e Envenenado (não recupera PV).",
+			"6. Raio Telecinético: DC 16 For. Move o alvo até 9m ou o deixa Impedido.",
+			"7. Raio de Sono: DC 16 Sab. Falha: Inconsciente por 1 minuto (acorda se sofrer dano).",
+			"8. Raio de Petrificação: DC 16 Con. Falha: Impedido; segunda falha: Petrificado.",
+			"9. Raio de Desintegração: DC 16 Des. Falha: 36 (8d8) dano de força. Reduzido a 0 PV, vira pó.",
+			"10. Raio da Morte: DC 16 Des. Falha: 55 (10d10) dano necrótico. Morre se chegar a 0 PV."
+		  ]
+		}
+	  ],
+	  "acoes_lendarias": [
+		{
+		  "nome": "Mastigar (Chomp)",
+		  "custo": 1,
+		  "descricao": "O beholder realiza dois ataques de Mordida."
+		},
+		{
+		  "nome": "Olhar (Glare)",
+		  "custo": 1,
+		  "descricao": "O beholder usa um Raio Ocular aleatório."
+		}
+	  ],
+	  "descricao": "Um beholder de olhos dourados cobertos por runas orbitais que brilham conforme ele antecipa os movimentos de suas presas."
+	},
+	{
+		"id": "bruxa_da_noite_nyssara",
+		"nome": "Nyssara da Lua Morta",
+		"tipo": "Fey",
+		"alinhamento": "Caótico Mau",
+		"ca": 19,
+		"pv": 225,
+		"hp_max": 225,
+		"deslocamento": "12m",
+		"atributos": {
+		  "for": 13,
+		  "des": 20,
+		  "con": 20,
+		  "int": 21,
+		  "sab": 18,
+		  "car": 22
+		},
+		"cr": 12,
+		"xp": 8400,
+		"habilidades": [
+		  {
+			"nome": "Passo Sombrio",
+			"descricao": "Pode teletransportar-se entre sombras como ação bônus."
+		  },
+		  {
+			"nome": "Aura da Lua Morta",
+			"descricao": "Inimigos a até 4,5m têm desvantagem em testes de resistência contra medo."
+		  }
+		],
+		"magias": {
+		  "truques": ["Chill Touch", "Minor Illusion"],
+		  "3/dia": ["Phantasmal Killer", "Blight", "Dimension Door", "Fear"],
+		  "1/dia": ["Finger of Death", "Circle of Death", "Dream"]
+		},
+		"acoes": [
+		  {
+			"nome": "Toque da Lua Morta",
+			"tipo": "corpo a corpo",
+			"ataque": "+11",
+			"dano": "4d8 necrótico + 4d8 psíquico"
+		  },
+		  {
+			"nome": "Grito da Noite Eterna",
+			"tipo": "área",
+			"descricao": "Raio de 9m, CD 19 Sabedoria, 10d8 psíquico e condição Amedrontado."
+		  }
+		],
+		"descricao": "Uma entidade envolta em mantos negros líquidos, com olhos prateados vazios."
+	},
   {
     "id": "meio_dragao_umbral",
     "nome": "Meio-Dragão Umbral",
