@@ -447,54 +447,54 @@ const DATA_ENCONTROS = [
       "segredo": "Uma das árvores da clareira contém um portal adormecido conectado às Terras de Entremeio."
     },
     {
-    "id": "encontro_bruxa_verde_do_pantano",
-    "nome": "A Lama que Respira",
-    "bioma": "Pântano Feérico",
-    "nivel_recomendado": "Difícil",
-    "descricao": "O cheiro de ervas podres e sangue antigo paira sobre o pântano. Uma cabana torta afunda lentamente na lama enquanto um enorme wyvern coberto de fungos circula acima das árvores.",
-    "inimigos": [
-      { "id": "bruxa_verde_morvakka", "quantidade": 1 },
-      { "id": "wyvern_putrefato", "quantidade": 1 }
-    ],
-    "taticas": [
-      "Morvakka utiliza magia de terreno e venenos para separar o grupo.",
-      "O wyvern mergulha contra conjuradores e tenta arrastar vítimas para a lama.",
-      "A bruxa utiliza ilusões vegetais para dificultar visão."
-    ],
-    "segredo": "A cabana da bruxa possui raízes conectadas diretamente a um antigo coração feérico enterrado sob o pântano."
-  },
-  {
-    "id": "encontro_bruxa_do_destino",
-    "nome": "O Tear das Possibilidades",
-    "bioma": "Ruínas Feéricas",
-    "nivel_recomendado": "Muito Difícil",
-    "descricao": "Fios dourados atravessam o ar como teias invisíveis enquanto olhos observam de todas as direções. Uma figura encapuzada costura linhas brilhantes diante de um enorme observador deformado.",
-    "inimigos": [
-      { "id": "bruxa_do_destino_elyndra", "quantidade": 1 },
-      { "id": "beholder_oracular", "quantidade": 1 }
-    ],
-    "taticas": [
-      "Elyndra força rerrolagens, manipula iniciativa e enfraquece alvos prioritários.",
-      "O beholder mantém distância enquanto cobre corredores e áreas abertas.",
-      "As linhas douradas do cenário funcionam como alarmes mágicos."
-    ],
-    "segredo": "Parte das profecias da bruxa menciona estrelas desaparecendo do céu da Feywild."
-  },
-  {
-    "id": "encontro_bruxa_da_noite",
-    "nome": "O Banquete da Lua Morta",
-    "bioma": "Floresta Sombria",
-    "nivel_recomendado": "Mortal",
-    "descricao": "A floresta mergulha em silêncio absoluto enquanto a lua parece apagar lentamente acima das árvores negras. Entre os galhos, uma criatura dracônica deformada rasteja ao lado de uma mulher de olhos vazios.",
-    "inimigos": [
-      { "id": "bruxa_da_noite_nyssara", "quantidade": 1 },
-      { "id": "meio_dragao_umbral", "quantidade": 1 }
-    ],
-    "taticas": [
-      "Nyssara utiliza escuridão mágica e magia psíquica para quebrar formação.",
-      "O meio-dragão caça alvos isolados nas sombras.",
-      "A bruxa tenta incapacitar antes de causar dano massivo."
-    ],
-    "segredo": "Nyssara possui fragmentos de memórias roubadas de arquifadas desaparecidas."
-  }
+		"id": "encontro_bruxa_verde_do_pantano",
+		"nome": "A Lama que Respira",
+		"bioma": "Pântano Feérico",
+		"nivel_recomendado": "Difícil",
+		"descricao": "O cheiro de ervas podres e sangue antigo paira sobre o pântano. Uma cabana torta afunda lentamente na lama enquanto um enorme wyvern coberto de fungos circula acima das árvores.",
+		"inimigos": [
+		  { "id": "bruxa_verde_morvakka", "quantidade": 1 },
+		  { "id": "wyvern_putrefato", "quantidade": 1 }
+		],
+		"taticas": [
+		  "Morvakka utiliza magia de terreno e venenos para separar o grupo.",
+		  "O wyvern mergulha contra conjuradores e tenta arrastar vítimas para a lama.",
+		  "A bruxa utiliza ilusões vegetais para dificultar visão."
+		],
+		"segredo": "A cabana da bruxa possui raízes conectadas diretamente a um antigo coração feérico enterrado sob o pântano."
+	},
+	{
+		"id": "encontro_bruxa_do_destino",
+		"nome": "O Tear das Possibilidades",
+		"bioma": "Ruínas Feéricas",
+		"nivel_recomendado": "Muito Difícil",
+		"descricao": "Fios dourados atravessam o ar como teias invisíveis enquanto olhos observam de todas as direções. Uma figura encapuzada costura linhas brilhantes diante de um enorme observador deformado.",
+		"inimigos": [
+		  { "id": "bruxa_do_destino_elyndra", "quantidade": 1 },
+		  { "id": "beholder_oracular", "quantidade": 1 }
+		],
+		"taticas": [
+		  "Elyndra força rerrolagens, manipula iniciativa e enfraquece alvos prioritários.",
+		  "O beholder mantém distância enquanto cobre corredores e áreas abertas.",
+		  "As linhas douradas do cenário funcionam como alarmes mágicos."
+		],
+		"segredo": "Parte das profecias da bruxa menciona estrelas desaparecendo do céu da Feywild."
+	},
+	{
+		"id": "encontro_bruxa_da_noite",
+		"nome": "O Banquete da Lua Morta",
+		"bioma": "Floresta Sombria",
+		"nivel_recomendado": "Mortal",
+		"descricao": "A floresta mergulha em silêncio absoluto enquanto a lua parece apagar lentamente acima das árvores negras. Entre os galhos, uma criatura dracônica deformada rasteja ao lado de uma mulher de olhos vazios.",
+		"inimigos": [
+		  { "id": "bruxa_da_noite_nyssara", "quantidade": 1 },
+		  { "id": "meio_dragao_umbral", "quantidade": 1 }
+		],
+		"taticas": [
+		  "Nyssara utiliza escuridão mágica e magia psíquica para quebrar formação.",
+		  "O meio-dragão caça alvos isolados nas sombras.",
+		  "A bruxa tenta incapacitar antes de causar dano massivo."
+		],
+		"segredo": "Nyssara possui fragmentos de memórias roubadas de arquifadas desaparecidas."
+	}
 ];
