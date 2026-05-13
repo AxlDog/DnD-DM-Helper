@@ -1,3 +1,45 @@
+/* =========================================================
+ * SCHEMA: DATA_MONSTROS
+ * =========================================================
+ * Array de objetos representando as criaturas do Bestiário.
+ * 
+ * DATA_MONSTROS = [{
+ *   id: String,
+ *   nome: String,
+ *   tipo: String,
+ *   alinhamento: String,
+ *   ca: Number,
+ *   tipo_ca: String (opcional),
+ *   pv: Number,
+ *   hp_max: Number (opcional),
+ *   dados_vida: String (opcional),
+ *   deslocamento: String,
+ *   iniciativa: Number (opcional),
+ *   ambientes: [String] (opcional),
+ *   atributos: { for: Number, des: Number, con: Number, int: Number, sab: Number, car: Number },
+ *   testes_resistencia: { <atributo>: String } (opcional),
+ *   pericias: { <pericia>: String } (opcional),
+ *   resistencias: [String] (opcional),
+ *   imunidades: [String] (opcional),
+ *   imunidades_condicao: [String] (opcional),
+ *   sentidos: String (opcional),
+ *   idiomas: String (opcional),
+ *   cr: Number | String,
+ *   xp: Number,
+ *   habilidades: [{ nome: String, descricao: String }] (opcional),
+ *   magias: { cd: Number, ataque_magia: String, truques: [String], <nível_ou_frequencia>: [String] } (opcional),
+ *   acoes: [{ nome: String, tipo: String, ataque: String, alcance: String, alvo: String, dano: String, efeito: String, descricao: String, recarregar: String }],
+ *   acoes_bonus: [{ nome: String, descricao: String }] (opcional),
+ *   reacoes: [{ nome: String, descricao: String }] (opcional),
+ *   acoes_lendarias: [{ nome: String, custo: Number, descricao: String }] (opcional),
+ *   habilidades_especiais: [{ nome: String, descricao: String }] (opcional),
+ *   raios_oculares: { <numero>: String } (opcional),
+ *   descricao: String (opcional),
+ *   funcao_navio: String (opcional),
+ *   loot: { arma: String, equipamento: [String] } (opcional)
+ * }]
+ * ========================================================= */
+
 const DATA_MONSTROS = [
   {
   "id": "mob_bandido_plus1",

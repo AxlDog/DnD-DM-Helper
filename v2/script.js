@@ -2084,3 +2084,46 @@ function renderBestiario(monstros) {
     grid.appendChild(card);
   });
 }
+
+/* =========================================================
+ * 13. IMPORTAÇÃO DE MONSTROS DO SRD
+ * ========================================================= */
+
+async function devImportarMonstros() {
+    console.log("Iniciando download dos monstros do SRD...");
+    
+    try {
+        // 1. Pega a lista geral
+        const respostaLista = await fetch('https://www.dnd5eapi.co/api/monsters');
+        const lista = await respostaLista.json();
+        
+        console.log(`Encontrados ${lista.count} monstros. Iniciando injeção no Supabase...`);
+
+        let salvos = 0;
+        // 2. Loop para baixar a ficha completa e salvar no banco
+        for (const monstro of lista.results) {
+            const resFicha = await fetch(`https://www.dnd5eapi.co${monstro.url}`);
+            const fichaCompleta = await resFicha.json();
+
+            const { error } = await db
+                .from('monsters')
+                .upsert({ // upsert atualiza se já existir, insere se for novo
+                    index: fichaCompleta.index,
+                    name: fichaCompleta.name,
+                    challenge_rating: fichaCompleta.challenge_rating,
+                    data: fichaCompleta 
+                }, { onConflict: 'index' });
+
+            if (error) {
+                console.error("Erro no monstro:", fichaCompleta.name, error);
+            } else {
+                salvos++;
+                // Atualiza o console a cada 20 monstros para não travar o navegador
+                if (salvos % 20 === 0) console.log(`Progresso: ${salvos} de ${lista.count} salvos...`);
+            }
+        }
+        console.log("IMPORTAÇÃO CONCLUÍDA! Banco de dados atualizado com sucesso.");
+    } catch (erro) {
+        console.error("Erro crítico na importação:", erro);
+    }
+}
