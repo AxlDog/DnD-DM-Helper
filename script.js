@@ -99,50 +99,6 @@ function loadDashboard() {
 }
 
 /* =========================================================
- * 3. AUTENTICAÇÃO E ACESSO
- * ========================================================= */
-
-function verificarAcesso() {
-  const senha = document.getElementById("inputSenha").value;
-  const lockscreen = document.getElementById("lockscreen");
-  const erro = document.getElementById("erroSenha");
-
-  if (senha === SENHA_MESTRE) {
-    lockscreen.style.display = "none";
-    liberarAbasMestre(true);
-    configurarVisibilidadeJogadores(true);
-    localStorage.setItem("acesso", senha);
-  } else if (senha === SENHA_JOGADOR) {
-    lockscreen.style.display = "none";
-    liberarAbasMestre(false);
-    configurarVisibilidadeJogadores(false);
-    localStorage.setItem("acesso", senha);
-  } else {
-    if (erro) erro.style.display = "block";
-  }
-}
-
-function liberarAbasMestre(revelar) {
-  const itensMestre = document.querySelectorAll('.mestre-only');
-  itensMestre.forEach(el => {
-    if (revelar) {
-      el.classList.add('show-mestre');
-    } else {
-      el.classList.remove('show-mestre');
-    }
-  });
-}
-
-function configurarVisibilidadeJogadores(isMestre = false) {
-  const sessoesEscondidas = ["aba-npcs-secretos", "aba-mapas-mestre", "aba-lore-proibida"];
-  
-  sessoesEscondidas.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = isMestre ? "block" : "none";
-  });
-}
-
-/* =========================================================
  * 4. MODAIS GENÉRICOS E UTILIDADES
  * ========================================================= */
 
