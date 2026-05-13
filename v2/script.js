@@ -250,57 +250,6 @@ function openGenericModal(objeto, tituloPadrao) {
 }
 
 /* =========================================================
- * 5. TIMELINE / LINHA DO TEMPO
- * ========================================================= */
-
-function loadTimeline() {
-  setActiveMenu(1);
-  setView("timeline");
-
-  document.getElementById("content").innerHTML = `
-    <div class="timeline-vertical-wrapper">
-      <h2>🕰️ Linha do Tempo</h2>
-      <div id="timelineGrid"></div>
-    </div>
-  `;
-
-  if (typeof DATA_TIMELINE !== 'undefined') {
-    renderTimeline(DATA_TIMELINE);
-  } else {
-    document.getElementById("timelineGrid").innerHTML = "<p class='placeholder'>Erro: Banco de dados da Timeline não encontrado.</p>";
-  }
-}
-
-function renderTimeline(atos) {
-  const container = document.getElementById("timelineGrid");
-  if (!container) return;
-
-  container.innerHTML = '<div class="timeline-v-line"></div>';
-
-  Object.keys(atos).forEach((atoKey) => {
-    const sessoes = atos[atoKey];
-
-    Object.keys(sessoes).forEach((sessaoKey) => {
-      const dadosSessao = sessoes[sessaoKey];
-      const card = document.createElement("div");
-      card.className = "timeline-v-item";
-
-      const corPrata = "#e0e0e0"; 
-
-      card.innerHTML = `
-        <div class="timeline-v-dot moonlight-glow"></div>
-        <div class="timeline-v-content card">
-          <h3>${sessaoKey.toUpperCase().replace("_", " ")}</h3>
-        </div>
-      `;
-
-      card.onclick = () => openGenericModal(dadosSessao, sessaoKey.replace("_", " "));
-      container.appendChild(card);
-    });
-  });
-}
-
-/* =========================================================
  * 6. NPCs (Lista, Criação, Supabase)
  * ========================================================= */
 
