@@ -1,3 +1,43 @@
+/* =========================================================
+ * SCHEMA: DATA_FACCOES
+ * =========================================================
+ * Array de objetos com informações de guildas, escolas e organizações.
+ * 
+ * DATA_FACCOES = [{
+ *   id: String,
+ *   nome: String,
+ *   tipo: String,
+ *   bairro_id: String | null,
+ *   status: String,
+ *   descricao: String,
+ *   influencia: {
+ *     nobreza: String,
+ *     populacao: String,
+ *     conselho: String
+ *   },
+ *   comandante: {
+ *     nome: String,
+ *     titulo: String,
+ *     publico: Boolean,
+ *     descricao: String
+ *   },
+ *   representante_publico: {
+ *     nome: String,
+ *     titulo: String,
+ *     publico: Boolean,
+ *     descricao: String
+ *   } (opcional),
+ *   membros_conhecidos: [String] (opcional),
+ *   vantagem_politica: String,
+ *   objetivos: [String],
+ *   relacoes: {
+ *     aliados: [String],
+ *     rivais: [String],
+ *     desconfianca: [String]
+ *   },
+ *   segredo: String
+ * }]
+ * ========================================================= */
 
 const DATA_FACCOES = [
   {
