@@ -1,3 +1,50 @@
+/* =========================================================
+ * SCHEMA: DATA_LOCAIS
+ * =========================================================
+ * Objeto principal contendo as informações dos bairros e locais da cidade.
+ * 
+ * DATA_LOCAIS = {
+ *   pontos_interesse: [{
+ *     id: String,
+ *     local_id: String,
+ *     nome: String,
+ *     tipo / categoria_local: String,
+ *     descricao: String,
+ *     tags: [String],
+ *     informacoes / informacoes_encontradas: [String],
+ *     testes: { <pericia>: Number },
+ *     segredo: String
+ *   }],
+ *   eventos: [{
+ *     id: String,
+ *     local_id: String,
+ *     nome: String,
+ *     tipo / categoria_local: String,
+ *     descricao: String,
+ *     frequencia: String,
+ *     tags: [String],
+ *     participantes: [String],
+ *     informacoes_encontradas: [String],
+ *     testes: { <pericia>: Number },
+ *     segredo: String
+ *   }],
+ *   npcs: [{
+ *     id: String,
+ *     local_id: String,
+ *     nome: String,
+ *     tipo: String,
+ *     raca: String,
+ *     status: String,
+ *     funcao: String,
+ *     descricao: String,
+ *     tags: [String],
+ *     informacoes: [String],
+ *     interacao: { <pericia>: Number },
+ *     segredo: String
+ *   }]
+ * }
+ * ========================================================= */
+
 const DATA_LOCAIS = {
   "pontos_interesse": [
     {
