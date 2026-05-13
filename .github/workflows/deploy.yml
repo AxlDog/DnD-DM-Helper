@@ -1,0 +1,34 @@
+name: Deploy Automático (Main e V2)
+
+on:
+  push:
+    branches:
+      - main
+      - v2-refactor
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Definir pasta de destino
+        id: pasta
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "DEST=." >> $GITHUB_ENV
+          else
+            echo "DEST=v2" >> $GITHUB_ENV
+          fi
+
+      - name: Publicar no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          destination_dir: ${{ env.DEST }}
+          keep_files: true
