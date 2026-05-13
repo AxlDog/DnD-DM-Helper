@@ -1,3 +1,6 @@
+/* =========================================================
+ * 1. CONFIGURAÇÃO INICIAL E VARIÁVEIS GLOBAIS
+ * ========================================================= */
 const params = new URLSearchParams(window.location.search);
 let npcGerado = null;
 let npcCache = [];
@@ -6,6 +9,21 @@ const SUPABASE_URL = 'https://umiytlqphtxknhjldzgs.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nq_f9SCvJwxp9dNM5KGskw_ltD4oL45';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const IMAGES_CACHE = {
+  previewHeader: "https://lh3.googleusercontent.com/u/0/d/1D3aCHtmip3VJMcHADhXqNqmafbHcFrGf=s400",
+  listHeader: "https://lh3.googleusercontent.com/u/0/d/13RnNoDIeuJiv6qoLyWEiAdTBdMqF9Kp_=s400"
+};
+
+let NPC_PREVIEW_ATUAL = null;
+let itemFinal = null;
+const SENHA_MESTRE = "sensei"; 
+const SENHA_JOGADOR = "lindos"; 
+
+// Variáveis de Combate
+let currentCombat = {
+  encontroId: null,
+  monstros: []
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("npcModal");
@@ -23,18 +41,47 @@ document.addEventListener("DOMContentLoaded", () => {
   modalContent.addEventListener("click", (e) => {
     e.stopPropagation();
   });
+
+  const campoSenha = document.getElementById("inputSenha");
+  if (campoSenha) {
+    campoSenha.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); 
+        verificarAcesso();      
+      }
+    });
+  }
 });
+
+window.onload = loadInitialView;
+
+// Pré-carregamento imediato
+function preloadImages() {
+  Object.values(IMAGES_CACHE).forEach(url => {
+    const img = new Image();
+    img.src = url;
+  });
+}
+preloadImages();
+
+/* =========================================================
+ * 2. NAVEGAÇÃO E VIEWS
+ * ========================================================= */
 
 function getViewFromURL() {
   const params = new URLSearchParams(window.location.search);
   return params.get("view");
 }
 
+function setView(view) {
+  const url = new URL(window.location);
+  url.searchParams.set("view", view);
+  window.history.pushState({}, "", url);
+}
+
 function setActiveMenu(index) {
   const buttons = document.querySelectorAll(".menu-btn");
-
   buttons.forEach(btn => btn.classList.remove("active"));
-
   if (buttons[index]) {
     buttons[index].classList.add("active");
   }
@@ -44,32 +91,16 @@ function loadInitialView() {
   const view = getViewFromURL();
 
   switch (view) {
-    case "timeline":
-      loadTimeline();
-      break;
-    case "pontos-principais":
-      loadPontosPrincipais();
-      break;
-    case "npcs":
-      loadNPCList();
-      break;
-    case "npc-create":
-      loadNPCCreator();
-      break;
-    case "locais":
-      loadLocais();
-      break;
-    case "faccoes":
-      loadFaccoes();
-      break;
-    case "loja":
-      loadLoja();
-    break;
-	case "bestiario":
-      loadBestiario();
-    break;
-    default:
-      loadDashboard();
+    case "timeline": loadTimeline(); break;
+    case "pontos-principais": loadPontosPrincipais(); break;
+    case "npcs": loadNPCList(); break;
+    case "npc-create": loadNPCCreator(); break;
+    case "locais": loadLocais(); break;
+    case "faccoes": loadFaccoes(); break;
+    case "loja": loadLoja(); break;
+    case "encontros": loadEncontros(); break;
+    case "bestiario": loadBestiario(); break;
+    default: loadDashboard();
   }
 }
 
@@ -78,6 +109,149 @@ function loadDashboard() {
   setView("dashboard");
   document.getElementById("content").innerHTML = `<h2>📌 Arco Final</h2> <p>Jogadores seguem em busca de vingança e de seus entes queridos.</p>`;
 }
+
+/* =========================================================
+ * 3. AUTENTICAÇÃO E ACESSO
+ * ========================================================= */
+
+function verificarAcesso() {
+  const senha = document.getElementById("inputSenha").value;
+  const lockscreen = document.getElementById("lockscreen");
+  const erro = document.getElementById("erroSenha");
+
+  if (senha === SENHA_MESTRE) {
+    lockscreen.style.display = "none";
+    liberarAbasMestre(true);
+    configurarVisibilidadeJogadores(true);
+    localStorage.setItem("acesso", senha);
+  } else if (senha === SENHA_JOGADOR) {
+    lockscreen.style.display = "none";
+    liberarAbasMestre(false);
+    configurarVisibilidadeJogadores(false);
+    localStorage.setItem("acesso", senha);
+  } else {
+    if (erro) erro.style.display = "block";
+  }
+}
+
+function liberarAbasMestre(revelar) {
+  const itensMestre = document.querySelectorAll('.mestre-only');
+  itensMestre.forEach(el => {
+    if (revelar) {
+      el.classList.add('show-mestre');
+    } else {
+      el.classList.remove('show-mestre');
+    }
+  });
+}
+
+function configurarVisibilidadeJogadores(isMestre = false) {
+  const sessoesEscondidas = ["aba-npcs-secretos", "aba-mapas-mestre", "aba-lore-proibida"];
+  
+  sessoesEscondidas.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = isMestre ? "block" : "none";
+  });
+}
+
+/* =========================================================
+ * 4. MODAIS GENÉRICOS E UTILIDADES
+ * ========================================================= */
+
+function closeNPCModal() {
+  const modal = document.getElementById("npcModal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function formatarValor(valor) {
+  if (valor === null || valor === undefined || valor === "") return "—";
+
+  if (Array.isArray(valor)) {
+    if (valor.length === 0) return "—";
+    if (typeof valor[0] === 'object') {
+      return `<div style="margin-top: 5px;">${valor.map(v => `<div style="padding-left: 10px; border-left: 2px solid #E69A28; margin-bottom: 5px;">${formatarValor(v)}</div>`).join('')}</div>`;
+    }
+    return `<ul style="margin: 5px 0; padding-left: 20px;">${valor.map(v => `<li>${formatarValor(v)}</li>`).join('')}</ul>`;
+  }
+
+  if (typeof valor === 'object') {
+    return `<ul style="margin: 5px 0; padding-left: 20px;">${Object.entries(valor).map(([k, v]) => {
+      const nomeChave = k.replace(/_/g, ' ').charAt(0).toUpperCase() + k.replace(/_/g, ' ').slice(1);
+      return `<li><strong>${nomeChave}:</strong> ${formatarValor(v)}</li>`;
+    }).join('')}</ul>`;
+  }
+
+  return valor;
+}
+
+function openGenericModal(objeto, tituloPadrao) {
+  const modal = document.getElementById("npcModal");
+  const body = document.getElementById("npcModalBody");
+  var modalContent = modal.querySelector(".modal-content");
+
+  const dataCompleta = { 
+    ...objeto, 
+    ...(objeto.metadata || {}) 
+  };
+
+  if (modalContent && typeof IMAGES_CACHE !== 'undefined' && IMAGES_CACHE.previewHeader) {
+    modalContent.style.backgroundImage = `url('${IMAGES_CACHE.previewHeader}')`;
+  }
+  
+  if (!modal || !body) return;
+
+  let colunasHtml = "";
+  let tituloPrincipal = dataCompleta.nome || dataCompleta.faccao_nome || dataCompleta.nome_faccao || tituloPadrao;
+
+  const nomesFormatados = {
+    raca: "Raça", faccao: "Facção", aparencia: "Aparência",
+    missao: "Missão Relacionada", personalidade: "Personalidade",
+    encontravel: "Onde Encontrar", ameacas: "Ameaças",
+    status: "Status", observacoes: "Observações",
+    segredo: "🤫 Segredo (Mestre)", desejo: "Desejo", comportamento: "Comportamento"
+  };
+
+  Object.entries(dataCompleta).forEach(([chave, valor]) => {
+    const chaveLower = chave.toLowerCase();
+    
+    if (["id", "id_js", "bairro_id", "local_id", "created_at", "metadata", "nome", "faccao_nome", "nome_faccao"].includes(chaveLower)) return;
+    if (valor === null || valor === undefined || valor === "" || valor === "—") return;
+    if (Array.isArray(valor) && valor.length === 0) return;
+    if (typeof valor === 'object' && Object.keys(valor).length === 0) return;
+
+    const label = nomesFormatados[chaveLower] || chave.replace(/_/g, " ").charAt(0).toUpperCase() + chave.replace(/_/g, " ").slice(1);
+
+    colunasHtml += `
+      <div class="${chaveLower === 'segredo' ? 'secret-info' : ''}">
+        <strong style="color: #E69A28; font-size: 1.1em;">${label}:</strong>
+        <div style="margin-top: 5px; color: #541a7f; font-size: 0.95em;">${formatarValor(valor)}</div>
+      </div>
+    `;
+  });
+
+  body.innerHTML = `
+    <div class="local-modal-container" style="padding: 20px;">
+      <header class="local-modal-header" style="border-bottom: 2px solid #6c1fa5; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2 style="color: #6c1fa5; margin: 0;">${tituloPrincipal}</h2>
+        ${dataCompleta.tipo ? `<span class="badge" style="background: #444; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; display: inline-block; margin-top: 10px;">${dataCompleta.tipo.toUpperCase()}</span>` : ''}
+      </header>
+      
+      <div class="local-modal-scroll" style="max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+        ${colunasHtml}
+      </div>
+      
+      <div class="modal-footer" style="margin-top: 20px; text-align: right; border-top: 1px solid #444; padding-top: 15px;">
+         <button class="btn-forja" onclick="closeNPCModal()" style="padding: 8px 16px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-weight: bold;">Fechar</button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.remove("hidden");
+}
+
+/* =========================================================
+ * 5. TIMELINE / LINHA DO TEMPO
+ * ========================================================= */
 
 function loadTimeline() {
   setActiveMenu(1);
@@ -90,7 +264,6 @@ function loadTimeline() {
     </div>
   `;
 
-  // Verifica se a constante existe antes de tentar renderizar
   if (typeof DATA_TIMELINE !== 'undefined') {
     renderTimeline(DATA_TIMELINE);
   } else {
@@ -112,7 +285,6 @@ function renderTimeline(atos) {
       const card = document.createElement("div");
       card.className = "timeline-v-item";
 
-      // Cor fixa: Prata da Lua (Moonlight Silver)
       const corPrata = "#e0e0e0"; 
 
       card.innerHTML = `
@@ -128,70 +300,98 @@ function renderTimeline(atos) {
   });
 }
 
-/* NPCs */
+/* =========================================================
+ * 6. NPCs (Lista, Criação, Supabase)
+ * ========================================================= */
 
 function loadNomesData(callback) {
-  if (DATA_NOMES_CACHE) {
+  if (typeof DATA_NOMES_CACHE !== 'undefined' && DATA_NOMES_CACHE) {
     callback(DATA_NOMES_CACHE);
     return;
   }
   
-  google.script.run
-    .withSuccessHandler(function(data) {
-      DATA_NOMES_CACHE = data;
-      callback(data);
-    })
-    .withFailureHandler(function(error) {
-      console.error("Erro ao carregar nomes:", error);
-      // Fallback para dados mínimos
-      DATA_NOMES_CACHE = {
-        "Humano": { masculinos: ["João"], femininos: ["Maria"], sobrenomes: ["Silva"] }
-      };
-      callback(DATA_NOMES_CACHE);
-    })
-    .getNomesData();
+  if (typeof google !== 'undefined' && google.script) {
+    google.script.run
+      .withSuccessHandler(function(data) {
+        window.DATA_NOMES_CACHE = data;
+        callback(data);
+      })
+      .withFailureHandler(function(error) {
+        console.error("Erro ao carregar nomes:", error);
+        window.DATA_NOMES_CACHE = {
+          "Humano": { masculinos: ["João"], femininos: ["Maria"], sobrenomes: ["Silva"] }
+        };
+        callback(window.DATA_NOMES_CACHE);
+      })
+      .getNomesData();
+  } else {
+    window.DATA_NOMES_CACHE = {
+      "Humano": { masculinos: ["João"], femininos: ["Maria"], sobrenomes: ["Silva"] }
+    };
+    callback(window.DATA_NOMES_CACHE);
+  }
 }
 
 async function loadNPCList() {
-	setActiveMenu(3);
-	setView("npcs");
+  setActiveMenu(3);
+  setView("npcs");
   const mainContent = document.getElementById("content");
   
-  // 1. Feedback visual de carregamento
   mainContent.innerHTML = `
     <div class="loading-container">
       <h2>🛡️ Buscando NPCs na taverna...</h2>
     </div>
   `;
 
-  console.log("Consultando banco de dados...");
-
-  // 2. Busca dados no Supabase
   let { data: npcs, error } = await db
       .from('npcs')
       .select('*')
       .order('nome', { ascending: true });
 
-  // 3. Tratamento de Erro
   if (error) {
       console.error("Erro Supabase:", error.message);
       mainContent.innerHTML = `<p style="color:red; padding:20px;">Erro ao carregar NPCs: ${error.message}</p>`;
       return;
   }
 
-  // 4. Prepara o esqueleto da página no "content"
-  // Criamos o div com ID "npcGrid" para que a função renderNPCs saiba onde desenhar
   mainContent.innerHTML = `
       <h2>📜 NPCs</h2>
 		<div class="card-grid" id="npcGrid"></div>
-	  `;
-  // 5. Atualiza o cache global e chama a sua função de renderização
+  `;
+
   if (npcs && npcs.length > 0) {
       npcCache = npcs;
-      renderNPCs(npcs); // Aqui chamamos a sua função original!
+      renderNPCs(npcs); 
   } else {
       document.getElementById("npcGrid").innerHTML = "<p class='placeholder'>A taverna está vazia (Nenhum NPC encontrado).</p>";
   }
+}
+
+function renderNPCs(npcs) {
+  const grid = document.getElementById("npcGrid");
+  if (!grid || !npcs.length) {
+    if (grid) grid.innerHTML = "<p class='placeholder'>Nenhum NPC encontrado.</p>";
+    return;
+  }
+
+  grid.innerHTML = "";
+
+  npcs.forEach(npc => {
+    const card = document.createElement("div");
+    card.className = "card npc-card";
+
+    const origemTag = npc.metadata && npc.metadata.id_js && npc.metadata.id_js.startsWith("GEN") ? "🧪 Gerado" : "📜 Canônico";
+
+    card.innerHTML = `
+      <h3 class="npc-name">${npc.nome}</h3>
+      <p class="npc-meta"><strong>${npc.raca}</strong> • ${npc.sexo || "—"}</p>
+      <p class="npc-faction"><span class="label">Facção:</span> ${npc.faccao || "<em>Independente</em>"}</p>
+      <span class="npc-origin">${origemTag}</span>
+    `;
+
+    card.onclick = () => openGenericModal(npc, "Ficha de NPC");
+    grid.appendChild(card);
+  });
 }
 
 function loadNPCCreator() {
@@ -270,119 +470,22 @@ function loadNPCCreator() {
       </div>
     </div>
 
-    <div id="npcPreview" class="mt-4">
-      <!-- O preview do NPC gerado aparecerá aqui -->
-    </div>
+    <div id="npcPreview" class="mt-4"></div>
   `;
 }
 
-function criarNPC() {
-  const preview = document.getElementById("npcPreview");
-  
-  preview.innerHTML = `
-    <div class="npc-card manual-form">
-      <h3>➕ Novo NPC Canônico</h3>
-      <input type="text" id="m-nome" placeholder="Nome do Personagem">
-      <input type="text" id="m-raca" placeholder="Raça">
-      
-      <select id="m-sexo">
-        <option value="Masculino">Masculino</option>
-        <option value="Feminino">Feminino</option>
-        <option value="Outro">Outro</option>
-      </select>
-
-      <input type="text" id="m-faccao" placeholder="Facção (ex: Punhos Flamejantes)">
-      <textarea id="m-desc" placeholder="Descrição e história..."></textarea>
-      
-      <div class="actions">
-        <button class="btn-primary" onclick="enviarManual()">Salvar NPC</button>
-        <button class="btn-secondary" onclick="preview.innerHTML=''">Cancelar</button>
-      </div>
-    </div>
-  `;
-}
-
-/**
- * Captura os valores da UI e chama a geração
- */
 async function handleGerarNPC() {
   const raca = document.getElementById('racaSelect').value;
   const classe = document.getElementById('classeSelect').value;
   const genero = document.getElementById('genderSelect').value;
   
-  // Feedback visual de carregamento
   const preview = document.getElementById("npcPreview");
   preview.innerHTML = `<div class="loading-container">🪄 Tecendo a alma do NPC...</div>`;
   
   await gerarNPC(raca, classe, genero);
 }
 
-// Função auxiliar para coletar os dados do formulário acima
-function enviarManual() {
-  const nome = document.getElementById("m-nome").value;
-  if (!nome) return alert("O nome é obrigatório!");
-
-  const npcManual = {
-    id: "CAN-" + Date.now(),
-    nome: nome,
-    raca: document.getElementById("m-raca").value || "Humano",
-    sexo: document.getElementById("m-sexo").value,
-    status: "Ativo",
-    faccao: document.getElementById("m-faccao").value,
-    metadata: {
-      descricao: document.getElementById("m-desc").value, // Note: usamos 'descricao' aqui
-      origem: "Canonico" // Definimos que é Manual
-    }
-  };
-
-  confirmarNPC(npcManual);
-}
-
-async function salvarEdicaoNPC(id, metadataAntigo) {
-  const titulo = document.getElementById("editKey").value.trim();
-  const conteudo = document.getElementById("editValue").value.trim();
-
-  if (!titulo || !conteudo) {
-    alert("Preencha o título e o conteúdo da nota.");
-    return;
-  }
-
-  // 1. Cria o novo metadata mesclando o antigo com a nova chave
-  const novoMetadata = {
-    ...metadataAntigo,
-    [titulo]: conteudo
-  };
-
-  try {
-    // 2. Faz o update e pede para o Supabase retornar a linha atualizada (.select().single())
-    const { data: npcAtualizado, error } = await db
-      .from('npcs')
-      .update({ metadata: novoMetadata })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    // 3. Feedback rápido de sucesso
-    console.log("NPC Atualizado com sucesso:", npcAtualizado);
-
-    // 4. A MÁGICA: Chama o modal novamente com os dados fresquinhos
-    // Isso vai reconstruir o HTML do modal, limpando os campos de input
-    // e mostrando a nova informação na lista de campos.
-    openGenericModal(npcAtualizado, npcAtualizado.nome);
-
-    // 5. Atualiza a lista de NPCs ao fundo para quando o usuário fechar o modal
-    if (typeof loadNPCs === "function") loadNPCs();
-
-  } catch (err) {
-    console.error("Erro ao atualizar e recarregar:", err);
-    alert("Erro ao salvar: " + err.message);
-  }
-}
-
 async function gerarNPC(racaSelecionada = "", classeSelecionada = "", genderSelecionado = "") {
-  const sorteio = Math.floor(Math.random() * 100);
   const sexo = genderSelecionado || "Masculino";
   const raca = racaSelecionada || "Humano";
   const classe = classeSelecionada || "Camponês";
@@ -394,18 +497,15 @@ async function gerarNPC(racaSelecionada = "", classeSelecionada = "", genderSele
 
     if (error) throw error;
 
-    // LOG DE VERIFICAÇÃO (O que você pediu)
-    console.log("%c[RETORNO IA]", "background: #222; color: #bada55", data);
-
     const npc = {
       id: "GEN-" + crypto.randomUUID().slice(0, 8),
-      nome: data.nome, // Vem da IA
-      raca: raca,      // Vem da sua variável
-      sexo: sexo,      // Vem da sua variável
+      nome: data.nome, 
+      raca: raca,      
+      sexo: sexo,      
       status: "Vivo",
       faccao: "Independente",
       metadata: {
-        aparencia: data.aparencia, // Vem da IA
+        aparencia: data.aparencia, 
         origem: "IA Gemini"
       }
     };
@@ -415,85 +515,12 @@ async function gerarNPC(racaSelecionada = "", classeSelecionada = "", genderSele
 
   } catch (err) {
     console.error("Erro:", err);
+    document.getElementById("npcPreview").innerHTML = `<p style="color:red;">Erro ao gerar: ${err.message}</p>`;
   }
 }
-
-function getGenNPCs() {
-  return DATA_NOMES_CACHE || {};
-}
-
-function getDescNPCs() {
-  return DESC_NPCS || {};
-}
-
-function gerarDescricaoNPC(raca, sexo) {
-  const lista = DESC_NPCS?.[raca]?.[sexo];
-
-  if (!Array.isArray(lista) || !lista.length) {
-    return "Uma figura comum em Faerûn.";
-  }
-
-  const indice = Math.floor(Math.random() * lista.length);
-  return lista[indice];
-}
-
-function renderNPCs(npcs) {
-  const grid = document.getElementById("npcGrid");
-  if (!grid || !npcs.length) {
-    if (grid) grid.innerHTML = "<p class='placeholder'>Nenhum NPC encontrado.</p>";
-    return;
-  }
-
-  grid.innerHTML = "";
-
-  npcs.forEach(npc => {
-    const card = document.createElement("div");
-    card.className = "card npc-card";
-
-    // Mantemos a lógica visual rápida do card
-    const origemTag = npc.metadata.id_js && npc.metadata.id_js.startsWith("GEN") ? "🧪 Gerado" : "📜 Canônico";
-
-    card.innerHTML = `
-      <h3 class="npc-name">${npc.nome}</h3>
-      <p class="npc-meta"><strong>${npc.raca}</strong> • ${npc.sexo || "—"}</p>
-      <p class="npc-faction"><span class="label">Facção:</span> ${npc.faccao || "<em>Independente</em>"}</p>
-      <span class="npc-origin">${origemTag}</span>
-    `;
-
-    // Agora usa a função genérica!
-    card.onclick = () => openGenericModal(npc, "Ficha de NPC");
-    grid.appendChild(card);
-  });
-}
-
-function closeNPCModal() {
-  document.getElementById("npcModal").classList.add("hidden");
-}
-
-function getFullDriveUrl(id) {
-  if (!id) return "#";
-  return "https://drive.google.com/uc?export=view&id=" + id;
-}
-
-const IMAGES_CACHE = {
-  previewHeader: "https://lh3.googleusercontent.com/u/0/d/1D3aCHtmip3VJMcHADhXqNqmafbHcFrGf=s400",
-  listHeader: "https://lh3.googleusercontent.com/u/0/d/13RnNoDIeuJiv6qoLyWEiAdTBdMqF9Kp_=s400"
-};
-
-// Pré-carregamento imediato
-function preloadImages() {
-  Object.values(IMAGES_CACHE).forEach(url => {
-    const img = new Image();
-    img.src = url;
-  });
-}
-preloadImages();
-
-let NPC_PREVIEW_ATUAL = null;
 
 function renderNPCPreview(npc) {
   NPC_PREVIEW_ATUAL = npc;
-
   const previewDiv = document.getElementById("npcPreview");
 
   previewDiv.innerHTML = `
@@ -518,6 +545,52 @@ function descartarNPC() {
   npcGerado = null;
 }
 
+function abrirFormularioManual() {
+  const preview = document.getElementById("npcPreview");
+  
+  preview.innerHTML = `
+    <div class="npc-card manual-form">
+      <h3>➕ Novo NPC Canônico</h3>
+      <input type="text" id="m-nome" placeholder="Nome do Personagem">
+      <input type="text" id="m-raca" placeholder="Raça">
+      
+      <select id="m-sexo">
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+        <option value="Outro">Outro</option>
+      </select>
+
+      <input type="text" id="m-faccao" placeholder="Facção (ex: Punhos Flamejantes)">
+      <textarea id="m-desc" placeholder="Descrição e história..."></textarea>
+      
+      <div class="actions">
+        <button class="btn-primary" onclick="enviarManual()">Salvar NPC</button>
+        <button class="btn-secondary" onclick="document.getElementById('npcPreview').innerHTML=''">Cancelar</button>
+      </div>
+    </div>
+  `;
+}
+
+function enviarManual() {
+  const nome = document.getElementById("m-nome").value;
+  if (!nome) return alert("O nome é obrigatório!");
+
+  const npcManual = {
+    id: "CAN-" + Date.now(),
+    nome: nome,
+    raca: document.getElementById("m-raca").value || "Humano",
+    sexo: document.getElementById("m-sexo").value,
+    status: "Ativo",
+    faccao: document.getElementById("m-faccao").value,
+    metadata: {
+      descricao: document.getElementById("m-desc").value, 
+      origem: "Canonico" 
+    }
+  };
+
+  confirmarNPC(npcManual);
+}
+
 async function confirmarNPC(npc) {
   if (!npc) return;
 
@@ -525,10 +598,7 @@ async function confirmarNPC(npc) {
   preview.innerHTML = "<p class='placeholder'>💾 Gravando na Grande Biblioteca...</p>";
 
   try {
-    // 1. Resolvemos a descrição (pode vir como 'aparencia' na IA ou 'descricao' no manual)
     const descricaoFinal = npc.metadata.aparencia || npc.metadata.descricao || "Sem descrição.";
-    
-    // 2. Resolvemos a origem (se não houver uma definida, assume IA Gemini)
     const origemFinal = npc.metadata.origem || "IA Gemini";
 
     const { data, error } = await db
@@ -567,30 +637,54 @@ async function confirmarNPC(npc) {
   }
 }
 
-function montarUrlImagem(fileId) {
-  if (!fileId || fileId.trim() === "") return "";
-  return "https://lh3.googleusercontent.com/u/0/d/" + fileId + "=s400";
-}
-/* ----------- VIEW PRINCIPAL (NÃO EXCLUIR) ----------*/
-
-function setView(view) {
-  const url = new URL(window.location);
-  url.searchParams.set("view", view);
-  window.history.pushState({}, "", url);
+function prepararEdicaoNPC(id, metadataEncoded) {
+  try {
+    const metadataDecoded = JSON.parse(decodeURIComponent(metadataEncoded));
+    salvarEdicaoNPC(id, metadataDecoded);
+  } catch (e) {
+    console.error("Erro ao processar metadados do NPC:", e);
+    alert("Erro interno ao editar. Verifique o console.");
+  }
 }
 
-/*--------- OUTRAS VIEWS ------*/
+async function salvarEdicaoNPC(id, metadataAntigo) {
+  const titulo = document.getElementById("editKey").value.trim();
+  const conteudo = document.getElementById("editValue").value.trim();
 
-function openModal(title, content) {
-  document.getElementById("modal-body").innerHTML = `<h3>${title}</h3> <p>${content}</p>`;
-  document.getElementById("modal").style.display = "flex";
+  if (!titulo || !conteudo) {
+    alert("Preencha o título e o conteúdo da nota.");
+    return;
+  }
+
+  const novoMetadata = {
+    ...metadataAntigo,
+    [titulo]: conteudo
+  };
+
+  try {
+    const { data: npcAtualizado, error } = await db
+      .from('npcs')
+      .update({ metadata: novoMetadata })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    console.log("NPC Atualizado com sucesso:", npcAtualizado);
+    openGenericModal(npcAtualizado, npcAtualizado.nome);
+
+    if (typeof loadNPCs === "function") loadNPCs();
+
+  } catch (err) {
+    console.error("Erro ao atualizar e recarregar:", err);
+    alert("Erro ao salvar: " + err.message);
+  }
 }
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
-/*-------------------LOCAIS------------------*/
+/* =========================================================
+ * 7. LOCAIS E BAIRROS
+ * ========================================================= */
 
 function loadLocais() {
   setActiveMenu(5);
@@ -599,7 +693,6 @@ function loadLocais() {
   const content = document.getElementById("content");
   if (!content) return;
 
-  // Proteção caso o banco de dados não esteja carregado
   if (typeof DATA_LOCAIS === 'undefined' || !DATA_LOCAIS.pontos_interesse) {
     content.innerHTML = `
       <div class="header-section">
@@ -610,7 +703,6 @@ function loadLocais() {
     return;
   }
 
-  // Extrair todos os bairros únicos das três categorias (POIs, Eventos, NPCs)
   const bairrosSet = new Set();
   if (DATA_LOCAIS.pontos_interesse) DATA_LOCAIS.pontos_interesse.forEach(p => p.local_id && bairrosSet.add(p.local_id));
   if (DATA_LOCAIS.eventos) DATA_LOCAIS.eventos.forEach(e => e.local_id && bairrosSet.add(e.local_id));
@@ -618,7 +710,6 @@ function loadLocais() {
 
   const bairros = Array.from(bairrosSet);
 
-  // Criar as opções do menu suspenso formatando o texto (ex: bairro_biblioteca -> Bairro Biblioteca)
   let options = `<option value="">-- Selecione uma Região --</option>`;
   bairros.forEach(b => {
     const nomeFormatado = b.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -654,14 +745,12 @@ function renderBairroView(bairroId) {
     return;
   }
 
-  area.innerHTML = ""; // Limpa a área para renderizar o novo conteúdo
+  area.innerHTML = ""; 
 
-  // Filtrar os dados pelo bairro selecionado
   const pois = DATA_LOCAIS.pontos_interesse ? DATA_LOCAIS.pontos_interesse.filter(p => p.local_id === bairroId) : [];
   const eventos = DATA_LOCAIS.eventos ? DATA_LOCAIS.eventos.filter(e => e.local_id === bairroId) : [];
   const npcs = DATA_LOCAIS.npcs ? DATA_LOCAIS.npcs.filter(n => n.local_id === bairroId) : [];
 
-  // 1. Renderizar PONTOS DE INTERESSE
   if (pois.length > 0) {
     const tituloPoi = document.createElement("h3");
     tituloPoi.style.cssText = "color: #E69A28; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px;";
@@ -693,7 +782,6 @@ function renderBairroView(bairroId) {
     area.appendChild(gridPoi);
   }
 
-  // 2. Renderizar EVENTOS
   if (eventos.length > 0) {
     const tituloEvt = document.createElement("h3");
     tituloEvt.style.cssText = "color: #E69A28; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px;";
@@ -723,7 +811,6 @@ function renderBairroView(bairroId) {
     area.appendChild(gridEvt);
   }
 
-  // 3. Renderizar NPCS
   if (npcs.length > 0) {
     const tituloNpc = document.createElement("h3");
     tituloNpc.style.cssText = "color: #E69A28; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px;";
@@ -751,181 +838,24 @@ function renderBairroView(bairroId) {
     area.appendChild(gridNpc);
   }
 
-  // Feedback caso o bairro não tenha nenhum dado listado
   if (area.innerHTML === '') {
     area.innerHTML = '<p class="placeholder">Nenhuma atividade registrada para esta região.</p>';
   }
 }
 
-
-/* ----------- MODAL GENÉRICO ------------*/
-
-/**
- * Função recursiva para formatar qualquer tipo de dado (String, Array, Objeto) para o Modal
- */
-function formatarValor(valor) {
-  if (valor === null || valor === undefined || valor === "") return "—";
-
-  if (Array.isArray(valor)) {
-    if (valor.length === 0) return "—";
-    // Se for array de objetos (ex: lista de membros com funções e títulos)
-    if (typeof valor[0] === 'object') {
-      return `<div style="margin-top: 5px;">${valor.map(v => `<div style="padding-left: 10px; border-left: 2px solid #E69A28; margin-bottom: 5px;">${formatarValor(v)}</div>`).join('')}</div>`;
-    }
-    // Se for array de strings simples (ex: tags, participantes)
-    return `<ul style="margin: 5px 0; padding-left: 20px;">${valor.map(v => `<li>${formatarValor(v)}</li>`).join('')}</ul>`;
-  }
-
-  // Se for um Objeto (ex: { historia: 12, persuasao: 13 })
-  if (typeof valor === 'object') {
-    return `<ul style="margin: 5px 0; padding-left: 20px;">${Object.entries(valor).map(([k, v]) => {
-      const nomeChave = k.replace(/_/g, ' ').charAt(0).toUpperCase() + k.replace(/_/g, ' ').slice(1);
-      return `<li><strong>${nomeChave}:</strong> ${formatarValor(v)}</li>`;
-    }).join('')}</ul>`;
-  }
-
-  // Para valores normais (String, Número, Boolean)
-  return valor;
-}
-
-/**
- * Modal Dinâmico que aceita qualquer Objeto e renderiza suas chaves.
- * Passa por TODOS os elementos e sub-elementos usando recursividade.
- */
-function openGenericModal(objeto, tituloPadrao) {
-  const modal = document.getElementById("npcModal");
-  const body = document.getElementById("npcModalBody");
-  var modalContent = modal.querySelector(".modal-content");
-
-  const dataCompleta = { 
-    ...objeto, 
-    ...(objeto.metadata || {}) 
-  };
-
-  if (modalContent && typeof IMAGES_CACHE !== 'undefined' && IMAGES_CACHE.previewHeader) {
-    modalContent.style.backgroundImage = `url('${IMAGES_CACHE.previewHeader}')`;
-  }
-  
-  if (!modal || !body) return;
-
-  let colunasHtml = "";
-  // Tenta extrair o nome principal de várias formas, senão usa o padrão
-  let tituloPrincipal = dataCompleta.nome || dataCompleta.faccao_nome || dataCompleta.nome_faccao || tituloPadrao;
-
-  // Dicionário para deixar as chaves de sistema bonitas visualmente
-  const nomesFormatados = {
-    raca: "Raça",
-    faccao: "Facção",
-    aparencia: "Aparência",
-    missao: "Missão Relacionada",
-    personalidade: "Personalidade",
-    encontravel: "Onde Encontrar",
-    ameacas: "Ameaças",
-    status: "Status",
-    observacoes: "Observações",
-    segredo: "🤫 Segredo (Mestre)",
-    desejo: "Desejo",
-    comportamento: "Comportamento"
-  };
-
-  // Aqui passamos por TODAS as chaves do objeto principal
-  Object.entries(dataCompleta).forEach(([chave, valor]) => {
-    const chaveLower = chave.toLowerCase();
-    
-    // Ignorar chaves de controle de banco de dados ou chaves que já compõem o Título
-    if (["id", "id_js", "bairro_id", "local_id", "created_at", "metadata", "nome", "faccao_nome", "nome_faccao"].includes(chaveLower)) return;
-    
-    // Ignorar valores nulos, vazios ou arrays/objetos sem nada dentro
-    if (valor === null || valor === undefined || valor === "" || valor === "—") return;
-    if (Array.isArray(valor) && valor.length === 0) return;
-    if (typeof valor === 'object' && Object.keys(valor).length === 0) return;
-
-    // Converte a chave (ex: informacoes_encontradas) para (Informacoes Encontradas)
-    const label = nomesFormatados[chaveLower] || chave.replace(/_/g, " ").charAt(0).toUpperCase() + chave.replace(/_/g, " ").slice(1);
-
-    // O formatarValor(valor) fará a mágica de extrair e exibir qualquer sub-item!
-    colunasHtml += `
-      <div class="${chaveLower === 'segredo' ? 'secret-info' : ''}">
-        <strong style="color: #E69A28; font-size: 1.1em;">${label}:</strong>
-        <div style="margin-top: 5px; color: #541a7f; font-size: 0.95em;">${formatarValor(valor)}</div>
-      </div>
-    `;
-  });
-
-  // Renderização e reconstrução visual do modal no HTML
-  body.innerHTML = `
-    <div class="local-modal-container" style="padding: 20px;">
-      <header class="local-modal-header" style="border-bottom: 2px solid #6c1fa5; padding-bottom: 10px; margin-bottom: 20px;">
-        <h2 style="color: #6c1fa5; margin: 0;">${tituloPrincipal}</h2>
-        ${dataCompleta.tipo ? `<span class="badge" style="background: #444; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; display: inline-block; margin-top: 10px;">${dataCompleta.tipo.toUpperCase()}</span>` : ''}
-      </header>
-      
-      <div class="local-modal-scroll" style="max-height: 60vh; overflow-y: auto; padding-right: 10px;">
-        ${colunasHtml}
-      </div>
-      
-      <div class="modal-footer" style="margin-top: 20px; text-align: right; border-top: 1px solid #444; padding-top: 15px;">
-         <button class="btn-forja" onclick="closeNPCModal()" style="padding: 8px 16px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-weight: bold;">Fechar</button>
-      </div>
-    </div>
-  `;
-
-  modal.classList.remove("hidden");
-}
-
-function prepararEdicaoNPC(id, metadataEncoded) {
-  try {
-    // Decodifica o que o HTML "escondeu"
-    const metadataDecoded = JSON.parse(decodeURIComponent(metadataEncoded));
-    
-    // Chama a função de salvamento (a que você já tem ou a debaixo)
-    salvarEdicaoNPC(id, metadataDecoded);
-  } catch (e) {
-    console.error("Erro ao processar metadados do NPC:", e);
-    alert("Erro interno ao editar. Verifique o console.");
-  }
-}
-
-function formatarValor(valor) {
-  if (Array.isArray(valor)) {
-    // Se for array de objetos (como exploracao_locais_acampamento)
-    if (typeof valor[0] === 'object') {
-      return valor.map(v => `<div class="sub-item">${formatarValor(v)}</div>`).join("");
-    }
-    return valor.join(", ");
-  } 
-  
-  if (typeof valor === 'object' && valor !== null) {
-    // Se for um objeto (como npc_principal), transforma em lista de strings
-    return Object.entries(valor)
-      .map(([k, v]) => `<strong>${k}:</strong> ${formatarValor(v)}`)
-      .join("<br>");
-  }
-  
-  return valor || "—";
-}
-
-/*-------------------------------------*/
-
-function section(title, content) {
-  if (!content || content.trim() === "") return "";
-  return `<h4>${title}</h4><p>${content}</p>`;
-}
-
-/* ------------------------ PONTOS PRINCIPAIS ------------------------ */
+/* =========================================================
+ * 8. PONTOS PRINCIPAIS
+ * ========================================================= */
 
 function loadPontosPrincipais() {
   setActiveMenu(2);
   setView("pontos-principais");
 
-  // Prepara o container principal
   document.getElementById("content").innerHTML = `
     <h2>⭐ Pontos Principais</h2>
     <div class="card-grid" id="ppGrid"></div>
   `;
 
-  // Chama a renderização usando sua constante de dados locais
-  // Nota: Certifique-se de que o nome da constante seja DATA_PONTOS_PRINCIPAIS (ou o que você definiu)
   if (typeof DATA_PONTOS_PRINCIPAIS !== 'undefined') {
     renderPontosPrincipais(DATA_PONTOS_PRINCIPAIS);
   } else {
@@ -950,14 +880,12 @@ function renderPontosPrincipais(pontos) {
     const card = document.createElement("div");
     card.className = "card local-card";
 
-    // Mostramos apenas o essencial: Nome, Tipo e Região
     card.innerHTML = `
       <h3>${p["nome"] || "Local sem Nome"}</h3>
       <h5 class="muted">Quem controla <p>${p["quem controla"] || "Sem dono"} · ${p["regiao"] || "Desconhecida"}</p></h5>
     `;
 
-    // Conectando ao modal genérico
-    card.onclick = () => openGenericModal(p, "Ponto de Interesse");
+    card.onclick = () => openPontoPrincipalModal(p);
     
     grid.appendChild(card);
   });
@@ -972,56 +900,49 @@ function openPontoPrincipalModal(local) {
 
   body.innerHTML = `
   <div class="local-modal-container">
-
     <header class="local-modal-header">
-      <h2>${local["Nome"]}</h2>
+      <h2>${local["Nome"] || local["nome"]}</h2>
       <p class="local-meta">
-        <span><strong>Tipo:</strong> ${local["Tipo"]}</span>
+        <span><strong>Tipo:</strong> ${local["Tipo"] || local["tipo"]}</span>
       </p>
     </header>
-
     <div class="local-modal-scroll">
-
       <div class="local-modal-grid">
-
         <section class="local-col">
           <h3>Aparência</h3>
-          <p>${local["Aparência"] || "—"}</p>
+          <p>${local["Aparência"] || local["aparencia"] || "—"}</p>
         </section>
-
         <section class="local-col">
           <h3>Descrição</h3>
-          <p>${local["Descrição"] || "—"}</p>
+          <p>${local["Descrição"] || local["descricao"] || "—"}</p>
         </section>
-
         <section class="local-col">
           <h3>NPCs Envolvidos</h3>
-          <p>${local["NPCs Envolvidos"] || "—"}</p>
+          <p>${local["NPCs Envolvidos"] || local["npcs_envolvidos"] || "—"}</p>
         </section>
-
         <section class="local-col">
           <h3>Conflitos</h3>
-          <p>${local["Conflitos"] || "—"}</p>
+          <p>${local["Conflitos"] || local["conflitos"] || "—"}</p>
         </section>
-
         <section class="local-col">
           <h3>Itens / Relíquias</h3>
-          <p>${local["Itens / Relíquias"] || "—"}</p>
+          <p>${local["Itens / Relíquias"] || local["itens_reliquias"] || "—"}</p>
         </section>
-
         <section class="local-col">
           <h3>Consequências</h3>
-          <p>${local["Consequências"] || "—"}</p>
+          <p>${local["Consequências"] || local["consequencias"] || "—"}</p>
         </section>
-
       </div>
     </div>
-
   </div>
 `;
 
   modal.classList.remove("hidden");
 }
+
+/* =========================================================
+ * 9. FACÇÕES
+ * ========================================================= */
 
 function loadFaccoes() {
   setActiveMenu(6);
@@ -1033,7 +954,9 @@ function loadFaccoes() {
     <div class="card-grid" id="faccaoGrid"></div>
   `;
 
-  renderFaccoes(DATA_FACCOES);
+  if (typeof DATA_FACCOES !== 'undefined') {
+    renderFaccoes(DATA_FACCOES);
+  }
 }
 
 function renderFaccoes(faccoes) {
@@ -1051,15 +974,12 @@ function renderFaccoes(faccoes) {
     const card = document.createElement("div");
     card.className = "card faccao-card";
 
-    // Mantemos o card minimalista como você pediu
     card.innerHTML = `
       <h3>${item.nome || "Facção sem nome"}</h3>
-      <p><strong>Liderança:</strong> ${item.comandante.nome || "Desconhecida"}</p>
+      <p><strong>Liderança:</strong> ${item.comandante ? item.comandante.nome : "Desconhecida"}</p>
     `;
 
-    // AGORA USANDO O MODAL GENÉRICO
-    // Passamos o 'item' e um título padrão caso o objeto não tenha a chave 'faccao'
-    card.onclick = () => openGenericModal(item, "Detalhes da Facção");
+    card.onclick = () => openFaccaoModal(item);
     
     grid.appendChild(card);
   });
@@ -1076,29 +996,22 @@ function openFaccaoModal(faccao) {
     modalContent.style.backgroundImage = `url('${IMAGES_CACHE.previewHeader}')`;
   }
 
-  // 1. Pegamos o nome da facção para o Header
-  // O || serve para aceitar tanto "faccao" quanto "Facção"
-  const nomeFaccao = faccao.faccao || faccao["Facção"] || "Facção";
-
-  // 2. Geramos as colunas dinamicamente para o restante dos dados
+  const nomeFaccao = faccao.faccao || faccao["Facção"] || faccao.nome || "Facção";
   let colunasHtml = "";
 
   Object.entries(faccao).forEach(([chave, valor]) => {
-    // Pulamos a chave do nome da facção, pois ela já vai no <h2> do header
-    if (chave.toLowerCase() === "faccao") return;
+    if (chave.toLowerCase() === "faccao" || chave.toLowerCase() === "nome") return;
 
-    // Formatamos o nome da chave (ex: "comandantes" vira "Comandantes")
     const label = chave.charAt(0).toUpperCase() + chave.slice(1);
 
     colunasHtml += `
       <section class="local-col">
         <h3>${label}</h3>
-        <p>${valor || "—"}</p>
+        <p>${typeof valor === 'object' ? JSON.stringify(valor) : (valor || "—")}</p>
       </section>
     `;
   });
 
-  // 3. Montamos o HTML final
   body.innerHTML = `
     <div class="local-modal-container">
       <header class="local-modal-header">
@@ -1116,32 +1029,9 @@ function openFaccaoModal(faccao) {
   modal.classList.remove("hidden");
 }
 
-let GEN_NPCS = [];  // Planilha
-
-function mergeNPCs(genNPCs) {
-  return [...DATA_NPCS, ...genNPCs];
-}
-
-// Função para salvar NPC gerado
-function salvarNPCGerado(npc) {
-  const npcParaSalvar = {
-    nome: npc.nome,
-    status: npc.status || "usando",
-    raca: npc.raca,
-    vicio: npc.observacoes || ""
-  };
-
-  google.script.run
-    .withSuccessHandler(function() {
-      alert("NPC salvo com sucesso!");
-    })
-    .withFailureHandler(function(error) {
-      alert("Erro ao salvar NPC: " + error.message);
-    })
-    .salvarNPC(npcParaSalvar);
-}
-
-//----------------- LOJA -------------------
+/* =========================================================
+ * 10. LOJA E ITENS
+ * ========================================================= */
 
 function loadLoja() {
   setActiveMenu(8);
@@ -1171,7 +1061,6 @@ function loadLoja() {
   `;
 }
 
-// Prepara a tela para mostrar os preços e ativa os filtros
 function setupPrecosView() {
   document.getElementById("lojaFiltros").classList.remove("hidden");
   document.getElementById("lojaGrid").innerHTML = "<p class='placeholder'>Escolha uma categoria para ver os preços.</p>";
@@ -1181,7 +1070,6 @@ function filtrarLoja(categoria) {
   const grid = document.getElementById("lojaGrid");
   grid.innerHTML = "";
 
-  // Supondo que você terá um DATA_LOJA
   if (typeof DATA_LOJA === 'undefined') {
     grid.innerHTML = "<p class='placeholder'>Erro: Banco de dados da loja não encontrado.</p>";
     return;
@@ -1217,6 +1105,7 @@ function showSubFilters(tipo) {
   
   subContainer.innerHTML = ""; 
 
+  if (typeof DATA_LOJA === 'undefined') return;
   const dadosTipo = DATA_LOJA[tipo];
 
   if (!dadosTipo || !dadosTipo.categorias) {
@@ -1224,13 +1113,11 @@ function showSubFilters(tipo) {
     return;
   }
 
-  // Cria botões para cada subcategoria (ex: "Armas Simples Corpo a Corpo")
   dadosTipo.categorias.forEach(sub => {
     const btn = document.createElement("button");
     btn.className = "btn-sub-filter";
     btn.innerText = sub.categoria;
     
-    // Passamos o tipo (Weapon) e o nome da subcategoria para renderizar
     btn.onclick = () => renderItensLoja(tipo, sub.categoria);
     subContainer.appendChild(btn);
   });
@@ -1249,7 +1136,6 @@ function renderItensLoja(tipo, subNome) {
     const card = document.createElement("div");
     card.className = "card item-card";
     
-    // Lógica expandida para múltiplos tipos
     let infoSecundaria = "";
 
     switch (tipo) {
@@ -1260,11 +1146,7 @@ function renderItensLoja(tipo, subNome) {
         infoSecundaria = `<p class="item-meta"><strong>CA:</strong> ${item.classeArmadura}</p>`;
         break;
       case 'Gear':
-        infoSecundaria = item.peso ? `<p class="item-meta"><strong>Peso:</strong> ${item.peso}</p>` : "";
-        break;
       case 'Tool':
-        // Gear e Tools geralmente focam no peso ou tipo, mas podemos deixar vazio
-        // ou exibir o peso se você tiver essa chave no banco.
         infoSecundaria = item.peso ? `<p class="item-meta"><strong>Peso:</strong> ${item.peso}</p>` : "";
         break;
       default:
@@ -1282,40 +1164,50 @@ function renderItensLoja(tipo, subNome) {
       </div>
     `;
 
-    card.onclick = () => openGenericModal(item, item.nome);
+    card.onclick = () => {
+      openGenericModal(item, item.nome);
+      ativarEdicaoItem(item); // Ativa controles de forja no modal
+    };
     grid.appendChild(card);
   });
 }
 
 function ativarEdicaoItem(item) {
-  const container = document.getElementById("modalFields");
+  const container = document.getElementById("modalFields") || document.getElementById("npcModalBody");
+  if(!document.getElementById("modalFields")) {
+    const forgeDiv = document.createElement("div");
+    forgeDiv.id = "modalFields";
+    forgeDiv.style.marginTop = "20px";
+    forgeDiv.style.borderTop = "1px solid #444";
+    forgeDiv.style.paddingTop = "15px";
+    container.appendChild(forgeDiv);
+  }
+  const forgeContainer = document.getElementById("modalFields");
   const btnSalvar = document.getElementById("btnSalvarForja");
   
-  // Mostra o botão salvar que estava escondido
   if (btnSalvar) btnSalvar.style.display = "block";
 
-  // Identifica o tipo de item
   const isArma = !!item.dano;
   const isArmadura = !!item.classeArmadura;
 
-  // Parte comum: Nome do Item
   let htmlForja = `
+    <h3 style="color: #E69A28;">⚒️ Forja Mágica</h3>
     <div class="forja-field">
       <label>Nome do Item Especial</label>
-      <input type="text" id="editNome" value="${item.nome}">
+      <input type="text" id="editNome" value="${item.nome}" style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
     </div>
-    <div class="forja-field">
+    <div class="forja-field" style="margin-top: 10px;">
       <label>Bônus Mágico (+1 a +3)</label>
-      <select id="editBonus">
+      <select id="editBonus" style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
         <option value="0">Normal</option>
         <option value="1">Incomum +1</option>
         <option value="2">Raro +2</option>
         <option value="3">Lendário +3</option>
       </select>
     </div>
-    <div class="forja-field">
+    <div class="forja-field" style="margin-top: 10px;">
       <label>Encantamento!</label>
-      <select id="editSpell">
+      <select id="editSpell" style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
         <option value="nenhuma">Nenhum</option>
         <option value="cantrip">Cantrip</option>
         <option value="nível 1">Nível 1</option>
@@ -1328,12 +1220,11 @@ function ativarEdicaoItem(item) {
     </div>
   `;
 
-  // Parte Específica: ARMAS (Dano Extra)
   if (isArma) {
     htmlForja += `
-      <div class="forja-field">
+      <div class="forja-field" style="margin-top: 10px;">
         <label>Dano Adicional (Elemental/Extra)</label>
-        <select id="editDanoExtra">
+        <select id="editDanoExtra" style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
           <option value="">Nenhum</option>
           <option value="+1d4">+1d4 (Incomum)</option>
           <option value="+1d6">+1d6 (Raro)</option>
@@ -1341,19 +1232,18 @@ function ativarEdicaoItem(item) {
           <option value="+1d10">+1d10 (Lendário)</option>
         </select>
       </div>
-      <div class="forja-field">
-        <h3>📜 Informações pertinentes</h3>
-        <textarea id="solicita" class="textarea-forja" placeholder="Ex: Dano de fogo, a magia é _, efeito visual..."></textarea>
+      <div class="forja-field" style="margin-top: 10px;">
+        <label>📜 Informações pertinentes</label>
+        <textarea id="solicita" class="textarea-forja" placeholder="Ex: Dano de fogo, a magia é _, efeito visual..." style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;"></textarea>
       </div>
     `;
   }
 
-  // Parte Específica: ARMADURAS (Propriedades Defensivas)
   if (isArmadura) {
     htmlForja += `
-      <div class="forja-field">
+      <div class="forja-field" style="margin-top: 10px;">
         <label>Propriedade de Armadura</label>
-        <select id="editEfeitoDefesa">
+        <select id="editEfeitoDefesa" style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
           <option value="">Nenhuma</option>
           <option value="Resistência">Resistência a Dano</option>
           <option value="Adamante">Adamante (Anula Críticos)</option>
@@ -1361,9 +1251,9 @@ function ativarEdicaoItem(item) {
           <option value="Vigilante">Vigilante (+Bônus Iniciativa)</option>
         </select>
       </div>
-      <div class="forja-field">
-        <h3>📜 Informações pertinentes</h3>
-        <textarea id="solicita" class="textarea-forja" placeholder="Ex: Dano de fogo, a magia é _, efeito visual..."></textarea>
+      <div class="forja-field" style="margin-top: 10px;">
+        <label>📜 Informações pertinentes</label>
+        <textarea id="solicita" class="textarea-forja" placeholder="Ex: Dano de fogo, a magia é _, efeito visual..." style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;"></textarea>
       </div>
     `;
   }
@@ -1377,33 +1267,27 @@ function ativarEdicaoItem(item) {
   </div>
   `;
 
-  container.innerHTML = htmlForja;
+  forgeContainer.innerHTML = htmlForja;
 }
 
-let itemFinal = null;
-
 function salvarItemCustomizado(custoBase) {
-  // 1. Captura os valores dos inputs
   const nome = document.getElementById("editNome").value;
   const bonus = parseInt(document.getElementById("editBonus").value);
   const spellLevel = document.getElementById("editSpell").value;
-  const solicita = document.getElementById("solicita").value;
+  const solicita = document.getElementById("solicita") ? document.getElementById("solicita").value : "";
   
-  // 2. Tabelas de Preços (Modificadores)
   const PRECO_BONUS = { 0: 0, 1: 400, 2: 4000, 3: 40000 };
   const PRECO_SPELL = {
     "nenhuma": 0, "cantrip": 30, "nível 1": 50, "nível 2": 200, 
     "nível 3": 300, "nível 4": 2000, "nível 5": 3000, "nível 6": 20000
   };
   
-  // Preços para Dano Extra (Armas) ou Propriedades (Armaduras)
   const danoExtra = document.getElementById("editDanoExtra")?.value || "";
   const PRECO_DANO = { "": 0, "+1d4": 300, "+1d6": 1000, "+1d8": 1500, "+1d10": 10000 };
   
   const efeitoDefesa = document.getElementById("editEfeitoDefesa")?.value || "";
   const PRECO_DEFESA = { "": 0, "Resistência": 1500, "Adamante": 1000, "Furtiva": 800, "Vigilante": 800 };
 
-  // 3. Cálculo do Preço Total
   const valorBaseNumerico = parseMoedaParaGP(custoBase);
   const custoEncantamento = PRECO_BONUS[bonus] + PRECO_SPELL[spellLevel] + PRECO_DANO[danoExtra] + PRECO_DEFESA[efeitoDefesa];
   const precoTotal = valorBaseNumerico + custoEncantamento;
@@ -1418,10 +1302,8 @@ function salvarItemCustomizado(custoBase) {
     solicitacao: solicita
   };
 
-  // 4. Renderizar o "Resultado Final" no Modal
   const container = document.getElementById("modalFields");
   
-  // 1. Preparar as linhas do recibo (Só aparecem se tiverem valor)
   const linhasRecibo = [
     { label: "Item Base", valor: custoBase },
     { label: `Bônus Mágico (+${bonus})`, valor: PRECO_BONUS[bonus] > 0 ? `${PRECO_BONUS[bonus].toLocaleString('pt-BR')} GP` : null },
@@ -1429,7 +1311,6 @@ function salvarItemCustomizado(custoBase) {
     { label: `Adicional: ${danoExtra || efeitoDefesa}`, valor: (PRECO_DANO[danoExtra] || PRECO_DEFESA[efeitoDefesa]) > 0 ? `${(PRECO_DANO[danoExtra] || PRECO_DEFESA[efeitoDefesa]).toLocaleString('pt-BR')} GP` : null }
   ];
 
-  // Filtra apenas o que não é nulo para não encher o recibo de zeros
   const htmlLinhas = linhasRecibo
     .filter(linha => linha.valor !== null)
     .map(linha => `
@@ -1439,29 +1320,28 @@ function salvarItemCustomizado(custoBase) {
       </div>
     `).join('');
 
-  // 2. Renderizar o Recibo Final 
   container.innerHTML = `
-    <div class="recibo-antigo" style="grid-column: span 2;">
-      <h2>📜 RECIBO DE FORJA</h2>
-      <p>Mercador - Itens Especiais</p>
+    <div class="recibo-antigo" style="grid-column: span 2; background: #1a1a1a; padding: 20px; border: 1px solid #E69A28; border-radius: 8px;">
+      <h2 style="color: #E69A28; text-align: center; margin-top: 0;">📜 RECIBO DE FORJA</h2>
+      <p style="text-align: center; color: #aaa;">Mercador - Itens Especiais</p>
       
       <div style="margin-bottom: 20px;">
-        <strong style="font-size: 1.1em;">PRODUTO: ${nome} ${bonus > 0 ? '+' + bonus : ''}</strong>
+        <strong style="font-size: 1.1em; color: #fff;">PRODUTO: ${nome} ${bonus > 0 ? '+' + bonus : ''}</strong>
       </div>
 
-      <div class="detalhes-precos" style="margin-bottom: 20px;">
+      <div class="detalhes-precos" style="margin-bottom: 20px; color: #ddd;">
         ${htmlLinhas}
       </div>
 
-      <div style="display: flex; justify-content: space-between; font-size: 1.4em; font-weight: bold; border-top: 2px solid #444; padding-top: 10px;">
+      <div style="display: flex; justify-content: space-between; font-size: 1.4em; font-weight: bold; border-top: 2px solid #444; padding-top: 10px; color: #E69A28;">
         <span>TOTAL:</span>
         <span>💰 ${precoTotal.toLocaleString('pt-BR')} GP</span>
       </div>
 
       ${solicita ? `
-        <div>
+        <div style="margin-top: 15px; color: #aaa;">
           <small>NOTAS DO CLIENTE:</small>
-          <span style="font-style: italic; font-size: 0.9em;">"${solicita}"</span>
+          <span style="font-style: italic; font-size: 0.9em; display: block;">"${solicita}"</span>
         </div>
       ` : ""}
       
@@ -1471,169 +1351,79 @@ function salvarItemCustomizado(custoBase) {
           ✅ Confirmar e Enviar ao Mestre
         </button>
       </div>
-      <p style="text-align: center; font-size: 0.7em; margin-top: 30px; letter-spacing: 2px;">*** QUE OS DEUSES TE PROTEJAM ***</p>
+      <p style="text-align: center; font-size: 0.7em; margin-top: 30px; letter-spacing: 2px; color: #666;">*** QUE OS DEUSES TE PROTEJAM ***</p>
     </div>
   `;
 }
 
 function enviarItem(item) {
   const container = document.getElementById("modalFields");
-  const originalHTML = container.innerHTML; // Guarda o recibo caso dê erro
-
-  // Feedback visual imediato no botão
   const btn = document.getElementById("btnConfirmarEnvio");
+
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = "⌛ Processando Pedido...";
     btn.style.opacity = "0.7";
   }
 
-  google.script.run
-    .withSuccessHandler(function(res) {
-      // SUBSTITUI O CONTEÚDO DO MODAL POR UMA MENSAGEM DE SUCESSO
+  if(typeof google !== 'undefined' && google.script) {
+    google.script.run
+      .withSuccessHandler(function(res) {
+        container.innerHTML = `
+          <div class="recibo-antigo" style="grid-column: span 2; text-align: center; padding: 40px 20px; animation: fadeIn 0.5s;">
+            <div style="font-size: 50px; margin-bottom: 20px;">⚒️</div>
+            <h2 style="color: #E69A28; margin-bottom: 10px;">Pedido Entregue!</h2>
+            <p style="color: #E69A28; font-style: italic;">"O mestre ferreiro já recebeu suas instruções. Seu item será forjado com a perícia de Elturel."</p>
+            <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
+            <button onclick="closeNPCModal()" style="padding: 10px 20px; background: transparent; border: 1px solid #E69A28; color: #E69A28; cursor: pointer; border-radius: 4px;">
+              Fechar Forja
+            </button>
+          </div>
+        `;
+        console.log("Salvo com sucesso na planilha!");
+      })
+      .withFailureHandler(function(err) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = "❌ Erro ao enviar. Tentar novamente?";
+          btn.style.background = "#ff4444";
+        }
+        alert("Houve um erro mágico ao contatar a forja. Verifique o console.");
+        console.error("Erro ao salvar:", err);
+      })
+      .salvarItemNoGoogle(item);
+  } else {
+    // Fallback if google.script is not available
+    setTimeout(() => {
       container.innerHTML = `
-        <div class="recibo-antigo" style="grid-column: span 2; text-align: center; padding: 40px 20px; animation: fadeIn 0.5s;">
-          <div style="font-size: 50px; margin-bottom: 20px;">⚒️</div>
-          <h2 style="color: #E69A28; margin-bottom: 10px;">Pedido Entregue!</h2>
-          <p style="color: #E69A28; font-style: italic;">"O mestre ferreiro já recebeu suas instruções. Seu item será forjado com a perícia de Elturel."</p>
-          <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
-          <button onclick="closeNPCModal()" style="padding: 10px 20px; background: transparent; border: 1px solid #E69A28; color: #E69A28; cursor: pointer; border-radius: 4px;">
-            Fechar Forja
-          </button>
-        </div>
-      `;
-      console.log("Salvo com sucesso na planilha!");
-    })
-    .withFailureHandler(function(err) {
-      // SE DER ERRO, VOLTA O BOTÃO AO NORMAL E AVISA
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = "❌ Erro ao enviar. Tentar novamente?";
-        btn.style.background = "#ff4444";
-      }
-      alert("Houve um erro mágico ao contatar a forja. Verifique o console.");
-      console.error("Erro ao salvar:", err);
-    })
-    .salvarItemNoGoogle(item);
+          <div class="recibo-antigo" style="grid-column: span 2; text-align: center; padding: 40px 20px; animation: fadeIn 0.5s;">
+            <div style="font-size: 50px; margin-bottom: 20px;">⚒️</div>
+            <h2 style="color: #E69A28; margin-bottom: 10px;">Pedido Simulado (Offline)</h2>
+            <p style="color: #E69A28; font-style: italic;">"O script do Google não está disponível. Simulação concluída."</p>
+            <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
+            <button onclick="closeNPCModal()" style="padding: 10px 20px; background: transparent; border: 1px solid #E69A28; color: #E69A28; cursor: pointer; border-radius: 4px;">
+              Fechar Forja
+            </button>
+          </div>
+        `;
+    }, 1000);
+  }
 }
 
 function parseMoedaParaGP(custoString) {
   if (!custoString) return 0;
-
-  // Remove pontos de milhar (ex: 1.500 vira 1500) e troca vírgula por ponto
   const valorLimpo = custoString.replace(/\./g, '').replace(',', '.');
   const numero = parseFloat(valorLimpo);
   const unidade = custoString.toUpperCase();
 
   if (unidade.includes("SP")) return numero * 0.1;
   if (unidade.includes("CP")) return numero * 0.01;
-  return numero; // Assume GP por padrão
+  return numero;
 }
 
-function verificarAcesso() {
-  const senhaDigitada = document.getElementById("inputSenha").value;
-  const erro = document.getElementById("erroSenha");
-  const lock = document.getElementById("lockscreen");
-
-  if (senhaDigitada === SENHA_MESTRE) {
-    lock.style.display = "none"; // Remove a tela de bloqueio
-    configurarVisibilidadeJogadores();
-  } else {
-    erro.style.display = "block";
-    document.getElementById("inputSenha").value = "";
-  }
-}
-
-function configurarVisibilidadeJogadores() {
-  // Aqui escondemos os botões/seções que eles NÃO devem ver
-  // Supondo que seus botões de menu tenham IDs ou classes:
-  
-  const sessoesEscondidas = ["aba-npcs-secretos", "aba-mapas-mestre", "aba-lore-proibida"];
-  
-  sessoesEscondidas.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
-
-  console.log("Acesso concedido: Sessão Atual, Linha do Tempo e Mercado liberados.");
-}
-
-const SENHA_MESTRE = "sensei"; // Senha para liberar TUDO
-const SENHA_JOGADOR = "lindos"; // Senha para liberar apenas o básico
-
-function verificarAcesso() {
-  const senha = document.getElementById("inputSenha").value;
-  const lockscreen = document.getElementById("lockscreen");
-
-  if (senha === SENHA_MESTRE) {
-    // Mestre: Libera as abas extras
-    lockscreen.style.display = "none";
-    liberarAbasMestre(true);
-    localStorage.setItem("acesso", senha);
-  } else if (senha === SENHA_JOGADOR) {
-    // Jogador: Abre o site, mas mantém abas escondidas
-    lockscreen.style.display = "none";
-    liberarAbasMestre(false);
-    localStorage.setItem("acesso", senha);
-  } else {
-    document.getElementById("erroSenha").style.display = "block";
-  }
-}
-
-// Coloque isso logo abaixo da sua função verificarAcesso
-document.addEventListener("DOMContentLoaded", function() {
-  const campoSenha = document.getElementById("inputSenha");
-  
-  if (campoSenha) {
-    campoSenha.addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); // Evita que a página recarregue
-        verificarAcesso();      // Chama a sua função
-      }
-    });
-  }
-});
-
-function liberarAbasMestre(revelar) {
-  const itensMestre = document.querySelectorAll('.mestre-only');
-  itensMestre.forEach(el => {
-    if (revelar) {
-      el.classList.add('show-mestre');
-    } else {
-      el.classList.remove('show-mestre');
-    }
-  });
-}
-
-function renderEncontros(dados) {
-  const grid = document.getElementById("encontrosGrid");
-  if (!grid) return;
-
-  grid.innerHTML = ""; // Limpa o grid
-
-  if (!dados || dados.length === 0) {
-    grid.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhum encontro cadastrado.</p>';
-    return;
-  }
-
-  dados.forEach((encontro) => {
-    const card = document.createElement("div");
-    card.className = "card encounter-card"; // Seguindo o padrão de classes do projeto
-
-    // Mostramos apenas o essencial no card seguindo o padrão visual de renderLocais
-    card.innerHTML = `
-      <div class="card-header">
-        <h3>${encontro.nome || "Sem Nome"}</h3>
-      </div>
-      <p class="line-clamp-1">${encontro.descricao || "Sem descrição definida."}</p>
-    `;
-
-    // Ao clicar, abre o modal enviando o objeto completo seguindo o padrão openGenericModal
-    card.onclick = () => openEncounterModal(encontro);
-    
-    grid.appendChild(card);
-  });
-}
+/* =========================================================
+ * 11. ENCONTROS TÁTICOS
+ * ========================================================= */
 
 function loadEncontros() {
   setActiveMenu(7); 
@@ -1642,7 +1432,6 @@ function loadEncontros() {
   const content = document.getElementById("content");
   if (!content) return;
 
-  // Cabeçalho da seção de encontros
   content.innerHTML = `
     <div class="header-section">
       <h2>⚔️ Encontros Táticos</h2>
@@ -1661,19 +1450,39 @@ function loadEncontros() {
   }
 }
 
-/**
- * =========================================================
- * ENCONTRO RÁPIDO (AD-HOC) COM FILTROS
- * Permite selecionar monstros com filtros de ambiente e nome
- * =========================================================
- */
+function renderEncontros(dados) {
+  const grid = document.getElementById("encontrosGrid");
+  if (!grid) return;
+
+  grid.innerHTML = ""; 
+
+  if (!dados || dados.length === 0) {
+    grid.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhum encontro cadastrado.</p>';
+    return;
+  }
+
+  dados.forEach((encontro) => {
+    const card = document.createElement("div");
+    card.className = "card encounter-card"; 
+
+    card.innerHTML = `
+      <div class="card-header">
+        <h3>${encontro.nome || "Sem Nome"}</h3>
+      </div>
+      <p class="line-clamp-1">${encontro.descricao || "Sem descrição definida."}</p>
+    `;
+
+    card.onclick = () => openEncounterModal(encontro);
+    grid.appendChild(card);
+  });
+}
+
 function openCustomEncounterModal() {
   if (typeof DATA_MONSTROS === 'undefined' || DATA_MONSTROS.length === 0) {
     alert("O bestiário ainda não foi carregado ou está vazio.");
     return;
   }
 
-  // Extrair todos os ambientes únicos para o filtro
   const todosAmbientes = new Set();
   DATA_MONSTROS.forEach(m => {
     if (m.ambientes && Array.isArray(m.ambientes)) {
@@ -1681,7 +1490,6 @@ function openCustomEncounterModal() {
     }
   });
 
-  // Criação do Overlay no DOM
   const overlay = document.createElement('div');
   overlay.className = 'quick-monster-overlay';
   overlay.id = 'customEncounterModal';
@@ -1691,7 +1499,6 @@ function openCustomEncounterModal() {
 
   overlay.innerHTML = `
     <div class="quick-monster-content" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; background: #1a1a1a; padding: 20px; border: 1px solid #cda434; border-radius: 8px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; box-shadow: 0 0 30px rgba(0,0,0,0.7);">
-      
       <header class="quick-monster-header" style="flex-shrink: 0; display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 15px;">
         <div>
           <h3 style="color: #cda434; margin: 0;">➕ Encontro Rápido</h3>
@@ -1699,24 +1506,14 @@ function openCustomEncounterModal() {
         </div>
         <button onclick="document.getElementById('customEncounterModal').remove()" style="background: none; border: none; color: #fff; font-size: 1.5em; cursor: pointer;">✖</button>
       </header>
-
-      <!-- BARRA DE FILTROS -->
       <div class="filter-bar" style="display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;">
-        <input type="text" id="filterName" placeholder="Buscar por nome..." oninput="filterQuickMonsters()" 
-          style="flex: 2; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
-        
-        <select id="filterEnvironment" onchange="filterQuickMonsters()" 
-          style="flex: 1; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        <input type="text" id="filterName" placeholder="Buscar por nome..." oninput="filterQuickMonsters()" style="flex: 2; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        <select id="filterEnvironment" onchange="filterQuickMonsters()" style="flex: 1; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
           <option value="">🌍 Todos Ambientes</option>
           ${Array.from(todosAmbientes).sort().map(amb => `<option value="${amb}">${amb.charAt(0).toUpperCase() + amb.slice(1)}</option>`).join('')}
         </select>
       </div>
-      
-      <!-- Lista de monstros (Container dinâmico) -->
-      <div id="quickMonsterList" class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;">
-        <!-- Renderizado via JS -->
-      </div>
-
+      <div id="quickMonsterList" class="quick-monster-body" style="overflow-y: auto; flex-grow: 1; padding-right: 10px;"></div>
       <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; flex-shrink: 0;">
         <button class="btn-loja" onclick="startCustomEncounter()" style="width: 100%; padding: 12px; font-size: 1.1em; background: #cda434; color: #000; font-weight: bold; cursor: pointer;">
           ⚔️ Iniciar Combate
@@ -1726,12 +1523,9 @@ function openCustomEncounterModal() {
   `;
 
   document.body.appendChild(overlay);
-  filterQuickMonsters(); // Inicializa a lista
+  filterQuickMonsters(); 
 }
 
-/**
- * Filtra a lista de monstros no modal baseado nos inputs
- */
 function filterQuickMonsters() {
   const container = document.getElementById("quickMonsterList");
   const nameQuery = document.getElementById("filterName").value.toLowerCase();
@@ -1764,17 +1558,11 @@ function filterQuickMonsters() {
   `).join('') : `<p style="text-align: center; color: #666; padding: 20px;">Nenhum monstro encontrado.</p>`;
 }
 
-/**
- * Mantém as quantidades selecionadas mesmo ao filtrar
- */
 function updateTempQuantity(id, val) {
   if (!window.tempSelectedQuantities) window.tempSelectedQuantities = {};
   window.tempSelectedQuantities[id] = parseInt(val) || 0;
 }
 
-/**
- * Coleta os monstros selecionados e inicia o combate
- */
 function startCustomEncounter() {
   const inimigosSelecionados = [];
   const quantities = window.tempSelectedQuantities || {};
@@ -1800,22 +1588,11 @@ function startCustomEncounter() {
     terreno: { descricao: "Local atual." }
   };
 
-  // Limpa o estado temporário e remove modal
   window.tempSelectedQuantities = {};
   document.getElementById('customEncounterModal').remove();
-  
   openEncounterModal(encontroAdHoc);
 }
 
-// Estado global para não perder os HPs e iniciativas ao trocar de aba
-let currentCombat = {
-  encontroId: null,
-  monstros: [] // { instanceId, mobId, nome, hpMax, iniciativa, modificadores: [], ca, ativo: true }
-};
-
-/**
- * Abre o modal de encontro e inicializa as instâncias de combate
- */
 function openEncounterModal(encontro) {
   const modal = document.getElementById("npcModal");
   const body = document.getElementById("npcModalBody");
@@ -1823,12 +1600,10 @@ function openEncounterModal(encontro) {
   
   if (!modal || !body) return;
 
-  // Carrega a imagem de cabeçalho, se existir
   if (modalContent && typeof IMAGES_CACHE !== 'undefined') {
     modalContent.style.backgroundImage = "url('" + IMAGES_CACHE.previewHeader + "')";
   }
 
-  // Inicializa o combate se for um encontro diferente do atual
   if (currentCombat.encontroId !== encontro.id) {
     currentCombat.encontroId = encontro.id;
     currentCombat.monstros = [];
@@ -1846,7 +1621,7 @@ function openEncounterModal(encontro) {
               hpMax: parseInt(template.pv) || 0,
               iniciativa: 0,
               ca: template.ca || "?",
-              modificadores: [], // Vetor: valores negativos (dano) e positivos (cura)
+              modificadores: [], 
               ativo: true
             });
           }
@@ -1859,9 +1634,6 @@ function openEncounterModal(encontro) {
   modal.classList.remove("hidden");
 }
 
-/**
- * Renderiza o conteúdo dinâmico do modal com sistema de ABAS
- */
 function renderEncounterModalContent(encontro) {
   const body = document.getElementById("npcModalBody");
   if (!body) return;
@@ -1871,7 +1643,6 @@ function renderEncounterModalContent(encontro) {
     ? DATA_MONSTROS.filter(m => mobIds.includes(m.id)) 
     : [];
 
-  // Função para calcular o HP atual com base no vetor de danos e curas
   const calculateHP = (m) => {
     const totalMod = m.modificadores.reduce((acc, val) => acc + val, 0);
     const atual = m.hpMax + totalMod;
@@ -1980,8 +1751,8 @@ function renderEncounterModalContent(encontro) {
 
       </div>
 
-      <div id="modalFooter" class="modal-footer">
-        <button class="btn-forja" onclick="document.getElementById('npcModal').classList.add('hidden')">
+      <div id="modalFooter" class="modal-footer" style="padding: 20px; border-top: 1px solid #444; text-align: right;">
+        <button class="btn-forja" onclick="document.getElementById('npcModal').classList.add('hidden')" style="padding: 8px 16px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-weight: bold;">
           Fechar Registro
         </button>
       </div>
@@ -1989,9 +1760,6 @@ function renderEncounterModalContent(encontro) {
   `;
 }
 
-/**
- * Funções Auxiliares do Tracker de Combate
- */
 function applyHPModifier(instanceId, tipo) {
   const monstro = currentCombat.monstros.find(m => m.instanceId === instanceId);
   const input = document.getElementById(`input-hp-${instanceId}`);
@@ -2000,7 +1768,6 @@ function applyHPModifier(instanceId, tipo) {
   const val = parseInt(input.value) || 0;
   if (val <= 0) return;
 
-  // Dano entra negativo, cura entra positivo
   const modifier = tipo === 'dano' ? -val : val;
   monstro.modificadores.push(modifier);
   
@@ -2031,7 +1798,6 @@ function refreshEncounterUI() {
     ? DATA_ENCONTROS.find(e => e.id === currentCombat.encontroId) 
     : null;
 
-  // Renderiza mantendo os dados caso seja um encontro Ad-Hoc
   const baseData = encontroOriginal || {
     id: currentCombat.encontroId,
     nome: "Combate Ativo",
@@ -2042,21 +1808,17 @@ function refreshEncounterUI() {
 }
 
 function switchEncounterTab(tabName) {
-  // Esconde todas as abas
   document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
   
-  // Reseta os botões
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.style.background = '#222';
     b.style.color = '#fff';
     b.style.border = '1px solid #444';
   });
   
-  // Mostra a aba correta
   const targetTab = document.getElementById(`tab-${tabName}`);
   if (targetTab) targetTab.style.display = 'block';
 
-  // Destaca o botão correto
   const tabBtnMap = { 'tracker': 'btn-tab-tracker', 'info-monstros': 'btn-tab-info', 'taticas': 'btn-tab-taticas' };
   const activeBtn = document.getElementById(tabBtnMap[tabName]);
   if (activeBtn) {
@@ -2066,12 +1828,15 @@ function switchEncounterTab(tabName) {
   }
 }
 
-/*
- * =========================================================
- * FICHA RÁPIDA DE MONSTRO
- * Estrutura segura com processamento dinâmico de ações
- * =========================================================
- */
+function getDificuldadeLabel(slug) {
+  const mapa = { 'facil': 'Fácil', 'medio': 'Médio', 'dificil': 'Difícil', 'dificil_alto': 'Difícil (Alto)', 'mortal': 'Mortal' };
+  return mapa[slug] || slug;
+}
+
+/* =========================================================
+ * 12. BESTIÁRIO
+ * ========================================================= */
+
 function openMonsterDetails(event, monstroId) {
   if (event) event.stopPropagation();
   if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
@@ -2091,7 +1856,6 @@ function openMonsterDetails(event, monstroId) {
     </div>
   `;
 
-  // Informações extras que monstros complexos possuem
   const extrasHtml = `
     ${monstro.resistencias ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>🛡️ Resistências:</strong> ${monstro.resistencias.join(', ')}</p>` : ''}
     ${monstro.imunidades ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>🚫 Imunidades:</strong> ${monstro.imunidades.join(', ')}</p>` : ''}
@@ -2107,7 +1871,7 @@ function openMonsterDetails(event, monstroId) {
     reacoes: "Reações",
     acoes_lendarias: "Ações Lendárias",
     magias: "Magias",
-	raios_oculares: "Raios Oculares"
+    raios_oculares: "Raios Oculares"
   };
 
   let sessoesDinamicasHtml = '';
@@ -2118,7 +1882,6 @@ function openMonsterDetails(event, monstroId) {
 
     sessoesDinamicasHtml += `<h4 class="quick-title">${titulo}</h4><ul class="quick-list">`;
 
-    // 1. Tratamento para Listas (Arrays) como Ações e Habilidades
     if (Array.isArray(lista) && lista.length > 0) {
       sessoesDinamicasHtml += lista.map(item => {
         if (typeof item === 'string') return `<li>${item}</li>`;
@@ -2126,7 +1889,6 @@ function openMonsterDetails(event, monstroId) {
         const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
         let desc = item.descricao || '';
         
-        // Se não for uma descrição em bloco de texto, monta as propriedades (Ataque, Dano, Efeito, etc)
         if (!desc) {
           let detalhes = [];
           if (item.ataque) detalhes.push(`<em>Ataque:</em> ${item.ataque}`);
@@ -2139,11 +1901,8 @@ function openMonsterDetails(event, monstroId) {
 
         return `<li>${nome}${desc}</li>`;
       }).join('');
-    } 
-    // 2. Tratamento para Objetos (Dicionários) como Magias
-    else if (typeof lista === 'object' && !Array.isArray(lista)) {
+    } else if (typeof lista === 'object' && !Array.isArray(lista)) {
       for (const [subchave, subvalor] of Object.entries(lista)) {
-        // Ex: "ataque_magia" vira "Ataque Magia", "3_dia" vira "3/dia"
         let chaveFormatada = subchave.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         if (subchave.match(/^\d+_dia$/)) chaveFormatada = subchave.replace('_dia', '/dia');
 
@@ -2193,9 +1952,6 @@ function openMonsterDetails(event, monstroId) {
   document.body.appendChild(overlay);
 }
 
-/**
- * Interface para seleção de Classe e ND
- */
 function abrirAprimoramento(monstroId) {
   const bodyArea = document.getElementById('quickMonsterBodyArea');
   if (!bodyArea) return;
@@ -2228,9 +1984,6 @@ function abrirAprimoramento(monstroId) {
   `;
 }
 
-/**
- * Função que realiza o envio para o Supabase (Edge Function)
- */
 async function solicitarAprimoramento(monstroId) {
   const classe = document.getElementById("aprimorarClasse").value;
   const incrementoCR = parseInt(document.getElementById("aprimorarCR").value) || 1;
@@ -2262,27 +2015,13 @@ async function solicitarAprimoramento(monstroId) {
   }
 }
 
-function getDificuldadeLabel(slug) {
-  const mapa = { 'facil': 'Fácil', 'medio': 'Médio', 'dificil': 'Difícil', 'dificil_alto': 'Difícil (Alto)', 'mortal': 'Mortal' };
-  return mapa[slug] || slug;
-}
-
-/*
- * =========================================================
- * BESTIÁRIO (Lista de Monstros)
- * Renderização da página principal de visualização de criaturas
- * =========================================================
- */
-
 function loadBestiario() {
-  // Defina o índice correto do seu menu para o Bestiário (Ex: 9)
   if (typeof setActiveMenu === 'function') setActiveMenu(9); 
   if (typeof setView === 'function') setView("bestiario");
 
   const content = document.getElementById("content");
   if (!content) return;
 
-  // Estrutura base da página com a barra de filtros
   content.innerHTML = `
     <div class="header-section">
       <h2>🐉 Bestiário</h2>
@@ -2317,27 +2056,20 @@ function loadBestiario() {
   }
 }
 
-/**
- * Preenche dinamicamente os menus de seleção (Tipo e CR) 
- * com base nos dados que existem de fato no DATA_MONSTROS
- */
 function preencherFiltrosBestiario() {
   const tipos = new Set();
   const crs = new Set();
 
-  // Extrai valores únicos
   DATA_MONSTROS.forEach(m => {
     if (m.tipo) tipos.add(m.tipo.trim());
     if (m.cr !== undefined) crs.add(m.cr);
   });
 
-  // Preenche filtro de Tipo
   const selectTipo = document.getElementById("filtroTipo");
   Array.from(tipos).sort().forEach(t => {
     selectTipo.innerHTML += `<option value="${t}">${t.charAt(0).toUpperCase() + t.slice(1)}</option>`;
   });
 
-  // Preenche filtro de CR (Ordenando logicamente números e frações como 1/4)
   const selectCR = document.getElementById("filtroCR");
   const sortedCRs = Array.from(crs).sort((a, b) => {
     const valA = (typeof a === 'string' && a.includes('/')) ? (a.split('/')[0] / a.split('/')[1]) : parseFloat(a) || 0;
@@ -2350,9 +2082,6 @@ function preencherFiltrosBestiario() {
   });
 }
 
-/**
- * Função responsável por ler os filtros e atualizar o grid
- */
 function filterBestiario() {
   const nameQuery = document.getElementById("buscaMonstro").value.toLowerCase();
   const tipoQuery = document.getElementById("filtroTipo").value;
@@ -2361,7 +2090,7 @@ function filterBestiario() {
   const filtrados = DATA_MONSTROS.filter(m => {
     const matchName = !nameQuery || m.nome.toLowerCase().includes(nameQuery);
     const matchTipo = !tipoQuery || (m.tipo && m.tipo.trim() === tipoQuery);
-    const matchCR = !crQuery || m.cr == crQuery; // Usa == para comparar "1" com 1, se necessário
+    const matchCR = !crQuery || m.cr == crQuery; 
     
     return matchName && matchTipo && matchCR;
   });
@@ -2369,9 +2098,6 @@ function filterBestiario() {
   renderBestiario(filtrados);
 }
 
-/**
- * Renderiza os cards dos monstros no grid da tela
- */
 function renderBestiario(monstros) {
   const grid = document.getElementById("bestiarioGrid");
   if (!grid) return;
@@ -2385,7 +2111,7 @@ function renderBestiario(monstros) {
 
   monstros.forEach(m => {
     const card = document.createElement("div");
-    card.className = "card monstro-card"; // Reaproveita o estilo das suas outras páginas
+    card.className = "card monstro-card"; 
     card.style.cursor = "pointer";
 
     card.innerHTML = `
@@ -2404,11 +2130,8 @@ function renderBestiario(monstros) {
       </div>
     `;
 
-    // Conectando ao Modal de Ficha Rápida que criamos na etapa anterior
     card.onclick = (e) => openMonsterDetails(e, m.id);
     
     grid.appendChild(card);
   });
 }
-
-window.onload = loadInitialView;
