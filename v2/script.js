@@ -16,8 +16,6 @@ const IMAGES_CACHE = {
 
 let NPC_PREVIEW_ATUAL = null;
 let itemFinal = null;
-const SENHA_MESTRE = "sensei"; 
-const SENHA_JOGADOR = "lindos"; 
 
 // Variáveis de Combate
 let currentCombat = {
@@ -41,16 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
   modalContent.addEventListener("click", (e) => {
     e.stopPropagation();
   });
-
-  const campoSenha = document.getElementById("inputSenha");
-  if (campoSenha) {
-    campoSenha.addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); 
-        verificarAcesso();      
-      }
-    });
-  }
 });
 
 window.onload = loadInitialView;

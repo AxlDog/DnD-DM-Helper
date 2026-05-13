@@ -839,11 +839,6 @@ main h2 {
   border-radius: 8px 0 0 8px;
 }
 
-/* Esconde elementos do mestre por padrão */
-.mestre-only {
-  display: none !important;
-}
-
 /* Estilo para quando a senha do mestre for digitada */
 .show-mestre {
   display: flex !important; /* ou block, dependendo do seu layout */
