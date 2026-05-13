@@ -2090,40 +2090,66 @@ function renderBestiario(monstros) {
  * ========================================================= */
 
 async function devImportarMonstros() {
-    console.log("Iniciando download dos monstros do SRD...");
+    console.log("Iniciando download dos monstros da Open5e...");
     
     try {
-        // 1. Pega a lista geral
-        const respostaLista = await fetch('https://www.dnd5eapi.co/api/monsters');
-        const lista = await respostaLista.json();
-        
-        console.log(`Encontrados ${lista.count} monstros. Iniciando injeção no Supabase...`);
-
+        // limit=100 faz com que peguemos 100 monstros por vez, acelerando o processo
+        let nextUrl = 'https://api.open5e.com/v1/monsters/?limit=100'; 
         let salvos = 0;
-        // 2. Loop para baixar a ficha completa e salvar no banco
-        for (const monstro of lista.results) {
-            const resFicha = await fetch(`https://www.dnd5eapi.co${monstro.url}`);
-            const fichaCompleta = await resFicha.json();
+        let total = "Desconhecido";
 
+        while (nextUrl) {
+            console.log(`Buscando dados na página: ${nextUrl}`);
+            const resposta = await fetch(nextUrl);
+            const dados = await resposta.json();
+            
+            // Pega o total apenas na primeira rodada
+            if (total === "Desconhecido") {
+                total = dados.count;
+                console.log(`Encontrados ${total} monstros. Iniciando injeção em lotes no Supabase...`);
+            }
+
+            // Prepara os 100 monstros da página atual para salvar de uma vez só
+            const monstrosParaSalvar = dados.results.map(ficha => {
+                
+                // Transforma "1/4" em 0.25 para o Supabase não reclamar do tipo de dado
+                let crNum = 0;
+                if (ficha.challenge_rating) {
+                    if (ficha.challenge_rating.includes('/')) {
+                        const [numerador, denominador] = ficha.challenge_rating.split('/');
+                        crNum = parseInt(numerador) / parseInt(denominador);
+                    } else {
+                        crNum = parseFloat(ficha.challenge_rating);
+                    }
+                }
+
+                return {
+                    index: ficha.slug, // A Open5e usa slug em vez de index
+                    name: ficha.name,
+                    challenge_rating: crNum,
+                    data: ficha // A ficha inteira vai para o JSONB
+                };
+            });
+
+            // Insere o lote inteiro no banco (muito mais rápido que salvar 1 por 1)
             const { error } = await db
                 .from('monsters')
-                .upsert({ // upsert atualiza se já existir, insere se for novo
-                    index: fichaCompleta.index,
-                    name: fichaCompleta.name,
-                    challenge_rating: fichaCompleta.challenge_rating,
-                    data: fichaCompleta 
-                }, { onConflict: 'index' });
+                .upsert(monstrosParaSalvar, { onConflict: 'index' });
 
             if (error) {
-                console.error("Erro no monstro:", fichaCompleta.name, error);
+                console.error("Erro ao salvar o lote:", error);
+                break; // Para o loop se der erro no banco
             } else {
-                salvos++;
-                // Atualiza o console a cada 20 monstros para não travar o navegador
-                if (salvos % 20 === 0) console.log(`Progresso: ${salvos} de ${lista.count} salvos...`);
+                salvos += monstrosParaSalvar.length;
+                console.log(`Progresso: ${salvos} de ${total} salvos no banco...`);
             }
+
+            // Define a próxima página (quando for a última, nextUrl será null e o loop acaba)
+            nextUrl = dados.next; 
         }
-        console.log("IMPORTAÇÃO CONCLUÍDA! Banco de dados atualizado com sucesso.");
+
+        console.log("✅ IMPORTAÇÃO CONCLUÍDA! Banco de dados recheado com sucesso.");
     } catch (erro) {
-        console.error("Erro crítico na importação:", erro);
+        console.error("❌ Erro crítico na importação:", erro);
     }
 }
