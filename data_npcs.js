@@ -1,3 +1,22 @@
+/* =========================================================
+ * SCHEMA: DATA_NPCS
+ * =========================================================
+ * Array de objetos detalhando personagens não-jogadores (canônicos e extras).
+ * 
+ * DATA_NPCS = [{
+ *   id: String,
+ *   nome: String,
+ *   raca: String,
+ *   status: String,
+ *   descricao: String (opcional),
+ *   observacoes: String (opcional),
+ *   segredo: String (opcional),
+ *   desejo: String (opcional),
+ *   comportamento: String (opcional),
+ *   ligacoes: [String] (opcional),
+ *   nivel_ameaca: String (opcional)
+ * }]
+ * ========================================================= */
 
 const DATA_NPCS = [
   {
