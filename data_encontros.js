@@ -1,3 +1,57 @@
+/* =========================================================
+ * SCHEMA: DATA_ENCONTROS
+ * =========================================================
+ * Array de objetos contendo a configuração de encontros e combates.
+ * 
+ * DATA_ENCONTROS = [{
+ *   id: String,
+ *   nome: String,
+ *   tipo: String,
+ *   nivel_recomendado: Number | String (opcional),
+ *   dificuldade: String (opcional),
+ *   descricao: String,
+ *   bioma: String (opcional),
+ *   contexto: { local: String, hora: String } (opcional),
+ *   detecao: { passiva: Number, ativa: String, sucesso: String, falha: String } (opcional),
+ *   inimigos: [{
+ *     id: String,
+ *     quantidade: Number,
+ *     posicao_inicial: String (opcional),
+ *     cr: Number (opcional),
+ *     funcao: String (opcional)
+ *   }],
+ *   terreno: {
+ *     descricao: String,
+ *     dificuldade_movimento: Boolean,
+ *     cobertura: [{ tipo: String, descricao: String }]
+ *   } (opcional),
+ *   ambiente: {
+ *     terreno: [String],
+ *     efeitos: [{ nome: String, descricao: String }]
+ *   } (opcional),
+ *   elementos_interativos: [{
+ *     nome: String,
+ *     tipo: String,
+ *     descricao: String,
+ *     interacoes: [String]
+ *   }] (opcional),
+ *   armadilhas: [{
+ *     nome: String,
+ *     descricao: String,
+ *     cd_percepcao: Number,
+ *     cd_desarme: Number,
+ *     efeito: String
+ *   }] (opcional),
+ *   objetivos: [{ tipo: String, descricao: String }] (opcional),
+ *   taticas / taticas_inimigos: [String] (opcional),
+ *   habilidades_especiais: [{ nome: String, descricao: String }] (opcional),
+ *   condicoes_especiais: [String] (opcional),
+ *   segredo: String (opcional),
+ *   recompensas: { xp: Number, itens: [String], ouro: { PO: Number, PP: Number, PC: Number } } | [String] (opcional),
+ *   item_especial: { nome: String, descricao: String } (opcional)
+ * }]
+ * ========================================================= */
+
 const DATA_ENCONTROS = [
 	{
 	  "id": "enc_assalto_vento_cinzento",
