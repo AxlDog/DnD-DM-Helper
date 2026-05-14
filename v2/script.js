@@ -2189,3 +2189,77 @@ async function devImportarMonstros() {
         console.error("❌ Erro crítico na importação:", erro);
     }
 }
+
+async function limparDuplicatasSupabase() {
+    console.log("🧹 Iniciando varredura de duplicatas no Supabase...");
+    
+    try {
+        // 1. Pega todos os monstros do banco (trazendo o id numérico e o index)
+        const { data: monstros, error } = await db
+            .from('monsters')
+            .select('id, index, name');
+
+        if (error) throw error;
+
+        console.log(`Encontrados ${monstros.length} monstros no total. Analisando...`);
+
+        // 2. Agrupa os monstros pelo nome exato
+        const agrupadosPorNome = {};
+        monstros.forEach(m => {
+            if (!agrupadosPorNome[m.name]) agrupadosPorNome[m.name] = [];
+            agrupadosPorNome[m.name].push(m);
+        });
+
+        const idsParaDeletar = [];
+        let totalMantidos = 0;
+
+        // 3. Verifica quem fica e quem vai pro lixo
+        for (const nome in agrupadosPorNome) {
+            const lista = agrupadosPorNome[nome];
+            
+            if (lista.length > 1) {
+                // Ordena pelo tamanho do 'index' para manter o original/oficial
+                // Ex: "goblin" (6 letras) ganha de "goblin-a5e" (10 letras)
+                lista.sort((a, b) => a.index.length - b.index.length);
+                
+                const mantido = lista[0]; 
+                const descartados = lista.slice(1); 
+                
+                descartados.forEach(d => idsParaDeletar.push(d.id));
+                console.log(`⚠️ Duplicata: '${nome}'. Mantendo [${mantido.index}] e apagando ${descartados.length} cópia(s).`);
+            }
+            totalMantidos++;
+        }
+
+        if (idsParaDeletar.length === 0) {
+            console.log("✅ Nenhuma duplicata encontrada! Seu banco já está limpo.");
+            return;
+        }
+
+        console.log(`🔥 Preparando para apagar ${idsParaDeletar.length} monstros duplicados. Isso é um caminho sem volta...`);
+
+        // 4. Deleta em lotes para não sobrecarregar a rede
+        const loteTamanho = 100;
+        for (let i = 0; i < idsParaDeletar.length; i += loteTamanho) {
+            const lote = idsParaDeletar.slice(i, i + loteTamanho);
+            const { error: deleteError } = await db
+                .from('monsters')
+                .delete()
+                .in('id', lote);
+
+            if (deleteError) {
+                console.error("❌ Erro ao deletar o lote:", deleteError);
+            }
+        }
+
+        console.log(`✨ FAXINA CONCLUÍDA! Foram pulverizados ${idsParaDeletar.length} monstros repetidos. Restaram ${totalMantidos} monstros únicos.`);
+        
+        // Limpa a memória local para forçar o sistema a baixar o banco limpo na próxima vez
+        if (typeof DATA_MONSTROS !== 'undefined') {
+            DATA_MONSTROS = [];
+        }
+
+    } catch (err) {
+        console.error("❌ Erro crítico na faxina:", err);
+    }
+}
