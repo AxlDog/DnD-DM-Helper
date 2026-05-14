@@ -1317,7 +1317,7 @@ window.DATA_ENCONTROS = [];
 // === NOVA FUNÇÃO: PUXAR ENCONTROS DO BANCO ===
 async function fetchEncontrosDoSupabase() {
   try {
-    const { data, error } = await db.client.from('encounters').select('*');
+    const { data, error } = await db.from('encounters').select('*');
     if (error) throw error;
 
     // Converte os dados do banco para o formato que a interface já entende
