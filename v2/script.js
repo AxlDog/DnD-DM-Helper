@@ -1311,6 +1311,34 @@ function parseMoedaParaGP(custoString) {
  * 11. ENCONTROS TÁTICOS
  * ========================================================= */
 
+// Variável global para armazenar os encontros puxados do banco
+window.DATA_ENCONTROS = [];
+
+// === NOVA FUNÇÃO: PUXAR ENCONTROS DO BANCO ===
+async function fetchEncontrosDoSupabase() {
+  try {
+    const { data, error } = await db.client.from('encounters').select('*');
+    if (error) throw error;
+
+    // Converte os dados do banco para o formato que a interface já entende
+    window.DATA_ENCONTROS = data.map(row => {
+      return {
+        id: row.id,
+        nome: row.name,
+        tipo: row.type,
+        xp: row.xp,
+        // Espalha as propriedades que estão dentro do JSONB 'data'
+        ...row.data 
+      };
+    });
+    console.log(`🗡️ [Supabase] ${window.DATA_ENCONTROS.length} Encontros carregados com sucesso!`);
+  } catch (error) {
+    console.error("Erro ao puxar encontros do Supabase:", error);
+    window.DATA_ENCONTROS = [];
+  }
+}
+
+// === FUNÇÃO ATUALIZADA: CARREGAR A TELA ===
 async function loadEncontros() {
   if (typeof setActiveMenu === 'function') setActiveMenu(5); 
   if (typeof setView === 'function') setView("encontros");
@@ -1329,22 +1357,27 @@ async function loadEncontros() {
     </div>
     <div class="card-grid" id="encontrosGrid">
       <div class="loading-spinner" style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #E69A28;">
-        Preparando o campo de batalha e rastreando inimigos... ⚔️
+        Preparando o campo de batalha e rastreando inimigos... ⏳
       </div>
     </div>
   `;
 
-  // O PULO DO GATO: Se os monstros não estiverem na memória, puxa do Supabase agora!
+  // Carrega os monstros se não existirem
   if (typeof DATA_MONSTROS === 'undefined' || DATA_MONSTROS.length === 0) {
     await fetchMonstrosDoSupabase();
   }
 
-  // Agora que temos certeza que os monstros existem, renderizamos os encontros
-  if (typeof DATA_ENCONTROS !== 'undefined' && DATA_ENCONTROS.length > 0) {
-    renderEncontros(DATA_ENCONTROS);
+  // Carrega os encontros do Supabase se a lista global estiver vazia
+  if (window.DATA_ENCONTROS.length === 0) {
+    await fetchEncontrosDoSupabase();
+  }
+
+  // Agora que temos certeza que tudo existe, renderizamos os encontros
+  if (window.DATA_ENCONTROS && window.DATA_ENCONTROS.length > 0) {
+    renderEncontros(window.DATA_ENCONTROS);
   } else {
     const grid = document.getElementById("encontrosGrid");
-    if (grid) grid.innerHTML = '<p class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">Nenhum encontro cadastrado (DATA_ENCONTROS vazio).</p>';
+    if (grid) grid.innerHTML = '<p class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">Nenhum encontro cadastrado no Supabase.</p>';
   }
 }
 
@@ -1533,6 +1566,7 @@ function openEncounterModal(encontro) {
 }
 
 function renderEncounterModalContent(encontro) {
+  // ... (o código até a renderização das abas fica igual, mantenha o seu) ...
   const body = document.getElementById("npcModalBody");
   if (!body) return;
   
@@ -1549,24 +1583,26 @@ function renderEncounterModalContent(encontro) {
 
   const monstrosAtivos = currentCombat.monstros.filter(m => m.ativo);
 
+  // Aqui começa o HTML do Modal. Adicionei os "||" para fallback caso algo venha vazio do banco
   body.innerHTML = `
     <div class="local-modal-container">
       <header class="local-modal-header">
         <h2>${encontro.nome || "Registro de Combate"}</h2>
-        <p style="font-size: 0.9em; margin-top: 5px;">
-          ${getDificuldadeLabel(encontro.dificuldade || 'Desconhecida')} | Nível ${encontro.nivel_recomendado || '?'}
+        <p style="font-size: 0.9em; margin-top: 5px; color: #aaa;">
+          ${encontro.tipo ? encontro.tipo.toUpperCase() : 'Combate'} | XP Total: ${encontro.xp || 'Improvisado'}
         </p>
       </header>
       
       <div style="display: flex; gap: 10px; padding: 10px 20px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
         <button class="tab-btn active" id="btn-tab-tracker" onclick="switchEncounterTab('tracker')" style="padding: 8px 16px; border-radius: 4px; border: none; background: #e69a28; color: #000; font-weight: bold; cursor: pointer;">⚔️ Tracker</button>
         <button class="tab-btn" id="btn-tab-info" onclick="switchEncounterTab('info-monstros')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">📖 Bestiário</button>
-        <button class="tab-btn" id="btn-tab-taticas" onclick="switchEncounterTab('taticas')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">🗺️ Táticas</button>
+        <button class="tab-btn" id="btn-tab-taticas" onclick="switchEncounterTab('taticas')" style="padding: 8px 16px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer;">🗺️ Notas do Mestre</button>
       </div>
 
       <div class="local-modal-scroll" style="padding: 20px;">
         
         <div id="tab-tracker" class="tab-content active">
+          <!-- TODO SEU CÓDIGO DA TABELA DO TRACKER FICA AQUI (NÃO MUDEI NADA) -->
           <table style="width: 100%; border-collapse: collapse; text-align: left;">
             <thead>
               <tr style="border-bottom: 2px solid #444; color: #e69a28;">
@@ -1622,12 +1658,12 @@ function renderEncounterModalContent(encontro) {
         </div>
 
         <div id="tab-info-monstros" class="tab-content" style="display:none;">
+          <!-- MESMO CÓDIGO DO BESTIÁRIO -->
           ${monstrosTemplates.map(m => `
             <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-left: 3px solid #e69a28; border-radius: 4px;">
               <h3 style="color: #e69a28; margin-top: 0;">${m.nome}</h3>
               <p><strong>CA:</strong> ${m.ca} (${m.tipo_ca || '-'}) | <strong>PV:</strong> ${m.pv} | <strong>Velocidade:</strong> ${m.deslocamento || '9m'}</p>
               <p style="color: #aaa; font-style: italic; font-size: 0.9em;">${m.tipo} | ${m.alinhamento}</p>
-              
               <div style="margin-top: 10px;">
                 <strong style="color: #ddd;">Ações Principais:</strong>
                 <ul style="padding-left: 20px; margin-top: 5px; font-size: 0.95em;">
@@ -1639,12 +1675,16 @@ function renderEncounterModalContent(encontro) {
         </div>
 
         <div id="tab-taticas" class="tab-content" style="display:none;">
-          <h3 style="color: #e69a28; margin-top: 0;">📋 Plano de Ação (Mestre)</h3>
-          <ul style="padding-left: 20px;">
-            ${(encontro.taticas_inimigos || []).map(t => `<li style="margin-bottom: 8px;">${t}</li>`).join('') || "<li>Nenhuma tática específica definida para este encontro. Improviso é a chave!</li>"}
-          </ul>
-          <h3 style="color: #e69a28; margin-top: 20px;">🏔️ Notas de Terreno</h3>
-          <p>${encontro.terreno?.descricao || "Terreno padrão. Sem efeitos ou perigos climáticos registrados."}</p>
+          <!-- AJUSTADO PARA LER O JSON DO SUPABASE -->
+          <h3 style="color: #e69a28; margin-top: 0;">🏔️ Cenário & Terreno</h3>
+          <p>${encontro.ambiente || "Terreno padrão. Sem efeitos registrados."}</p>
+          
+          <h3 style="color: #e69a28; margin-top: 20px;">🎁 Recompensas & Segredos</h3>
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 4px; border: 1px dashed #666;">
+            <p><strong>Ouro:</strong> ${encontro.recompensas?.ouro?.PO || 0} PO</p>
+            <p><strong>Itens:</strong> ${encontro.recompensas?.itens ? encontro.recompensas.itens.join(', ') : "Nenhum"}</p>
+            ${encontro.segredo ? `<p style="margin-top: 10px; color: #a855f7;"><strong>Segredo Oculto:</strong> ${encontro.segredo}</p>` : ''}
+          </div>
         </div>
 
       </div>
