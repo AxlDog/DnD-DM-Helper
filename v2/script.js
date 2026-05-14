@@ -2042,9 +2042,14 @@ async function loadBestiario() {
         <h2 style="margin:0;">🐉 Bestiário</h2>
         <p style="margin:5px 0 0 0;">Catálogo completo de criaturas, adversários e bestas do mundo.</p>
       </div>
-      <button class="btn-loja" onclick="abrirInvocadorIA()" style="padding: 10px 15px; background: #22c55e; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
-        ➕ Invocar via IA
-      </button>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-loja" onclick="abrirForjaEmLote()" style="padding: 10px 15px; background: #eab308; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+          🏭 Forja em Lote
+        </button>
+        <button class="btn-loja" onclick="abrirInvocadorIA()" style="padding: 10px 15px; background: #22c55e; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+          ➕ Invocar via IA
+        </button>
+      </div>
     </div>
 
     <div class="filter-bar" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
@@ -2202,6 +2207,113 @@ function abrirInvocadorIA() {
     </div>
   `;
   document.body.appendChild(overlay);
+}
+
+// Abre a interface visual da Forja em Lote
+function abrirForjaEmLote() {
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'forjaLoteModal';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  // A sua lista de monstros já pré-preenchida!
+  const listaPadrao = "Air Elemental D&D 5e\nDjinni D&D 5e\nLich D&D 5e\nWight D&D 5e\nSpecter D&D 5e\nWraith D&D 5e\nDryad D&D 5e\nTreant D&D 5e\nGreen Hag D&D 5e\nWyvern D&D 5e\nNight Hag D&D 5e\nAboleth D&D 5e\nYoung Black Dragon D&D 5e";
+
+  overlay.innerHTML = `
+    <div class="quick-monster-content" style="max-width: 600px; padding: 20px;">
+      <header style="display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;">
+        <h3 style="color: #eab308; margin: 0;">🏭 Forja em Lote (IA)</h3>
+        <button onclick="document.getElementById('forjaLoteModal').remove()" style="background:none; border:none; color:#fff; cursor:pointer; font-size: 1.2em;">✖</button>
+      </header>
+      
+      <p style="font-size: 0.85em; color: #aaa; margin-bottom: 15px;">
+        Coloque um monstro por linha. O sistema fará a extração completa e salvará no banco com intervalos de 5 segundos de segurança.
+      </p>
+
+      <textarea id="textoLote" rows="10" style="width: 100%; padding: 10px; background: #111; border: 1px solid #eab308; color: #fff; border-radius: 4px; resize: vertical; font-family: monospace;">${listaPadrao}</textarea>
+
+      <div id="statusLote" style="margin-top: 15px; padding: 10px; background: #222; border-radius: 4px; font-family: monospace; font-size: 0.9em; color: #aaa; min-height: 80px; max-height: 150px; overflow-y: auto;">
+        Pronto para iniciar a esteira de produção...
+      </div>
+
+      <button id="btnIniciarForja" onclick="executarForjaEmLote()" style="width: 100%; margin-top: 15px; padding: 12px; background: #eab308; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+        ⚙️ Iniciar Produção em Massa
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+// A lógica que processa a lista linha por linha
+async function executarForjaEmLote() {
+  const texto = document.getElementById("textoLote").value;
+  const statusDiv = document.getElementById("statusLote");
+  const btn = document.getElementById("btnIniciarForja");
+
+  // Separa o texto por linhas, tira espaços vazios e ignora linhas em branco
+  const listaDeMonstros = texto.split('\n').map(m => m.trim()).filter(m => m !== "");
+
+  if (listaDeMonstros.length === 0) {
+    statusDiv.innerHTML = "<span style='color: #ef4444;'>A lista está vazia!</span>";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.style.background = "#555";
+  btn.innerText = "Produzindo... Não feche esta janela.";
+  statusDiv.innerHTML = `Iniciando extração de ${listaDeMonstros.length} criaturas...<br><br>`;
+
+  let sucesso = 0;
+  let falha = 0;
+
+  for (let i = 0; i < listaDeMonstros.length; i++) {
+    const nomeMonstro = listaDeMonstros[i];
+    statusDiv.innerHTML += `<span>[${i+1}/${listaDeMonstros.length}] <strong>${nomeMonstro}</strong>... </span>`;
+    statusDiv.scrollTop = statusDiv.scrollHeight; // Rola a barrinha para baixo
+
+    try {
+      // Prompt aprimorado para forçar a IA a trazer TUDO do monstro
+      const instrucaoMestre = `Gere a ficha de D&D 5e para: "${nomeMonstro}". Inclua TODAS as magias, ataques múltiplos, reações e ações lendárias se existirem no livro. Traduza para português.`;
+
+      const { data, error } = await db.functions.invoke('rapid-handler', {
+        body: { 
+          monstro: TEMPLATE_MONSTRO_VAZIO, 
+          classe: "Nenhuma", 
+          incremento_cr: 0,
+          instrucoes_mestre: instrucaoMestre
+        }
+      });
+
+      if (error) throw error;
+
+      data.id = "lote-" + Date.now(); 
+      const monstroSalvo = await salvarMonstroPersonalizado(data, "boss");
+
+      if (monstroSalvo) {
+        statusDiv.innerHTML += `<span style="color: #22c55e;">✅ Salvo!</span><br>`;
+        sucesso++;
+      } else {
+        throw new Error("Falha de gravação no banco.");
+      }
+
+    } catch (err) {
+      statusDiv.innerHTML += `<span style="color: #ef4444;">❌ Erro: ${err.message}</span><br>`;
+      falha++;
+    }
+
+    // A pausa salvadora de 5 segundos
+    if (i < listaDeMonstros.length - 1) {
+      statusDiv.innerHTML += `<span style="color: #666; font-size: 0.9em;">⏳ Resfriando API por 5s...</span><br>`;
+      statusDiv.scrollTop = statusDiv.scrollHeight;
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+  }
+
+  statusDiv.innerHTML += `<br><span style="color: #eab308; font-size: 1.1em;">🎉 FÁBRICA CONCLUÍDA! (${sucesso} Sucessos)</span>`;
+  statusDiv.scrollTop = statusDiv.scrollHeight;
+  btn.innerText = "Produção Finalizada. Pode fechar.";
+  
+  if (typeof loadBestiario === 'function') loadBestiario();
 }
 
 async function executarInvocacao() {
