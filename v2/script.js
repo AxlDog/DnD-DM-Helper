@@ -1950,28 +1950,36 @@ function abrirAprimoramento(monstroId) {
   if (!bodyArea) return;
   
   bodyArea.innerHTML = `
-    <h3 style="color: #E69A28; margin-top: 0;">✨ Aprimorar Criatura</h3>
-    <p style="font-size: 0.9em; color: #aaa;">Escolha uma classe para fundir com este monstro.</p>
+    <h3 style="color: #E69A28; margin-top: 0;">✨ Mutação Feitiçaria (IA)</h3>
+    <p style="font-size: 0.85em; color: #aaa;">Descreva como a IA deve alterar ou fundir este monstro.</p>
     
-    <div style="margin: 15px 0;">
-      <label style="display: block; color: #ddd;">Classe Desejada</label>
-      <select id="aprimorarClasse" style="width: 100%; padding: 10px; background: #222; border: 1px solid #E69A28; color: #fff;">
-        <option value="Guerreiro">Guerreiro</option>
-		<option value="Bruxo">Bruxo</option>
-        <option value="Mago">Mago</option>
-        <option value="Ladino">Ladino</option>
-        <option value="Clérigo">Clérigo</option>
-        <option value="Paladino">Paladino</option>
-        <option value="Bárbaro">Bárbaro</option>
-      </select>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+      <div>
+        <label style="display: block; color: #ddd; font-size: 0.85em;">Classe/Tema (Opcional)</label>
+        <select id="aprimorarClasse" style="width: 100%; padding: 8px; background: #222; border: 1px solid #E69A28; color: #fff; border-radius: 4px;">
+          <option value="Nenhuma">Nenhum / Apenas Mutação</option>
+          <option value="Guerreiro">Guerreiro</option>
+          <option value="Bruxo">Bruxo</option>
+          <option value="Mago">Mago</option>
+          <option value="Ladino">Ladino</option>
+          <option value="Clérigo">Clérigo</option>
+          <option value="Paladino">Paladino</option>
+          <option value="Bárbaro">Bárbaro</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="display: block; color: #ddd; font-size: 0.85em;">Aumento de ND (+CR)</label>
+        <input type="number" id="aprimorarCR" value="1" min="0" max="10" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+      </div>
     </div>
 
-    <div style="margin-bottom: 20px;">
-      <label style="display: block; color: #ddd;">Incremento de ND (CR)</label>
-      <input type="number" id="aprimorarCR" value="1" min="1" max="10" style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff;">
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; color: #ddd; font-size: 0.85em;">Desejo do Mestre (Prompt Livre)</label>
+      <textarea id="aprimorarPrompt" rows="3" placeholder="Ex: Adicione dano de fogo aos ataques corporais e crie uma habilidade que empurra os inimigos..." style="width: 100%; padding: 8px; background: #111; border: 1px solid #444; color: #fff; border-radius: 4px; resize: vertical;"></textarea>
     </div>
 
-    <button onclick="solicitarAprimoramento('${monstroId}')" style="width: 100%; padding: 12px; background: #E69A28; color: #000; font-weight: bold; border: none; cursor: pointer;">
+    <button onclick="solicitarAprimoramento('${monstroId}')" style="width: 100%; padding: 12px; background: #E69A28; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
       🔮 Gerar Evolução
     </button>
   `;
@@ -1979,33 +1987,40 @@ function abrirAprimoramento(monstroId) {
 
 async function solicitarAprimoramento(monstroId) {
   const classe = document.getElementById("aprimorarClasse").value;
-  const incrementoCR = parseInt(document.getElementById("aprimorarCR").value) || 1;
+  const incrementoCR = parseInt(document.getElementById("aprimorarCR").value) || 0;
+  const instrucoesExtras = document.getElementById("aprimorarPrompt").value.trim();
+  
   const monstroOriginal = DATA_MONSTROS.find(m => m.id === monstroId);
-
   const bodyArea = document.getElementById('quickMonsterBodyArea');
-  bodyArea.innerHTML = `<div style="text-align: center; padding: 40px; color: #E69A28;">🔮 A IA está tecendo novos poderes...</div>`;
+  
+  bodyArea.innerHTML = `<div style="text-align: center; padding: 40px; color: #E69A28;">🔮 A IA está tecendo a nova criatura... aguarde.</div>`;
 
   try {
+    // Aqui nós passamos as instruções extras para a sua função no Supabase
     const { data, error } = await db.functions.invoke('rapid-handler', {
-      body: { monstro: monstroOriginal, classe: classe, incremento_cr: incrementoCR }
+      body: { 
+        monstro: monstroOriginal, 
+        classe: classe === "Nenhuma" ? null : classe, 
+        incremento_cr: incrementoCR,
+        instrucoes_mestre: instrucoesExtras // <--- Novo parâmetro!
+      }
     });
 
     if (error) throw error;
 
-    // Constrói o novo monstro com base na resposta da IA
     const novoMonstro = {
       ...data,
-      id: "IA-TEMP", // Será gerado um ID definitivo no Supabase
+      id: "IA-TEMP", 
       cr: (parseFloat(monstroOriginal.cr) || 0) + incrementoCR
     };
 
-    // Salva no banco de dados
-    const monstroSalvo = await salvarMonstroPersonalizado(novoMonstro, "upg");
+    // Usa a função que criamos para traduzir e salvar permanentemente no banco
+    const monstroSalvo = await salvarMonstroPersonalizado(novoMonstro, "boss");
 
     if (monstroSalvo) {
       document.getElementById('quickMonsterModal').remove();
-      openMonsterDetails(null, monstroSalvo.id);
       if (typeof loadBestiario === 'function') loadBestiario();
+      openMonsterDetails(null, monstroSalvo.id);
     }
 
   } catch (err) {
