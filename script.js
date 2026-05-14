@@ -2161,6 +2161,97 @@ function renderBestiario(monstros) {
   });
 }
 
+// O "mapa" para a IA saber exatamente qual formato devolver
+const TEMPLATE_MONSTRO_VAZIO = {
+  id: "TEMP_INVOCACAO",
+  nome: "", tipo: "", alinhamento: "", ca: 10, tipo_ca: "", pv: 10, dados_vida: "", deslocamento: "9m", cr: 1,
+  atributos: { for: 10, des: 10, con: 10, int: 10, sab: 10, car: 10 },
+  resistencias: [], imunidades: [], sentidos: "", idiomas: "",
+  habilidades_especiais: [], acoes: [], acoes_bonus: [], reacoes: [], acoes_lendarias: []
+};
+
+function abrirInvocadorIA() {
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'invocadorModal';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  overlay.innerHTML = `
+    <div class="quick-monster-content" style="max-width: 500px; padding: 20px;">
+      <header style="display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;">
+        <h3 style="color: #22c55e; margin: 0;">🔮 Invocar Criatura (IA)</h3>
+        <button onclick="document.getElementById('invocadorModal').remove()" style="background:none; border:none; color:#fff; cursor:pointer; font-size: 1.2em;">✖</button>
+      </header>
+      
+      <p style="font-size: 0.85em; color: #aaa; margin-bottom: 15px;">
+        Digite o nome de um monstro oficial (ex: <em>Shambling Mound</em>) OU cole o texto/ficha em inglês de uma homebrew. O Gemini fará a tradução e conversão para o nosso banco de dados.
+      </p>
+
+      <textarea id="textoInvocacao" rows="5" placeholder="Ex: Needle Blight (D&D 5e)..." style="width: 100%; padding: 10px; background: #111; border: 1px solid #22c55e; color: #fff; border-radius: 4px; resize: vertical; font-family: monospace;"></textarea>
+
+      <div id="statusInvocacao" style="margin-top: 10px; text-align: center; color: #22c55e; font-weight: bold; min-height: 20px;"></div>
+
+      <button onclick="executarInvocacao()" style="width: 100%; margin-top: 15px; padding: 12px; background: #22c55e; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+        ⚡ Extrair Ficha e Salvar no Bestiário
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+async function executarInvocacao() {
+  const texto = document.getElementById("textoInvocacao").value.trim();
+  const statusDiv = document.getElementById("statusInvocacao");
+  const btn = event.target;
+
+  if (!texto) {
+    statusDiv.innerHTML = "<span style='color: #ef4444;'>Digite o nome ou cole a ficha do monstro!</span>";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.style.background = "#555";
+  statusDiv.innerHTML = "Consultando os tomos antigos (Aguarde a IA)... ⏳";
+
+  try {
+    const instrucaoMestre = `O usuário solicitou o monstro baseado neste texto/nome: "${texto}". 
+    Se for apenas um nome, puxe os status oficiais do D&D 5e da sua base de conhecimento. 
+    Se for um texto longo, extraia os status e traduza para o português. 
+    Preencha o JSON base rigorosamente.`;
+
+    // Chamamos a mesma Edge Function que você já arrumou!
+    const { data, error } = await db.functions.invoke('rapid-handler', {
+      body: { 
+        monstro: TEMPLATE_MONSTRO_VAZIO, 
+        classe: "Nenhuma", 
+        incremento_cr: 0,
+        instrucoes_mestre: instrucaoMestre
+      }
+    });
+
+    if (error) throw error;
+
+    statusDiv.innerHTML = "Ficha criada! Salvando no Supabase... 💾";
+
+    // Salvamos usando a sua função do banco de dados
+    data.id = "novo-invocado"; // Força a função a entender que é novo
+    const monstroSalvo = await salvarMonstroPersonalizado(data, "boss");
+
+    if (monstroSalvo) {
+      document.getElementById('invocadorModal').remove();
+      if (typeof loadBestiario === 'function') loadBestiario();
+      // Abre a ficha recém-criada para você admirar o resultado!
+      openMonsterDetails(null, monstroSalvo.id); 
+    }
+
+  } catch (err) {
+    console.error(err);
+    statusDiv.innerHTML = `<span style='color: #ef4444;'>Erro: ${err.message}</span>`;
+    btn.disabled = false;
+    btn.style.background = "#22c55e";
+  }
+}
+
 /* =========================================================
  * 13. IMPORTAÇÃO DE MONSTROS DO SRD
  * ========================================================= */
