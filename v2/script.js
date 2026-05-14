@@ -1930,9 +1930,14 @@ function openMonsterDetails(event, monstroId) {
         ${sessoesDinamicasHtml}
         
         <div class="quick-divider" style="margin: 15px 0; border-top: 1px dashed #444;"></div>
-        <button class="btn-loja" onclick="abrirAprimoramento('${monstro.id}')" style="width: 100%; padding: 10px; background: #2a113a; color: #e69a28; font-weight: bold; border: 1px solid #5a2e7a; cursor: pointer; border-radius: 4px;">
-          ✨ Aprimorar com Classe (IA Gemini)
-        </button>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-loja" onclick="abrirAprimoramento('${monstro.id}')" style="flex: 1; padding: 10px; background: #2a113a; color: #e69a28; font-weight: bold; border: 1px solid #5a2e7a; cursor: pointer; border-radius: 4px;">
+              ✨ IA (Classe)
+            </button>
+            <button class="btn-loja" onclick="abrirEdicaoManual('${monstro.id}')" style="flex: 1; padding: 10px; background: #3a1111; color: #e65a5a; font-weight: bold; border: 1px solid #7a2e2e; cursor: pointer; border-radius: 4px;">
+              🧬 Clonar & Editar
+            </button>
+        </div>
       </div>
     </div>
   `;
@@ -1978,7 +1983,7 @@ async function solicitarAprimoramento(monstroId) {
   const monstroOriginal = DATA_MONSTROS.find(m => m.id === monstroId);
 
   const bodyArea = document.getElementById('quickMonsterBodyArea');
-  bodyArea.innerHTML = `<div style="text-align: center; padding: 40px;">🔮 Tecendo novos poderes...</div>`;
+  bodyArea.innerHTML = `<div style="text-align: center; padding: 40px; color: #E69A28;">🔮 A IA está tecendo novos poderes...</div>`;
 
   try {
     const { data, error } = await db.functions.invoke('rapid-handler', {
@@ -1987,19 +1992,24 @@ async function solicitarAprimoramento(monstroId) {
 
     if (error) throw error;
 
+    // Constrói o novo monstro com base na resposta da IA
     const novoMonstro = {
       ...data,
-      id: "UPG-" + Date.now(),
+      id: "IA-TEMP", // Será gerado um ID definitivo no Supabase
       cr: (parseFloat(monstroOriginal.cr) || 0) + incrementoCR
     };
 
-    DATA_MONSTROS.push(novoMonstro);
-    document.getElementById('quickMonsterModal').remove();
-    openMonsterDetails(null, novoMonstro.id);
-    if (typeof loadBestiario === 'function') loadBestiario();
+    // Salva no banco de dados
+    const monstroSalvo = await salvarMonstroPersonalizado(novoMonstro, "upg");
+
+    if (monstroSalvo) {
+      document.getElementById('quickMonsterModal').remove();
+      openMonsterDetails(null, monstroSalvo.id);
+      if (typeof loadBestiario === 'function') loadBestiario();
+    }
 
   } catch (err) {
-    bodyArea.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`;
+    bodyArea.innerHTML = `<p style="color:red; text-align:center;">Erro na IA: ${err.message}</p>`;
   }
 }
 
@@ -2294,4 +2304,144 @@ async function limparDuplicatasSupabase() {
     } catch (err) {
         console.error("❌ Erro crítico na faxina:", err);
     }
+}
+
+async function salvarMonstroPersonalizado(monstroAprimorado, prefixo = "npc") {
+  console.log("💾 Salvando nova criatura no Supabase...");
+  
+  // 1. Gera um ID único para nunca sobrescrever o original (A não ser que estejamos editando um já customizado)
+  const isNovo = !monstroAprimorado.id.startsWith(prefixo) && !monstroAprimorado.id.startsWith('UPG');
+  const slugUnico = isNovo 
+    ? `${prefixo}-${monstroAprimorado.nome.toLowerCase().replace(/[^a-z0-9]/g, '')}-${Date.now()}`
+    : monstroAprimorado.id;
+
+  // 2. Constrói o objeto simulando o padrão Open5e (Inglês) para o banco de dados não quebrar
+  const open5eData = {
+    name: monstroAprimorado.nome,
+    type: monstroAprimorado.tipo || 'humanoid',
+    alignment: monstroAprimorado.alinhamento || 'unaligned',
+    armor_class: parseInt(monstroAprimorado.ca) || 10,
+    armor_desc: monstroAprimorado.tipo_ca || '',
+    hit_points: parseInt(monstroAprimorado.pv) || 10,
+    hit_dice: monstroAprimorado.dados_vida || '',
+    speed: { walk: parseInt(monstroAprimorado.deslocamento) || 30 }, // Simplificado
+    strength: monstroAprimorado.atributos?.for || 10,
+    dexterity: monstroAprimorado.atributos?.des || 10,
+    constitution: monstroAprimorado.atributos?.con || 10,
+    intelligence: monstroAprimorado.atributos?.int || 10,
+    wisdom: monstroAprimorado.atributos?.sab || 10,
+    charisma: monstroAprimorado.atributos?.car || 10,
+    damage_resistances: monstroAprimorado.resistencias ? monstroAprimorado.resistencias.join(', ') : '',
+    damage_immunities: monstroAprimorado.imunidades ? monstroAprimorado.imunidades.join(', ') : '',
+    senses: monstroAprimorado.sentidos || '',
+    languages: monstroAprimorado.idiomas || '',
+    // Reconverte as ações de {nome, descricao} para {name, desc}
+    special_abilities: (monstroAprimorado.habilidades_especiais || []).map(a => ({ name: a.nome, desc: a.descricao || a.desc })),
+    actions: (monstroAprimorado.acoes || []).map(a => ({ name: a.nome, desc: a.descricao || a.desc })),
+    bonus_actions: (monstroAprimorado.acoes_bonus || []).map(a => ({ name: a.nome, desc: a.descricao || a.desc })),
+    reactions: (monstroAprimorado.reacoes || []).map(a => ({ name: a.nome, desc: a.descricao || a.desc })),
+    legendary_actions: (monstroAprimorado.acoes_lendarias || []).map(a => ({ name: a.nome, desc: a.descricao || a.desc }))
+  };
+
+  const payload = {
+    index: slugUnico,
+    name: monstroAprimorado.nome,
+    challenge_rating: parseFloat(monstroAprimorado.cr) || 1,
+    data: open5eData
+  };
+
+  try {
+    const { error } = await db.from('monsters').upsert(payload, { onConflict: 'index' });
+    if (error) throw error;
+    
+    // Atualiza a memória local para não precisar recarregar a página inteira
+    monstroAprimorado.id = slugUnico;
+    
+    // Se era novo, adiciona na lista. Se já existia, a lista já tem a referência.
+    if (isNovo) {
+        DATA_MONSTROS.push(monstroAprimorado);
+    }
+    
+    console.log(`✅ Monstro salvo com sucesso: ${monstroAprimorado.nome}`);
+    return monstroAprimorado;
+
+  } catch (error) {
+    console.error("❌ Erro ao salvar monstro:", error);
+    alert("Erro ao salvar monstro no banco de dados.");
+    return null;
+  }
+}
+
+function abrirEdicaoManual(monstroId) {
+  const monstroOriginal = DATA_MONSTROS.find(m => m.id === monstroId);
+  const bodyArea = document.getElementById('quickMonsterBodyArea');
+  if (!bodyArea || !monstroOriginal) return;
+
+  // Cria um clone profundo (deep copy) do objeto para não alterar o original sem querer
+  const clone = JSON.parse(JSON.stringify(monstroOriginal));
+  
+  // Guardamos o clone temporariamente no escopo global para o botão "Salvar" enxergar
+  window.monstroSendoEditado = clone;
+
+  bodyArea.innerHTML = `
+    <h3 style="color: #e65a5a; margin-top: 0;">🧬 Forja de NPC/Vilão</h3>
+    <p style="font-size: 0.85em; color: #aaa;">Altere os atributos vitais. Uma cópia independente será salva no seu banco de dados.</p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+      <div style="grid-column: 1 / -1;">
+        <label style="color: #ddd; font-size: 0.8em;">Nome do Monstro/NPC</label>
+        <input type="text" id="editNome" value="${clone.nome} (Boss)" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff;">
+      </div>
+      
+      <div>
+        <label style="color: #ddd; font-size: 0.8em;">Nível de Desafio (ND/CR)</label>
+        <input type="number" id="editCR" value="${clone.cr || 1}" step="0.25" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff;">
+      </div>
+      
+      <div>
+        <label style="color: #ddd; font-size: 0.8em;">Tipo (ex: undead)</label>
+        <input type="text" id="editTipo" value="${clone.tipo}" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff;">
+      </div>
+
+      <div>
+        <label style="color: #ddd; font-size: 0.8em;">Pontos de Vida (HP)</label>
+        <input type="number" id="editPV" value="${clone.pv}" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff;">
+      </div>
+
+      <div>
+        <label style="color: #ddd; font-size: 0.8em;">Classe de Armadura (CA)</label>
+        <input type="number" id="editCA" value="${clone.ca}" style="width: 100%; padding: 8px; background: #222; border: 1px solid #444; color: #fff;">
+      </div>
+    </div>
+
+    <button onclick="salvarEdicaoManual()" style="width: 100%; padding: 12px; background: #e65a5a; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+      💾 Salvar Novo NPC no Banco
+    </button>
+  `;
+}
+
+async function salvarEdicaoManual() {
+  const clone = window.monstroSendoEditado;
+  
+  // Atualiza o clone com os valores digitados no input
+  clone.nome = document.getElementById("editNome").value;
+  clone.cr = document.getElementById("editCR").value;
+  clone.tipo = document.getElementById("editTipo").value;
+  clone.pv = document.getElementById("editPV").value;
+  clone.ca = document.getElementById("editCA").value;
+
+  const btn = event.target;
+  btn.innerText = "Salvando...";
+  btn.disabled = true;
+
+  // Envia pro Supabase
+  const monstroSalvo = await salvarMonstroPersonalizado(clone, "npc");
+
+  if (monstroSalvo) {
+    document.getElementById('quickMonsterModal').remove();
+    // Recarrega o Bestiário para exibir a nova criatura na lista
+    if (typeof loadBestiario === 'function') loadBestiario();
+    // Abre a ficha do NPC que você acabou de criar
+    openMonsterDetails(null, monstroSalvo.id);
+  }
 }
