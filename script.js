@@ -1745,7 +1745,7 @@ function mapearAcoes(listaOriginal) {
 async function fetchMonstrosDoSupabase() {
   try {
     // Busca todos os monstros ordenados por nome
-    const { data: dbMonstros, error } = await supabase
+    const { data: dbMonstros, error } = await db
       .from('monsters')
       .select('*')
       .order('name', { ascending: true });
