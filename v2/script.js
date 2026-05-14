@@ -1797,7 +1797,7 @@ async function fetchMonstrosDoSupabase() {
         dados_vida: f.hit_dice,
         cr: row.challenge_rating, 
         xp: f.xp || '?',
-        deslocamento: Object.entries(f.speed || {}).map(([k,v]) => `${k} ${v}ft`).join(', '),
+        deslocamento: Object.entries(f.speed || {}).map(([k,v]) => `${k} ${v}`).join(', '), // Tratamento se for objeto ou texto
         atributos: {
           'for': f.strength,
           'des': f.dexterity,
@@ -1814,7 +1814,10 @@ async function fetchMonstrosDoSupabase() {
         acoes: mapearAcoes(f.actions),
         acoes_bonus: mapearAcoes(f.bonus_actions),
         reacoes: mapearAcoes(f.reactions),
-        acoes_lendarias: mapearAcoes(f.legendary_actions)
+        acoes_lendarias: mapearAcoes(f.legendary_actions),
+        // === AS MAGIAS AGORA SÃO PUXADAS AQUI ===
+        magias_classe: f.magias_classe || null,
+        magias_inatas: f.magias_inatas || null
       };
     });
 
