@@ -1851,6 +1851,72 @@ function openMonsterDetails(event, monstroId) {
     ${monstro.idiomas ? `<p style="margin: 5px 0; font-size: 0.9em;"><strong>🗣️ Idiomas:</strong> ${monstro.idiomas}</p>` : ''}
   `;
 
+  // ==========================================
+  // NOVO SISTEMA DE MAGIAS COM CAIXAS DE SELEÇÃO
+  // ==========================================
+  let magiasHtml = '';
+
+  // Magias de Classe (Slots)
+  if (monstro.magias_classe) {
+    const mc = monstro.magias_classe;
+    magiasHtml += `<div style="margin-top: 15px; padding-bottom: 10px;">
+                     <h4 class="quick-title" style="color: #c084fc; border-bottom: 1px solid #444; padding-bottom: 5px; margin-bottom: 10px;">
+                       🪄 Conjuração de Classe <small style="color: #aaa; font-weight: normal;">(${mc.habilidade} | CD ${mc.cd} | ${mc.ataque})</small>
+                     </h4>`;
+    
+    if (mc.magias && mc.magias["0"]) {
+       magiasHtml += `<div style="margin-left: 5px; margin-bottom: 8px;">
+                  <span style="color: #aaa; font-size: 0.9em;">Truques (À vontade):</span> <em>${mc.magias["0"].join(", ")}</em>
+                </div>`;
+    }
+    
+    for (let nivel = 1; nivel <= 9; nivel++) {
+      if (mc.slots && mc.slots[nivel] && mc.magias[nivel]) {
+        let quadradinhos = '';
+        for(let j = 0; j < mc.slots[nivel]; j++) {
+          quadradinhos += `<input type="checkbox" style="margin-right: 4px; cursor: pointer; accent-color: #c084fc; transform: scale(1.2);">`;
+        }
+        magiasHtml += `<div style="margin-left: 5px; margin-bottom: 6px; display: flex; align-items: baseline;">
+          <strong style="display: inline-block; width: 65px; font-size: 0.9em;">Nível ${nivel}</strong> 
+          <span style="width: auto;">${quadradinhos}</span> 
+          <span style="margin-left: 10px; font-size: 0.95em;"><em>${mc.magias[nivel].join(", ")}</em></span>
+        </div>`;
+      }
+    }
+    magiasHtml += `</div>`;
+  }
+
+  // Magias Inatas (X por dia)
+  if (monstro.magias_inatas) {
+    const mi = monstro.magias_inatas;
+    magiasHtml += `<div style="margin-top: 15px; padding-bottom: 10px;">
+                     <h4 class="quick-title" style="color: #22c55e; border-bottom: 1px solid #444; padding-bottom: 5px; margin-bottom: 10px;">
+                       ✨ Conjuração Inata <small style="color: #aaa; font-weight: normal;">(${mi.habilidade} | CD ${mi.cd} | ${mi.ataque})</small>
+                     </h4>`;
+    
+    if (mi.lista && Array.isArray(mi.lista)) {
+      mi.lista.forEach(item => {
+        let quadradinhos = '';
+        if (item.vezes === "ilimitado") {
+          quadradinhos = "<span style='color: #aaa; width: 70px; display: inline-block; font-size: 0.85em; font-weight: bold;'>À vontade</span>";
+        } else {
+          let caixas = '';
+          for(let j = 0; j < item.vezes; j++) {
+            caixas += `<input type="checkbox" style="margin-right: 4px; cursor: pointer; accent-color: #22c55e; transform: scale(1.2);">`;
+          }
+          quadradinhos = `<span style="width: 70px; display: inline-block;">${caixas}</span>`;
+        }
+        
+        magiasHtml += `<div style="margin-left: 5px; margin-bottom: 6px; display: flex; align-items: baseline; flex-wrap: wrap;">
+          ${quadradinhos} <span style="margin-left: 5px; font-size: 0.95em;"><em>${item.magias.join(", ")}</em></span>
+        </div>`;
+      });
+    }
+    magiasHtml += `</div>`;
+  }
+  // ==========================================
+
+
   const categoriasPossiveis = {
     habilidades: "Habilidades",
     habilidades_especiais: "Características Especiais",
@@ -1858,7 +1924,7 @@ function openMonsterDetails(event, monstroId) {
     acoes_bonus: "Ações Bônus",
     reacoes: "Reações",
     acoes_lendarias: "Ações Lendárias",
-    magias: "Magias",
+    magias: "Magias Adicionais", // Fallback para monstros antigos sem o sistema de slot novo
     raios_oculares: "Raios Oculares"
   };
 
@@ -1875,7 +1941,7 @@ function openMonsterDetails(event, monstroId) {
         if (typeof item === 'string') return `<li>${item}</li>`;
         
         const nome = item.nome ? `<strong>${item.nome}:</strong> ` : '';
-        let desc = item.descricao || '';
+        let desc = item.descricao || item.desc || ''; // Adicionei 'item.desc' para garantir compatibilidade com a IA
         
         if (!desc) {
           let detalhes = [];
@@ -1887,7 +1953,7 @@ function openMonsterDetails(event, monstroId) {
           desc = detalhes.join(' | ');
         }
 
-        return `<li>${nome}${desc}</li>`;
+        return `<li style="margin-bottom: 8px;">${nome}${desc}</li>`;
       }).join('');
     } else if (typeof lista === 'object' && !Array.isArray(lista)) {
       for (const [subchave, subvalor] of Object.entries(lista)) {
@@ -1915,18 +1981,20 @@ function openMonsterDetails(event, monstroId) {
       <header class="quick-monster-header">
         <div>
           <h3>${monstro.nome}</h3>
-          <span class="quick-subtitle">${monstro.tipo} | ND ${monstro.cr} (${monstro.xp || '?'} XP)</span>
+          <span class="quick-subtitle">${monstro.tipo} | ND ${monstro.cr || monstro.challenge_rating || '?'} (${monstro.xp || '?'} XP)</span>
         </div>
         <button class="btn-close-quick" onclick="document.getElementById('quickMonsterModal').remove()">✖</button>
       </header>
       
       <div class="quick-monster-body" id="quickMonsterBodyArea">
-        <p><strong>🛡️ CA:</strong> ${monstro.ca} <small>(${monstro.tipo_ca || '-'})</small></p>
-        <p><strong>❤️ PV:</strong> ${monstro.pv} <small>(${monstro.dados_vida || '-'})</small></p>
-        <p><strong>🏃 Deslocamento:</strong> ${monstro.deslocamento || '9m'}</p>
+        <p><strong>🛡️ CA:</strong> ${monstro.ca || monstro.armor_class || 10} <small>(${monstro.tipo_ca || '-'})</small></p>
+        <p><strong>❤️ PV:</strong> ${monstro.pv || monstro.hit_points || 10} <small>(${monstro.dados_vida || monstro.hit_dice || '-'})</small></p>
+        <p><strong>🏃 Deslocamento:</strong> ${typeof monstro.deslocamento === 'object' ? Object.entries(monstro.deslocamento).map(([k,v]) => `${k} ${v}`).join(', ') : (monstro.deslocamento || monstro.speed || '9m')}</p>
         ${extrasHtml}
         ${attrHtml}
         <div class="quick-divider"></div>
+        
+        ${magiasHtml} 
         ${sessoesDinamicasHtml}
         
         <div class="quick-divider" style="margin: 15px 0; border-top: 1px dashed #444;"></div>
@@ -2721,4 +2789,65 @@ async function salvarEdicaoManual() {
     // Abre a ficha do NPC que você acabou de criar
     openMonsterDetails(null, monstroSalvo.id);
   }
+}
+
+// Função para gerar as caixinhas de magia na ficha do monstro
+function renderizarMagias(monstro) {
+  let html = '';
+  
+  // 1. MAGIAS DE CLASSE (Sistema de Slots Tradicional de D&D)
+  if (monstro.magias_classe) {
+    const mc = monstro.magias_classe;
+    html += `<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #444;">
+               <strong style="color: #c084fc;">🪄 Conjuração de Classe:</strong> ${mc.habilidade} (CD ${mc.cd}, ${mc.ataque} para acertar)
+             </div>`;
+    
+    // Truques (Não gastam slot)
+    if (mc.magias["0"]) {
+       html += `<div style="margin-left: 15px; margin-top: 5px;">
+                  <span style="color: #aaa;">Truques (À vontade):</span> <em>${mc.magias["0"].join(", ")}</em>
+                </div>`;
+    }
+    
+    // Níveis de magia 1 a 9 (com os quadradinhos)
+    for (let nivel = 1; nivel <= 9; nivel++) {
+      if (mc.slots[nivel] && mc.magias[nivel]) {
+        let quadradinhos = '';
+        for(let j = 0; j < mc.slots[nivel]; j++) {
+          quadradinhos += `<input type="checkbox" style="margin-right: 4px; cursor: pointer; accent-color: #c084fc; transform: scale(1.2);">`;
+        }
+        html += `<div style="margin-left: 15px; margin-top: 8px;">
+          <strong style="display: inline-block; width: 60px;">Nível ${nivel}</strong> 
+          ${quadradinhos} <span style="margin-left: 10px;"><em>${mc.magias[nivel].join(", ")}</em></span>
+        </div>`;
+      }
+    }
+  }
+
+  // 2. MAGIAS INATAS (Sistema de X vezes por dia das Bruxas)
+  if (monstro.magias_inatas) {
+    const mi = monstro.magias_inatas;
+    html += `<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #444;">
+               <strong style="color: #22c55e;">✨ Conjuração Inata:</strong> ${mi.habilidade} (CD ${mi.cd}, ${mi.ataque} para acertar)
+             </div>`;
+    
+    mi.lista.forEach(item => {
+      let quadradinhos = '';
+      if (item.vezes === "ilimitado") {
+        quadradinhos = "<span style='color: #aaa; width: 60px; display: inline-block;'>À vontade</span>";
+      } else {
+        let caixas = '';
+        for(let j = 0; j < item.vezes; j++) {
+          caixas += `<input type="checkbox" style="margin-right: 4px; cursor: pointer; accent-color: #22c55e; transform: scale(1.2);">`;
+        }
+        quadradinhos = `<span style="width: 60px; display: inline-block;">${caixas}</span>`;
+      }
+      
+      html += `<div style="margin-left: 15px; margin-top: 8px; display: flex; align-items: center;">
+        ${quadradinhos} <span style="margin-left: 10px;"><em>${item.magias.join(", ")}</em></span>
+      </div>`;
+    });
+  }
+
+  return html;
 }
