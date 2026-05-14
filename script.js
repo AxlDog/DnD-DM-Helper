@@ -79,7 +79,6 @@ function loadInitialView() {
   const view = getViewFromURL();
 
   switch (view) {
-    case "timeline": loadTimeline(); break;
     case "pontos-principais": loadPontosPrincipais(); break;
     case "npcs": loadNPCList(); break;
     case "npc-create": loadNPCCreator(); break;
@@ -88,14 +87,8 @@ function loadInitialView() {
     case "loja": loadLoja(); break;
     case "encontros": loadEncontros(); break;
     case "bestiario": loadBestiario(); break;
-    default: loadDashboard();
+    default: loadLocais();
   }
-}
-
-function loadDashboard() {
-  setActiveMenu(0);
-  setView("dashboard");
-  document.getElementById("content").innerHTML = `<h2>📌 Arco Final</h2> <p>Jogadores seguem em busca de vingança e de seus entes queridos.</p>`;
 }
 
 /* =========================================================
@@ -1756,20 +1749,45 @@ function mapearAcoes(listaOriginal) {
 
 async function fetchMonstrosDoSupabase() {
   try {
-    // Busca todos os monstros ordenados por nome
-    const { data: dbMonstros, error } = await db
-      .from('monsters')
-      .select('*')
-      .order('name', { ascending: true });
+    let todosOsMonstros = [];
+    let buscando = true;
+    let de = 0;
+    let ate = 999;
+    let tamanhoLote = 1000;
 
-    if (error) throw error;
+    console.log("Baixando biblioteca do Supabase (bypass do limite de 1000)...");
 
-    // Traduz o JSONB (Inglês) para o seu objeto esperado (Português)
-    DATA_MONSTROS = dbMonstros.map(row => {
-      const f = row.data; // A ficha em inglês
+    // Loop para buscar de 1000 em 1000 até acabar
+    while (buscando) {
+      const { data: lote, error } = await db
+        .from('monsters')
+        .select('*')
+        .order('name', { ascending: true })
+        .range(de, ate);
+
+      if (error) throw error;
+
+      todosOsMonstros = todosOsMonstros.concat(lote);
+
+      // Se o lote veio com menos de 1000, significa que chegamos na última página
+      if (lote.length < tamanhoLote) {
+        buscando = false;
+      } else {
+        // Prepara para a próxima página
+        de += tamanhoLote;
+        ate += tamanhoLote;
+      }
+    }
+
+    console.log(`Sucesso! Foram puxados ${todosOsMonstros.length} monstros para a memória.`);
+
+    // Agora traduz o JSONB (Inglês) para o seu objeto esperado (Português)
+    DATA_MONSTROS = todosOsMonstros.map(row => {
+      const f = row.data; 
       
       return {
-        id: row.index,
+        id: row.index, // Usa o texto (slug) como ID para o encontro achar fácil
+        db_id: row.id, // ID numérico original do banco
         nome: f.name,
         tipo: f.type,
         alinhamento: f.alignment,
@@ -1777,9 +1795,8 @@ async function fetchMonstrosDoSupabase() {
         tipo_ca: f.armor_desc || '',
         pv: f.hit_points,
         dados_vida: f.hit_dice,
-        cr: row.challenge_rating, // Pega o número real (ex: 0.25)
+        cr: row.challenge_rating, 
         xp: f.xp || '?',
-        // O deslocamento vem como objeto {"walk": 30, "fly": 50}, transformamos em string
         deslocamento: Object.entries(f.speed || {}).map(([k,v]) => `${k} ${v}ft`).join(', '),
         atributos: {
           'for': f.strength,
@@ -1789,12 +1806,10 @@ async function fetchMonstrosDoSupabase() {
           'sab': f.wisdom,
           'car': f.charisma
         },
-        // O Open5e às vezes manda resistências como texto direto, tratamos isso
         resistencias: f.damage_resistances ? [f.damage_resistances] : null,
         imunidades: f.damage_immunities ? [f.damage_immunities] : null,
         sentidos: f.senses,
         idiomas: f.languages,
-        // Mapeando as ações
         habilidades_especiais: mapearAcoes(f.special_abilities),
         acoes: mapearAcoes(f.actions),
         acoes_bonus: mapearAcoes(f.bonus_actions),
