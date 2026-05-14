@@ -1730,6 +1730,74 @@ function getDificuldadeLabel(slug) {
  * 12. BESTIÁRIO
  * ========================================================= */
 
+// Variável global para armazenar os monstros na memória após puxar do banco
+let DATA_MONSTROS = [];
+
+// Função auxiliar para traduzir as ações do inglês para o seu formato
+function mapearAcoes(listaOriginal) {
+  if (!listaOriginal || !Array.isArray(listaOriginal)) return null;
+  return listaOriginal.map(item => ({
+    nome: item.name,
+    descricao: item.desc
+  }));
+}
+
+async function fetchMonstrosDoSupabase() {
+  try {
+    // Busca todos os monstros ordenados por nome
+    const { data: dbMonstros, error } = await supabase
+      .from('monsters')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+
+    // Traduz o JSONB (Inglês) para o seu objeto esperado (Português)
+    DATA_MONSTROS = dbMonstros.map(row => {
+      const f = row.data; // A ficha em inglês
+      
+      return {
+        id: row.id,
+        nome: f.name,
+        tipo: f.type,
+        alinhamento: f.alignment,
+        ca: f.armor_class,
+        tipo_ca: f.armor_desc || '',
+        pv: f.hit_points,
+        dados_vida: f.hit_dice,
+        cr: row.challenge_rating, // Pega o número real (ex: 0.25)
+        xp: f.xp || '?',
+        // O deslocamento vem como objeto {"walk": 30, "fly": 50}, transformamos em string
+        deslocamento: Object.entries(f.speed || {}).map(([k,v]) => `${k} ${v}ft`).join(', '),
+        atributos: {
+          'for': f.strength,
+          'des': f.dexterity,
+          'con': f.constitution,
+          'int': f.intelligence,
+          'sab': f.wisdom,
+          'car': f.charisma
+        },
+        // O Open5e às vezes manda resistências como texto direto, tratamos isso
+        resistencias: f.damage_resistances ? [f.damage_resistances] : null,
+        imunidades: f.damage_immunities ? [f.damage_immunities] : null,
+        sentidos: f.senses,
+        idiomas: f.languages,
+        // Mapeando as ações
+        habilidades_especiais: mapearAcoes(f.special_abilities),
+        acoes: mapearAcoes(f.actions),
+        acoes_bonus: mapearAcoes(f.bonus_actions),
+        reacoes: mapearAcoes(f.reactions),
+        acoes_lendarias: mapearAcoes(f.legendary_actions)
+      };
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao puxar bestiário do Supabase:", error);
+    return false;
+  }
+}
+
 function openMonsterDetails(event, monstroId) {
   if (event) event.stopPropagation();
   if (!monstroId || typeof DATA_MONSTROS === 'undefined') return;
@@ -1908,13 +1976,14 @@ async function solicitarAprimoramento(monstroId) {
   }
 }
 
-function loadBestiario() {
+async function loadBestiario() {
   if (typeof setActiveMenu === 'function') setActiveMenu(9); 
   if (typeof setView === 'function') setView("bestiario");
 
   const content = document.getElementById("content");
   if (!content) return;
 
+  // Desenha a interface básica e a barra de busca
   content.innerHTML = `
     <div class="header-section">
       <h2>🐉 Bestiário</h2>
@@ -1937,15 +2006,23 @@ function loadBestiario() {
     </div>
 
     <div class="card-grid" id="bestiarioGrid">
-      <div class="loading-spinner">Consultando os antigos tomos...</div>
+      <div class="loading-spinner" style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #E69A28;">
+        Consultando os antigos tomos (Conectando ao Supabase)... 🔮
+      </div>
     </div>
   `;
 
-  if (typeof DATA_MONSTROS !== 'undefined' && DATA_MONSTROS.length > 0) {
+  // Se for a primeira vez que abre, vai no banco de dados
+  if (DATA_MONSTROS.length === 0) {
+    await fetchMonstrosDoSupabase();
+  }
+
+  // Agora renderiza os cards
+  if (DATA_MONSTROS.length > 0) {
     preencherFiltrosBestiario();
     renderBestiario(DATA_MONSTROS);
   } else {
-    document.getElementById("bestiarioGrid").innerHTML = "<p class='placeholder'>O bestiário está vazio ou não foi carregado.</p>";
+    document.getElementById("bestiarioGrid").innerHTML = "<p class='placeholder' style='grid-column: 1 / -1; text-align: center;'>O bestiário está vazio ou falhou ao carregar.</p>";
   }
 }
 
@@ -1955,7 +2032,7 @@ function preencherFiltrosBestiario() {
 
   DATA_MONSTROS.forEach(m => {
     if (m.tipo) tipos.add(m.tipo.trim());
-    if (m.cr !== undefined) crs.add(m.cr);
+    if (m.cr !== undefined && m.cr !== null) crs.add(m.cr);
   });
 
   const selectTipo = document.getElementById("filtroTipo");
@@ -1964,14 +2041,17 @@ function preencherFiltrosBestiario() {
   });
 
   const selectCR = document.getElementById("filtroCR");
-  const sortedCRs = Array.from(crs).sort((a, b) => {
-    const valA = (typeof a === 'string' && a.includes('/')) ? (a.split('/')[0] / a.split('/')[1]) : parseFloat(a) || 0;
-    const valB = (typeof b === 'string' && b.includes('/')) ? (b.split('/')[0] / b.split('/')[1]) : parseFloat(b) || 0;
-    return valA - valB;
-  });
+  // Como cr agora é número (ex: 0.25, 1, 2), a ordenação é direta!
+  const sortedCRs = Array.from(crs).sort((a, b) => a - b);
 
   sortedCRs.forEach(cr => {
-    selectCR.innerHTML += `<option value="${cr}">ND ${cr}</option>`;
+    // Transforma 0.25 de volta em 1/4 visualmente
+    let displayCR = cr;
+    if (cr === 0.125) displayCR = "1/8";
+    if (cr === 0.25) displayCR = "1/4";
+    if (cr === 0.5) displayCR = "1/2";
+    
+    selectCR.innerHTML += `<option value="${cr}">ND ${displayCR}</option>`;
   });
 }
 
