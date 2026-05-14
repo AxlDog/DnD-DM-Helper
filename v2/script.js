@@ -2257,6 +2257,60 @@ async function executarInvocacao() {
   }
 }
 
+async function forjaEmLote(listaDeMonstros) {
+  console.log(`🏭 Iniciando a Fábrica: Produzindo ${listaDeMonstros.length} monstros...`);
+  
+  let sucesso = 0;
+  let falha = 0;
+
+  for (let i = 0; i < listaDeMonstros.length; i++) {
+    const nomeMonstro = listaDeMonstros[i];
+    console.log(`[${i+1}/${listaDeMonstros.length}] Invocando: ${nomeMonstro}...`);
+
+    try {
+      const instrucaoMestre = `Gere a ficha de D&D 5e para: "${nomeMonstro}". Traduza para português.`;
+
+      // 1. Pede para a Edge Function (Gemini)
+      const { data, error } = await db.functions.invoke('rapid-handler', {
+        body: { 
+          monstro: TEMPLATE_MONSTRO_VAZIO, // Aquela variável vazia que criamos
+          classe: "Nenhuma", 
+          incremento_cr: 0,
+          instrucoes_mestre: instrucaoMestre
+        }
+      });
+
+      if (error) throw error;
+
+      // 2. Salva no Supabase
+      data.id = "lote-" + Date.now(); 
+      const monstroSalvo = await salvarMonstroPersonalizado(data, "boss");
+
+      if (monstroSalvo) {
+        console.log(`✅ Sucesso: ${monstroSalvo.nome} foi adicionado ao banco!`);
+        sucesso++;
+      } else {
+        throw new Error("Falha no salvamento do Supabase.");
+      }
+
+    } catch (err) {
+      console.error(`❌ Erro ao criar '${nomeMonstro}':`, err.message);
+      falha++;
+    }
+
+    // 3. O Segredo: Pausa de 5 segundos para não estourar a cota gratuita do Google
+    if (i < listaDeMonstros.length - 1) {
+      console.log("⏳ Esfriando os motores da IA por 5 segundos...");
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+  }
+
+  console.log(`🎉 FÁBRICA CONCLUÍDA! Sucessos: ${sucesso} | Falhas: ${falha}`);
+  
+  // Atualiza a tela se o bestiário estiver aberto
+  if (typeof loadBestiario === 'function') loadBestiario();
+}
+
 /* =========================================================
  * 13. IMPORTAÇÃO DE MONSTROS DO SRD
  * ========================================================= */
