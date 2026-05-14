@@ -1318,13 +1318,14 @@ function parseMoedaParaGP(custoString) {
  * 11. ENCONTROS TÁTICOS
  * ========================================================= */
 
-function loadEncontros() {
-  setActiveMenu(7); 
-  setView("encontros");
+async function loadEncontros() {
+  if (typeof setActiveMenu === 'function') setActiveMenu(7); 
+  if (typeof setView === 'function') setView("encontros");
 
   const content = document.getElementById("content");
   if (!content) return;
 
+  // Renderiza a interface vazia e o spinner de loading primeiro
   content.innerHTML = `
     <div class="header-section">
       <h2>⚔️ Encontros Táticos</h2>
@@ -1334,12 +1335,23 @@ function loadEncontros() {
       </button>
     </div>
     <div class="card-grid" id="encontrosGrid">
-      <div class="loading-spinner">A carregar planos de batalha...</div>
+      <div class="loading-spinner" style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #E69A28;">
+        Preparando o campo de batalha e rastreando inimigos... ⚔️
+      </div>
     </div>
   `;
 
-  if (typeof DATA_ENCONTROS !== 'undefined') {
+  // O PULO DO GATO: Se os monstros não estiverem na memória, puxa do Supabase agora!
+  if (typeof DATA_MONSTROS === 'undefined' || DATA_MONSTROS.length === 0) {
+    await fetchMonstrosDoSupabase();
+  }
+
+  // Agora que temos certeza que os monstros existem, renderizamos os encontros
+  if (typeof DATA_ENCONTROS !== 'undefined' && DATA_ENCONTROS.length > 0) {
     renderEncontros(DATA_ENCONTROS);
+  } else {
+    const grid = document.getElementById("encontrosGrid");
+    if (grid) grid.innerHTML = '<p class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">Nenhum encontro cadastrado (DATA_ENCONTROS vazio).</p>';
   }
 }
 
