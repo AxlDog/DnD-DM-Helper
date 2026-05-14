@@ -2037,13 +2037,18 @@ async function loadBestiario() {
 
   // Desenha a interface básica e a barra de busca
   content.innerHTML = `
-    <div class="header-section">
-      <h2>🐉 Bestiário</h2>
-      <p>Catálogo completo de criaturas, adversários e bestas do mundo.</p>
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h2 style="margin:0;">🐉 Bestiário</h2>
+        <p style="margin:5px 0 0 0;">Catálogo completo de criaturas, adversários e bestas do mundo.</p>
+      </div>
+      <button class="btn-loja" onclick="abrirInvocadorIA()" style="padding: 10px 15px; background: #22c55e; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+        ➕ Invocar via IA
+      </button>
     </div>
 
-    <div class="filter-bar" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-      <input type="text" id="buscaMonstro" placeholder="Buscar por nome..." oninput="filterBestiario()" 
+    <div class="filter-bar" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+        <input type="text" id="buscaMonstro" placeholder="Buscar por nome..." oninput="filterBestiario()" 
         style="flex: 2; min-width: 200px; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
       
       <select id="filtroTipo" onchange="filterBestiario()" 
