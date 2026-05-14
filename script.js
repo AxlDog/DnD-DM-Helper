@@ -1560,7 +1560,7 @@ function renderEncounterModalContent(encontro) {
     <div class="local-modal-container">
       <header class="local-modal-header">
         <h2>${encontro.nome || "Registro de Combate"}</h2>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;">
+        <p style="font-size: 0.9em; margin-top: 5px;">
           ${getDificuldadeLabel(encontro.dificuldade || 'Desconhecida')} | Nível ${encontro.nivel_recomendado || '?'}
         </p>
       </header>
