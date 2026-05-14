@@ -219,7 +219,7 @@ function loadNomesData(callback) {
 }
 
 async function loadNPCList() {
-  setActiveMenu(3);
+  setActiveMenu(1);
   setView("npcs");
   const mainContent = document.getElementById("content");
   
@@ -281,7 +281,7 @@ function renderNPCs(npcs) {
 }
 
 function loadNPCCreator() {
-  setActiveMenu(4);
+  setActiveMenu(2);
   setView("npc-create");
   
   const content = document.getElementById("content");
@@ -573,7 +573,7 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
  * ========================================================= */
 
 function loadLocais() {
-  setActiveMenu(5);
+  setActiveMenu(3);
   setView("locais");
 
   const content = document.getElementById("content");
@@ -734,7 +734,7 @@ function renderBairroView(bairroId) {
  * ========================================================= */
 
 function loadPontosPrincipais() {
-  setActiveMenu(2);
+  setActiveMenu(0);
   setView("pontos-principais");
 
   document.getElementById("content").innerHTML = `
@@ -831,7 +831,7 @@ function openPontoPrincipalModal(local) {
  * ========================================================= */
 
 function loadFaccoes() {
-  setActiveMenu(6);
+  setActiveMenu(4);
   setView("faccoes");
 
   document.getElementById("content").innerHTML = `
@@ -920,7 +920,7 @@ function openFaccaoModal(faccao) {
  * ========================================================= */
 
 function loadLoja() {
-  setActiveMenu(8);
+  setActiveMenu(6);
   setView("loja");
 
   document.getElementById("content").innerHTML = `
@@ -1312,7 +1312,7 @@ function parseMoedaParaGP(custoString) {
  * ========================================================= */
 
 async function loadEncontros() {
-  if (typeof setActiveMenu === 'function') setActiveMenu(7); 
+  if (typeof setActiveMenu === 'function') setActiveMenu(5); 
   if (typeof setView === 'function') setView("encontros");
 
   const content = document.getElementById("content");
@@ -2029,7 +2029,7 @@ async function solicitarAprimoramento(monstroId) {
 }
 
 async function loadBestiario() {
-  if (typeof setActiveMenu === 'function') setActiveMenu(9); 
+  if (typeof setActiveMenu === 'function') setActiveMenu(7); 
   if (typeof setView === 'function') setView("bestiario");
 
   const content = document.getElementById("content");
