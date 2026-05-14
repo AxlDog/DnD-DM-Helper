@@ -2206,21 +2206,39 @@ async function devImportarMonstros() {
 }
 
 async function limparDuplicatasSupabase() {
-    console.log("🧹 Iniciando varredura de duplicatas no Supabase...");
+    console.log("🧹 Iniciando varredura PROFUNDA de duplicatas no Supabase...");
     
     try {
-        // 1. Pega todos os monstros do banco (trazendo o id numérico e o index)
-        const { data: monstros, error } = await db
-            .from('monsters')
-            .select('id, index, name');
+        let todosOsMonstros = [];
+        let buscando = true;
+        let de = 0;
+        let ate = 999;
+        const tamanhoLote = 1000;
 
-        if (error) throw error;
+        // 1. Pega TODOS os monstros do banco paginando de 1000 em 1000
+        while (buscando) {
+            const { data: lote, error } = await db
+                .from('monsters')
+                .select('id, index, name')
+                .range(de, ate);
 
-        console.log(`Encontrados ${monstros.length} monstros no total. Analisando...`);
+            if (error) throw error;
+
+            todosOsMonstros = todosOsMonstros.concat(lote);
+
+            if (lote.length < tamanhoLote) {
+                buscando = false;
+            } else {
+                de += tamanhoLote;
+                ate += tamanhoLote;
+            }
+        }
+
+        console.log(`Leitura concluída: ${todosOsMonstros.length} monstros encontrados no total. Analisando...`);
 
         // 2. Agrupa os monstros pelo nome exato
         const agrupadosPorNome = {};
-        monstros.forEach(m => {
+        todosOsMonstros.forEach(m => {
             if (!agrupadosPorNome[m.name]) agrupadosPorNome[m.name] = [];
             agrupadosPorNome[m.name].push(m);
         });
@@ -2247,16 +2265,15 @@ async function limparDuplicatasSupabase() {
         }
 
         if (idsParaDeletar.length === 0) {
-            console.log("✅ Nenhuma duplicata encontrada! Seu banco já está limpo.");
+            console.log("✅ Nenhuma duplicata encontrada na base inteira! Seu banco está impecável.");
             return;
         }
 
-        console.log(`🔥 Preparando para apagar ${idsParaDeletar.length} monstros duplicados. Isso é um caminho sem volta...`);
+        console.log(`🔥 Preparando para apagar ${idsParaDeletar.length} monstros duplicados...`);
 
-        // 4. Deleta em lotes para não sobrecarregar a rede
-        const loteTamanho = 100;
-        for (let i = 0; i < idsParaDeletar.length; i += loteTamanho) {
-            const lote = idsParaDeletar.slice(i, i + loteTamanho);
+        // 4. Deleta em lotes para não sobrecarregar a rede (agora a verdadeira limpeza)
+        for (let i = 0; i < idsParaDeletar.length; i += tamanhoLote) {
+            const lote = idsParaDeletar.slice(i, i + tamanhoLote);
             const { error: deleteError } = await db
                 .from('monsters')
                 .delete()
@@ -2267,7 +2284,7 @@ async function limparDuplicatasSupabase() {
             }
         }
 
-        console.log(`✨ FAXINA CONCLUÍDA! Foram pulverizados ${idsParaDeletar.length} monstros repetidos. Restaram ${totalMantidos} monstros únicos.`);
+        console.log(`✨ FAXINA CONCLUÍDA! Foram pulverizados ${idsParaDeletar.length} monstros repetidos. Restaram ${totalMantidos} monstros únicos no banco de dados.`);
         
         // Limpa a memória local para forçar o sistema a baixar o banco limpo na próxima vez
         if (typeof DATA_MONSTROS !== 'undefined') {
