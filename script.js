@@ -1769,7 +1769,7 @@ async function fetchMonstrosDoSupabase() {
       const f = row.data; // A ficha em inglês
       
       return {
-        id: row.id,
+        id: row.index,
         nome: f.name,
         tipo: f.type,
         alinhamento: f.alignment,
