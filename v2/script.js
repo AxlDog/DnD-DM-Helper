@@ -2938,7 +2938,7 @@ async function loadItens() {
     <div class="header-section">
       <h2>🗡️ Cofre do Mestre</h2>
       <p>Gerencie artefatos, armas mágicas e recompensas épicas para os jogadores.</p>
-      <button class="btn-loja" onclick="alert('Em breve: Forja de IA para criar itens do zero!')" style="margin-top: 10px; background: #E69A28; color: #000; font-weight: bold;">
+      <button class="btn-loja" onclick="abrirForjaItens()" style="margin-top: 10px; background: #E69A28; color: #000; font-weight: bold;">
         ➕ Forjar Novo Item
       </button>
     </div>
@@ -3001,7 +3001,7 @@ function renderItens(dados) {
   });
 }
 
-// === 5. ABRIR OS DETALHES DO ITEM MÁGICO ===
+// === ATUALIZANDO O MODAL PARA LER O COMÉRCIO ===
 function openItemModal(item) {
   const overlay = document.createElement('div');
   overlay.className = 'quick-monster-overlay';
@@ -3019,6 +3019,19 @@ function openItemModal(item) {
     propsHtml += '</ul>';
   }
 
+  // Novo Bloco: Lógica de Comércio/Vendedor
+  let comercioHtml = '';
+  if (item.comercio) {
+    comercioHtml = `
+      <div style="margin-top: 20px; background: rgba(230, 154, 40, 0.1); border: 1px dashed #E69A28; border-radius: 4px; padding: 12px;">
+        <h4 style="color: #E69A28; margin: 0 0 10px 0;">🏪 Informações de Comércio</h4>
+        <p style="margin: 4px 0; font-size: 0.9em;"><strong>Preço Base:</strong> ${item.comercio.preco_estimado}</p>
+        <p style="margin: 4px 0; font-size: 0.9em;"><strong>Encontrado em:</strong> ${item.comercio.local_venda}</p>
+        <p style="margin: 8px 0 0 0; font-size: 0.85em; font-style: italic; color: #bbb;">"${item.comercio.contexto}"</p>
+      </div>
+    `;
+  }
+
   overlay.innerHTML = `
     <div class="quick-monster-content" style="border: 1px solid ${cor}; box-shadow: 0 0 30px ${cor}33;">
       <header class="quick-monster-header" style="border-bottom: 1px dashed ${cor}88;">
@@ -3033,10 +3046,94 @@ function openItemModal(item) {
         <p style="font-style: italic; color: #aaa; background: rgba(0,0,0,0.3); padding: 12px; border-left: 3px solid ${cor}; border-radius: 0 4px 4px 0;">
           "${item.descricao}"
         </p>
-        
         ${propsHtml}
+        ${comercioHtml}
       </div>
     </div>
   `;
   document.body.appendChild(overlay);
+}
+
+// === ABRINDO A FORJA DE ITENS ===
+function abrirForjaItens() {
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'forgeModal';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  overlay.innerHTML = `
+    <div class="quick-monster-content" style="border: 1px solid #E69A28; background: #1a1a1a;">
+      <header class="quick-monster-header">
+        <div>
+          <h3 style="color: #E69A28; margin: 0;">⚒️ Forja de Artefatos</h3>
+          <span style="font-size: 0.85em; color: #aaa;">Descreva o item para a IA ou crie manualmente</span>
+        </div>
+        <button class="btn-close-quick" onclick="document.getElementById('forgeModal').remove()">✖</button>
+      </header>
+      
+      <div class="quick-monster-body" style="padding-top: 15px;">
+        <label style="color: #c084fc; font-weight: bold;">✨ Sugestão da IA (O que você quer criar?)</label>
+        <textarea id="iaItemPrompt" placeholder="Ex: Uma espada flamejante amaldiçoada que fala e é vendida por um djinn..." style="width: 100%; height: 80px; background: #111; color: #fff; border: 1px solid #c084fc; border-radius: 4px; padding: 10px; margin-top: 5px; font-family: inherit;"></textarea>
+        
+        <button class="btn-loja" onclick="chamarIAparaForja()" style="width: 100%; margin-top: 10px; background: #2a113a; color: #c084fc; font-weight: bold; border: 1px solid #5a2e7a;">
+          🪄 Gerar Estrutura com IA
+        </button>
+
+        <div style="margin: 20px 0; border-top: 1px dashed #444;"></div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="color: #aaa; font-size: 0.9em;">Nome do Item</label>
+            <input type="text" id="forgeName" style="width: 100%; background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="color: #aaa; font-size: 0.9em;">Tipo (Arma, Anel, Poção...)</label>
+            <input type="text" id="forgeType" style="width: 100%; background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="color: #aaa; font-size: 0.9em;">Raridade</label>
+            <select id="forgeRarity" style="width: 100%; background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 4px;">
+              <option value="Comum">Comum</option>
+              <option value="Incomum">Incomum</option>
+              <option value="Raro">Raro</option>
+              <option value="Muito Raro">Muito Raro</option>
+              <option value="Lendário">Lendário</option>
+            </select>
+          </div>
+          <div style="display: flex; align-items: flex-end; padding-bottom: 8px;">
+            <label style="color: #aaa; font-size: 0.9em; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="forgeAttunement" style="transform: scale(1.2);"> Requer Sintonização
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <label style="color: #aaa; font-size: 0.9em;">Descrição Visual</label>
+            <textarea id="forgeDesc" style="width: 100%; height: 60px; background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 4px;"></textarea>
+        </div>
+
+        <button onclick="salvarItemNoBanco()" style="width: 100%; margin-top: 20px; padding: 12px; background: #114411; color: #4ade80; font-weight: bold; border: 1px solid #22c55e; border-radius: 4px; cursor: pointer;">
+          💾 Salvar Artefato no Cofre
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+// Simulador de Chamada da IA e Salvamento (Você integrará isso com sua Função Edge depois)
+function chamarIAparaForja() {
+  const prompt = document.getElementById("iaItemPrompt").value;
+  if (!prompt) return alert("Descreva o item para a IA primeiro!");
+  alert("O prompt seria enviado para a IA agora. Ela retornaria o JSON preenchendo os campos abaixo automaticamente!");
+  // Aqui você faria o db.functions.invoke(...) igual faz com os monstros.
+}
+
+async function salvarItemNoBanco() {
+  const nome = document.getElementById("forgeName").value;
+  const tipo = document.getElementById("forgeType").value;
+  if (!nome || !tipo) return alert("Preencha ao menos o nome e o tipo do item!");
+
+  // Lógica para salvar no Supabase (inserir) vai aqui.
+  alert("Pronto para integrar a função de INSERT no Supabase!");
 }
