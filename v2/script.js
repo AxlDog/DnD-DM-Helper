@@ -87,6 +87,7 @@ function loadInitialView() {
     case "loja": loadLoja(); break;
     case "encontros": loadEncontros(); break;
     case "bestiario": loadBestiario(); break;
+    case "itens": loadItens(); break;
     default: loadLocais();
   }
 }
@@ -2893,4 +2894,149 @@ function renderizarMagias(monstro) {
   }
 
   return html;
+}
+
+/* =========================================================
+ * 14. Cofre Mágico
+ * ========================================================= */
+
+// Variável global para armazenar os tesouros
+window.DATA_ITENS = [];
+
+// === 1. PUXAR DO SUPABASE ===
+async function fetchItensDoSupabase() {
+  try {
+    const { data, error } = await db.from('magic_items').select('*');
+    if (error) throw error;
+
+    window.DATA_ITENS = data.map(row => ({
+      id: row.id,
+      nome: row.name,
+      tipo: row.type,
+      raridade: row.rarity,
+      sintonizacao: row.requires_attunement,
+      ...row.data 
+    }));
+    
+    console.log(`🗡️ [Supabase] ${window.DATA_ITENS.length} Itens Mágicos recuperados do Cofre!`);
+  } catch (error) {
+    console.error("Erro ao puxar itens mágicos:", error);
+    window.DATA_ITENS = [];
+  }
+}
+
+// === 2. CARREGAR A TELA DO COFRE ===
+async function loadItens() {
+  // Ajuste o índice do setActiveMenu para o número correto do seu menu (ex: 6)
+  if (typeof setActiveMenu === 'function') setActiveMenu(6); 
+  if (typeof setView === 'function') setView("itens");
+
+  const content = document.getElementById("content");
+  if (!content) return;
+
+  content.innerHTML = `
+    <div class="header-section">
+      <h2>🗡️ Cofre do Mestre</h2>
+      <p>Gerencie artefatos, armas mágicas e recompensas épicas para os jogadores.</p>
+      <button class="btn-loja" onclick="alert('Em breve: Forja de IA para criar itens do zero!')" style="margin-top: 10px; background: #E69A28; color: #000; font-weight: bold;">
+        ➕ Forjar Novo Item
+      </button>
+    </div>
+    <div class="card-grid" id="itensGrid">
+      <div class="loading-spinner" style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #E69A28;">
+        Destrancando as portas do Cofre... 🗡️
+      </div>
+    </div>
+  `;
+
+  if (window.DATA_ITENS.length === 0) {
+    await fetchItensDoSupabase();
+  }
+
+  renderItens(window.DATA_ITENS);
+}
+
+// === 3. AUXILIAR: CORES POR RARIDADE ===
+function getRarityColor(raridade) {
+  const r = raridade.toLowerCase();
+  if (r.includes('incomum')) return '#22c55e'; // Verde
+  if (r.includes('muito raro')) return '#a855f7'; // Roxo
+  if (r.includes('raro')) return '#3b82f6'; // Azul
+  if (r.includes('lendário') || r.includes('lendario')) return '#eab308'; // Dourado
+  if (r.includes('artefato')) return '#ef4444'; // Vermelho Mítico
+  return '#aaa'; // Comum (Cinza)
+}
+
+// === 4. RENDERIZAR OS CARDS ===
+function renderItens(dados) {
+  const grid = document.getElementById("itensGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+
+  if (!dados || dados.length === 0) {
+    grid.innerHTML = '<p class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">O cofre está vazio.</p>';
+    return;
+  }
+
+  dados.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card encounter-card"; // Reaproveitando sua classe de card
+    const cor = getRarityColor(item.raridade);
+    
+    // Deixando a borda superior do card da cor da raridade
+    card.style.borderTop = `3px solid ${cor}`;
+    
+    card.innerHTML = `
+      <div class="card-header" style="padding-bottom: 5px;">
+        <h3 style="color: ${cor}; margin: 0; font-size: 1.1em; text-shadow: 0 0 5px ${cor}44;">${item.nome}</h3>
+        <span style="font-size: 0.8em; color: #aaa;">${item.tipo}</span>
+      </div>
+      <div style="margin-top: 10px; font-size: 0.9em; color: #ccc;">
+        <strong>Raridade:</strong> <span style="color: ${cor};">${item.raridade}</span><br>
+        ${item.sintonizacao ? '<span style="color: #eab308;">⚠️ Requer Sintonização</span>' : '<span style="color: #aaa;">✔️ Sem sintonização</span>'}
+      </div>
+    `;
+    card.onclick = () => openItemModal(item);
+    grid.appendChild(card);
+  });
+}
+
+// === 5. ABRIR OS DETALHES DO ITEM MÁGICO ===
+function openItemModal(item) {
+  const overlay = document.createElement('div');
+  overlay.className = 'quick-monster-overlay';
+  overlay.id = 'magicItemModal';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  const cor = getRarityColor(item.raridade);
+  
+  let propsHtml = '';
+  if (item.propriedades && item.propriedades.length > 0) {
+    propsHtml = `<h4 style="color: ${cor}; margin-top: 20px; border-bottom: 1px solid #444; padding-bottom: 5px;">✨ Propriedades Mágicas</h4><ul style="padding-left: 20px; color: #ddd; line-height: 1.5;">`;
+    item.propriedades.forEach(p => {
+      propsHtml += `<li style="margin-bottom: 8px;"><strong>${p.nome}:</strong> ${p.desc}</li>`;
+    });
+    propsHtml += '</ul>';
+  }
+
+  overlay.innerHTML = `
+    <div class="quick-monster-content" style="border: 1px solid ${cor}; box-shadow: 0 0 30px ${cor}33;">
+      <header class="quick-monster-header" style="border-bottom: 1px dashed ${cor}88;">
+        <div>
+          <h3 style="color: ${cor}; margin-bottom: 2px;">${item.nome}</h3>
+          <span style="font-size: 0.85em; color: #aaa;">${item.tipo} | ${item.raridade} ${item.sintonizacao ? '(Sintonização)' : ''}</span>
+        </div>
+        <button class="btn-close-quick" onclick="document.getElementById('magicItemModal').remove()">✖</button>
+      </header>
+      
+      <div class="quick-monster-body" style="padding-top: 15px;">
+        <p style="font-style: italic; color: #aaa; background: rgba(0,0,0,0.3); padding: 12px; border-left: 3px solid ${cor}; border-radius: 0 4px 4px 0;">
+          "${item.descricao}"
+        </p>
+        
+        ${propsHtml}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
 }
