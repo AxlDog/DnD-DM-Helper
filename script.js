@@ -2925,14 +2925,25 @@ async function fetchItensDoSupabase() {
   }
 }
 
-// === 2. CARREGAR A TELA DO COFRE ===
+// === CARREGAR A TELA DO COFRE COM FILTROS ===
 async function loadItens() {
-  // Ajuste o índice do setActiveMenu para o número correto do seu menu (ex: 6)
   if (typeof setActiveMenu === 'function') setActiveMenu(6); 
   if (typeof setView === 'function') setView("itens");
 
   const content = document.getElementById("content");
   if (!content) return;
+
+  if (window.DATA_ITENS.length === 0) {
+    await fetchItensDoSupabase();
+  }
+
+  // Mapeia todas as origens únicas para criar o filtro automaticamente
+  const todasOrigens = new Set();
+  window.DATA_ITENS.forEach(item => {
+    if (item.origens && Array.isArray(item.origens)) {
+      item.origens.forEach(origem => todasOrigens.add(origem));
+    }
+  });
 
   content.innerHTML = `
     <div class="header-section">
@@ -2942,18 +2953,37 @@ async function loadItens() {
         ➕ Forjar Novo Item
       </button>
     </div>
+
+    <!-- BARRA DE FILTROS -->
+    <div class="filter-bar" style="display: flex; gap: 10px; margin-bottom: 20px; background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #333;">
+      <input type="text" id="filterItemName" placeholder="Buscar item por nome..." oninput="filterItens()" style="flex: 2; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+      
+      <select id="filterItemOrigin" onchange="filterItens()" style="flex: 1; padding: 10px; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px;">
+        <option value="">🌍 Todas as Origens/Locais</option>
+        ${Array.from(todasOrigens).sort().map(org => `<option value="${org}">${org}</option>`).join('')}
+      </select>
+    </div>
+
     <div class="card-grid" id="itensGrid">
-      <div class="loading-spinner" style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #E69A28;">
-        Destrancando as portas do Cofre... 🗡️
-      </div>
+      <!-- Os itens serão injetados aqui -->
     </div>
   `;
 
-  if (window.DATA_ITENS.length === 0) {
-    await fetchItensDoSupabase();
-  }
-
   renderItens(window.DATA_ITENS);
+}
+
+// === FUNÇÃO PARA FILTRAR OS ITENS EM TEMPO REAL ===
+function filterItens() {
+  const nameQuery = document.getElementById("filterItemName").value.toLowerCase();
+  const originQuery = document.getElementById("filterItemOrigin").value;
+
+  const filtrados = window.DATA_ITENS.filter(item => {
+    const matchName = item.nome.toLowerCase().includes(nameQuery);
+    const matchOrigin = !originQuery || (item.origens && item.origens.includes(originQuery));
+    return matchName && matchOrigin;
+  });
+
+  renderItens(filtrados);
 }
 
 // === 3. AUXILIAR: CORES POR RARIDADE ===
@@ -2974,18 +3004,25 @@ function renderItens(dados) {
   grid.innerHTML = "";
 
   if (!dados || dados.length === 0) {
-    grid.innerHTML = '<p class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">O cofre está vazio.</p>';
+    grid.innerHTML = '<p class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">Nenhum artefato encontrado com estes filtros.</p>';
     return;
   }
 
   dados.forEach(item => {
     const card = document.createElement("div");
-    card.className = "card encounter-card"; // Reaproveitando sua classe de card
+    card.className = "card encounter-card"; 
     const cor = getRarityColor(item.raridade);
     
-    // Deixando a borda superior do card da cor da raridade
     card.style.borderTop = `3px solid ${cor}`;
     
+    // HTML das Tags/Origens
+    let tagsHtml = '';
+    if (item.origens && item.origens.length > 0) {
+      tagsHtml = `<div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px;">` + 
+        item.origens.map(o => `<span style="background: #222; border: 1px solid #444; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; color: #ccc;">${o}</span>`).join('') +
+      `</div>`;
+    }
+
     card.innerHTML = `
       <div class="card-header" style="padding-bottom: 5px;">
         <h3 style="color: ${cor}; margin: 0; font-size: 1.1em; text-shadow: 0 0 5px ${cor}44;">${item.nome}</h3>
@@ -2995,6 +3032,7 @@ function renderItens(dados) {
         <strong>Raridade:</strong> <span style="color: ${cor};">${item.raridade}</span><br>
         ${item.sintonizacao ? '<span style="color: #eab308;">⚠️ Requer Sintonização</span>' : '<span style="color: #aaa;">✔️ Sem sintonização</span>'}
       </div>
+      ${tagsHtml}
     `;
     card.onclick = () => openItemModal(item);
     grid.appendChild(card);
