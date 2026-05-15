@@ -2927,7 +2927,7 @@ async function fetchItensDoSupabase() {
 
 // === CARREGAR A TELA DO COFRE COM FILTROS ===
 async function loadItens() {
-  if (typeof setActiveMenu === 'function') setActiveMenu(6); 
+  if (typeof setActiveMenu === 'function') setActiveMenu(8); 
   if (typeof setView === 'function') setView("itens");
 
   const content = document.getElementById("content");
