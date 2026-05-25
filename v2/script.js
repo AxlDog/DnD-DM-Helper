@@ -3048,16 +3048,65 @@ function openItemModal(item) {
 
   const cor = getRarityColor(item.raridade);
   
+  // 1. Sintonização (Adaptado para o novo formato JSON)
+  let sintonizacaoTexto = '';
+  if (item.sintonizacao && item.sintonizacao.requer) {
+    sintonizacaoTexto = `(Requer Sintonização${item.sintonizacao.restricao ? ' - ' + item.sintonizacao.restricao : ''})`;
+  } else if (item.sintonizacao === true) {
+    sintonizacaoTexto = '(Requer Sintonização)'; // Fallback para itens antigos
+  }
+
+  // 2. Propriedades e Magias
   let propsHtml = '';
   if (item.propriedades && item.propriedades.length > 0) {
     propsHtml = `<h4 style="color: ${cor}; margin-top: 20px; border-bottom: 1px solid #444; padding-bottom: 5px;">✨ Propriedades Mágicas</h4><ul style="padding-left: 20px; color: #ddd; line-height: 1.5;">`;
+    
     item.propriedades.forEach(p => {
-      propsHtml += `<li style="margin-bottom: 8px;"><strong>${p.nome}:</strong> ${p.desc}</li>`;
+      // Usa 'efeito' (do JSON atual) ou 'desc' (caso haja itens antigos no DB)
+      const descricaoProp = p.efeito || p.desc || '';
+      propsHtml += `<li style="margin-bottom: 8px;"><strong>${p.nome}:</strong> ${descricaoProp}`;
+      
+      // Adiciona bloco de Cargas e Sublista de Magias, se existirem
+      if (p.cargas_maximas) {
+        propsHtml += `<br><span style="font-size: 0.85em; color: #aaa;"><em>Cargas: ${p.cargas_maximas} | Recarga: ${p.recarga}</em></span>`;
+      }
+      
+      if (p.magias_disponiveis && p.magias_disponiveis.length > 0) {
+        propsHtml += `<ul style="margin-top: 6px; padding-left: 18px; list-style-type: circle; font-size: 0.95em;">`;
+        p.magias_disponiveis.forEach(magia => {
+          const plural = magia.cargas_gastas > 1 ? 's' : '';
+          propsHtml += `<li style="color: #b3d4ff;"><em>${magia.nome}</em> (${magia.cargas_gastas} carga${plural})</li>`;
+        });
+        propsHtml += `</ul>`;
+      }
+      
+      propsHtml += `</li>`;
     });
     propsHtml += '</ul>';
   }
 
-  // Novo Bloco: Lógica de Comércio/Vendedor
+  // 3. Maldições
+  let maldicaoHtml = '';
+  if (item.amaldicoado && item.maldicao) {
+    maldicaoHtml = `<h4 style="color: #ff4d4d; margin-top: 20px; border-bottom: 1px solid #772222; padding-bottom: 5px;">💀 Item Amaldiçoado</h4>`;
+    
+    if (item.maldicao.detalhes && item.maldicao.detalhes.length > 0) {
+      maldicaoHtml += `<ul style="padding-left: 20px; color: #ffb3b3; line-height: 1.5;">`;
+      item.maldicao.detalhes.forEach(d => {
+        maldicaoHtml += `<li style="margin-bottom: 8px;"><strong>${d.nome}:</strong> ${d.efeito || d.desc}</li>`;
+      });
+      maldicaoHtml += `</ul>`;
+    }
+
+    if (item.maldicao.como_quebrar) {
+      maldicaoHtml += `
+        <div style="margin-top: 10px; padding: 10px; background: rgba(255, 0, 0, 0.1); border-left: 3px solid #ff4d4d; border-radius: 0 4px 4px 0;">
+          <strong style="color: #ff4d4d;">Como Quebrar:</strong> <span style="color: #ffcccc; font-size: 0.9em;">${item.maldicao.como_quebrar}</span>
+        </div>`;
+    }
+  }
+
+  // 4. Comércio (Mantido o seu original)
   let comercioHtml = '';
   if (item.comercio) {
     comercioHtml = `
@@ -3070,12 +3119,13 @@ function openItemModal(item) {
     `;
   }
 
+  // Renderização Final do Modal
   overlay.innerHTML = `
     <div class="quick-monster-content" style="border: 1px solid ${cor}; box-shadow: 0 0 30px ${cor}33;">
       <header class="quick-monster-header" style="border-bottom: 1px dashed ${cor}88;">
         <div>
           <h3 style="color: ${cor}; margin-bottom: 2px;">${item.nome}</h3>
-          <span style="font-size: 0.85em; color: #aaa;">${item.tipo} | ${item.raridade} ${item.sintonizacao ? '(Sintonização)' : ''}</span>
+          <span style="font-size: 0.85em; color: #aaa;">${item.tipo} | ${item.raridade} <span style="color: #ffcc99;">${sintonizacaoTexto}</span></span>
         </div>
         <button class="btn-close-quick" onclick="document.getElementById('magicItemModal').remove()">✖</button>
       </header>
@@ -3085,6 +3135,7 @@ function openItemModal(item) {
           "${item.descricao}"
         </p>
         ${propsHtml}
+        ${maldicaoHtml}
         ${comercioHtml}
       </div>
     </div>
