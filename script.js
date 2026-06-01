@@ -381,41 +381,73 @@ async function salvarEdicaoNPC(id, metadataAntigo) {
   }
 }
 
-async function gerarNPC(racaSelecionada = "", classeSelecionada = "", genderSelecionado = "") {
-  const sorteio = Math.floor(Math.random() * 100);
-  const sexo = genderSelecionado || "Masculino";
-  const raca = racaSelecionada || "Humano";
-  const classe = classeSelecionada || "Camponês";
+async function gerarNPC(raca, sexo, classe) {
+    try {
+        // 1. Buscar a lista de nomes no Supabase filtrando por Raça e Sexo
+        const { data: nomesLista, error } = await db
+            .from('nomes_npcs')
+            .select('nome')
+            .eq('raca', raca)
+            .eq('sexo', sexo);
 
-  try {
-    const { data, error } = await db.functions.invoke('gerar_npc_gemini', {
-      body: { raca, sexo, classe }
-    });
+        if (error) {
+            console.error("Erro ao buscar nomes no Supabase:", error);
+            throw new Error("Falha ao consultar o banco de nomes.");
+        }
 
-    if (error) throw error;
+        let nomeEscolhido = "Aventureiro Desconhecido";
+        
+        // 2. Sortear um nome aleatório da lista retornada
+        if (nomesLista && nomesLista.length > 0) {
+            const indexSorteado = Math.floor(Math.random() * nomesLista.length);
+            nomeEscolhido = nomesLista[indexSorteado].nome;
+        } else {
+            console.warn(`Nenhum nome encontrado para ${raca} ${sexo} no banco. Usando fallback.`);
+            // Fallback caso a tabela não tenha nomes para essa combinação ainda
+            nomeEscolhido = `${raca} Errante`; 
+        }
 
-    // LOG DE VERIFICAÇÃO (O que você pediu)
-    console.log("%c[RETORNO IA]", "background: #222; color: #bada55", data);
+        // 3. Montar o prompt passando o nome sorteado
+        const promptText = gerarPromptDescricaoNPC(nomeEscolhido, raca, sexo, classe);
 
-    const npc = {
-      id: "GEN-" + crypto.randomUUID().slice(0, 8),
-      nome: data.nome, // Vem da IA
-      raca: raca,      // Vem da sua variável
-      sexo: sexo,      // Vem da sua variável
-      status: "Vivo",
-      faccao: "Independente",
-      metadata: {
-        aparencia: data.aparencia, // Vem da IA
-        origem: "IA Gemini"
-      }
-    };
+        // 4. Chamar a IA (Gemini) apenas para gerar a aparência e personalidade
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: promptText }] }],
+                generationConfig: { 
+                    responseMimeType: "application/json",
+                    temperature: 0.8
+                }
+            })
+        });
 
-    npcGerado = npc; 
-    renderNPCPreview(npc);
+        if (!response.ok) {
+            throw new Error(`Erro na API do Gemini: ${response.status}`);
+        }
 
-  } catch (err) {
-    console.error("Erro:", err);
-  }
+        const result = await response.json();
+        const textoIA = result.candidates?.[0]?.content?.parts?.[0]?.text;
+        
+        if (!textoIA) throw new Error("Resposta vazia da IA.");
+
+        // 5. Transforma a resposta no JSON final
+        const npcFinal = JSON.parse(textoIA);
+        
+        // Adiciona os metadados para serem usados na sua Ficha/Modal
+        npcFinal.raca = raca;
+        npcFinal.classe = classe;
+        npcFinal.sexo = sexo;
+        npcFinal.id = "npc_gen_" + Date.now();
+
+        return npcFinal;
+
+    } catch (err) {
+        console.error("Erro no processo de geração de NPC:", err);
+        alert("Falha ao forjar o NPC. Verifique o console para mais detalhes.");
+        return null;
+    }
 }
 
 function getGenNPCs() {
